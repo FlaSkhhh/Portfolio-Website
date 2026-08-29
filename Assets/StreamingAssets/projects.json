@@ -1,0 +1,28 @@
+{
+  "projects": [
+    {
+      "id": "hand-cricket",
+      "title": "Real-Time Multiplayer Hand Cricket",
+      "tag": "Unity Netcode | 34MB APK",
+      "description": "Performance-optimized up to 5v5 team-based multiplayer game utilizing Unity Netcode, Relay, and Lobby services with custom RPCs and cross-platform Android/WebGL simulation.",
+      "screenshotUrl": "Screenshots/HandCricket.jpg",
+      "caseStudyUrl": "https://yourportfolio.netlify.app/projects/hand-cricket"
+    },
+    {
+      "id": "boss-fight",
+      "title": "State-Based 2D Boss Fight",
+      "tag": "AI & FSM | Combat Systems",
+      "description": "Modular boss AI designed using Finite State Machines to manage complex behavior transitions, attack patterns, and animation events across multiple combat phases.",
+      "screenshotUrl": "Screenshots/BossFight.jpg",
+      "caseStudyUrl": "https://yourportfolio.netlify.app/projects/boss-fight"
+    },
+    {
+      "id": "infinite-runner",
+      "title": "Infinite Runner with Custom Shader",
+      "tag": "Custom HLSL | Procedural Gen",
+      "description": "Custom vertex shader simulating world curvature with procedural environment generation and multi-character selection featuring seamless restart logic.",
+      "screenshotUrl": "Screenshots/InfiniteRunner.jpg",
+      "caseStudyUrl": "https://yourportfolio.netlify.app/projects/infinite-runner"
+    }
+  ]
+}

@@ -6,22 +6,22 @@
     color: #FFFFFF;
 }
 
-/* Button Foundation Reset */
+/* Button Foundation Reset - Increased Sizes and locked flex-shrink */
 Button {
     border-width: 0;
-    font-size: 14px;
+    font-size: 16px;
     -unity-font-style: bold;
-    cursor: link;
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    min-height: 44px;
-    height: 44px;
-    padding-left: 20px;
-    padding-right: 20px;
+    min-height: 48px;
+    height: 48px;
+    padding-left: 24px;
+    padding-right: 24px;
     flex-grow: 0;
     flex-shrink: 0;
     align-self: flex-start;
+    white-space: nowrap;
     transition-property: background-color, scale;
     transition-duration: 0.15s, 0.15s;
 }
@@ -64,7 +64,7 @@ Button {
 }
 
 .header-title {
-    font-size: 16px;
+    font-size: 18px;
     -unity-font-style: bold;
     color: #FFFFFF;
 }
@@ -72,16 +72,20 @@ Button {
 .header-nav {
     flex-direction: row;
     align-items: center;
-    gap: 12px;
+}
+
+.header-nav .nav-btn {
+    margin-right: 12px;
 }
 
 .nav-btn {
     background-color: transparent;
     color: #C3C7D5;
-    height: 38px;
-    min-height: 38px;
-    padding-left: 16px;
-    padding-right: 16px;
+    height: 40px;
+    min-height: 40px;
+    font-size: 15px;
+    padding-left: 18px;
+    padding-right: 18px;
     border-radius: 6px;
 }
 
@@ -106,35 +110,35 @@ Button {
 }
 
 .intro-content {
-    max-width: 720px;
+    max-width: 760px;
     flex-direction: column;
-    gap: 20px;
     align-items: center;
 }
 
 .intro-headline {
-    font-size: 40px;
+    font-size: 48px;
     -unity-font-style: bold;
     color: #FFFFFF;
     white-space: normal;
     -unity-text-align: middle-center;
+    margin-bottom: 24px;
 }
 
 .intro-summary {
-    font-size: 16px;
+    font-size: 18px;
     color: #8E95A5;
     white-space: normal;
     -unity-text-align: middle-center;
-    line-height: 24px;
+    margin-bottom: 24px;
 }
 
 .btn-enter {
-    height: 48px;
-    min-height: 48px;
-    padding-left: 36px;
-    padding-right: 36px;
-    font-size: 15px;
-    margin-top: 12px;
+    height: 52px;
+    min-height: 52px;
+    padding-left: 42px;
+    padding-right: 42px;
+    font-size: 17px;
+    margin-top: 16px;
 }
 
 .portfolio-view {
@@ -146,19 +150,29 @@ Button {
     padding: 40px 24px;
 }
 
+.btn-back-home, .btn-back {
+    margin-bottom: 32px;
+    height: 44px;
+    min-height: 44px;
+    font-size: 26px; /* Bumps up the size of the arrow */
+    padding-left: 28px;
+    padding-right: 28px;
+    -unity-font-style: bold;
+}
+
 .experience-section {
     margin-bottom: 36px;
-    gap: 8px;
 }
 
 .section-title {
-    font-size: 28px;
+    font-size: 36px;
     -unity-font-style: bold;
     color: #FFFFFF;
+    margin-bottom: 8px;
 }
 
 .section-subtitle {
-    font-size: 15px;
+    font-size: 17px;
     color: #8E95A5;
 }
 
@@ -178,7 +192,6 @@ Button {
 
 .gaming-shelf-content {
     flex-direction: row;
-    gap: 12px;
     flex-wrap: wrap;
     margin-top: 16px;
 }
@@ -186,12 +199,14 @@ Button {
 .game-card {
     background-color: #14161F;
     color: #00E5FF;
-    padding: 10px 18px;
-    font-size: 13px;
+    padding: 12px 20px;
+    font-size: 14px;
     -unity-font-style: bold;
     border-width: 1px;
     border-color: rgba(0, 229, 255, 0.25);
     border-radius: 6px;
+    margin-right: 12px;
+    margin-bottom: 12px;
 }
 
 /* Modal Overlay */
@@ -205,7 +220,6 @@ Button {
     height: 100%;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
 }
 
 .detail-overlay-bg {
@@ -227,21 +241,13 @@ Button {
     border-width: 1px;
     border-color: rgba(0, 229, 255, 0.3);
     border-radius: 16px;
-    padding: 36px;
-    overflow-y: auto;
-}
-
-.btn-back {
-    margin-bottom: 24px;
-    height: 38px;
-    min-height: 38px;
-    padding-left: 16px;
-    padding-right: 16px;
+    padding: 40px;
+    overflow: hidden;
 }
 
 .detail-image {
     width: 100%;
-    height: 340px;
+    height: 380px;
     background-color: #0B0C10;
     border-radius: 10px;
     border-width: 1px;
@@ -251,7 +257,7 @@ Button {
 }
 
 .detail-title {
-    font-size: 32px;
+    font-size: 38px;
     -unity-font-style: bold;
     color: #FFFFFF;
     white-space: normal;
@@ -259,25 +265,81 @@ Button {
 }
 
 .detail-tags {
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
 .detail-tag-list {
-    font-size: 13px;
+    font-size: 15px;
     color: #00E5FF;
     -unity-font-style: bold;
 }
 
 .detail-description {
-    font-size: 15px;
+    font-size: 17px;
     color: #C3C7D5;
     white-space: normal;
-    line-height: 24px;
-    margin-bottom: 28px;
+    margin-bottom: 32px;
 }
 
 .detail-footer {
     flex-direction: row;
-    gap: 16px;
     align-items: center;
+}
+
+.detail-footer Button {
+    margin-right: 16px;
+}
+
+/* ===== PORTRAIT / MOBILE OVERRIDES ===== */
+@media (max-width: 1400px) {
+    .header-bar,
+    .intro-content,
+    .portfolio-view,
+    .experience-section,
+    .detail-panel {
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .header-bar {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .intro-headline {
+        font-size: 48px;
+        width: 100%;
+    }
+
+    .intro-summary {
+        font-size: 19px;
+        width: 100%;
+    }
+
+    .section-title {
+        font-size: 32px;
+    }
+
+    .portfolio-view {
+        padding: 24px 16px;
+    }
+
+    .detail-panel {
+        width: 95%;
+        padding: 24px 16px;
+        max-height: 90%;
+    }
+
+    .detail-title {
+        font-size: 30px;
+    }
+
+    .detail-description {
+        font-size: 16px;
+    }
+
+    .nav-btn {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
 }

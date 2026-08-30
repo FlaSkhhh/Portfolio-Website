@@ -310,9 +310,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d252275b133fd2142aa28081fdfbf7ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScrollAnimationController
-  uiDocument: {fileID: 0}
+  uiDocument: {fileID: 997640889}
   parallaxMultiplier: 0.1
-  fadeInThreshold: 0.85
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -11,8 +11,8 @@
             </ui:VisualElement>
         </ui:VisualElement>
 
-        <!-- Main Scrollable Body -->
-        <ui:ScrollView class="content-area">
+        <!-- Main Scrollable Body (Added Name & Permanent Scrollbar here) -->
+        <ui:ScrollView name="MainScrollArea" class="content-area" vertical-scroller-visibility="AlwaysVisible">
             
             <!-- Hero / Intro -->
             <ui:VisualElement name="IntroView" class="intro-view">
@@ -25,12 +25,16 @@
 
             <!-- Main Portfolio Section -->
             <ui:VisualElement name="MainPortfolioView" class="portfolio-view">
+                
+                <ui:Button name="BtnBackToHome" class="btn-secondary btn-back-home" text="←" />
+
                 <ui:VisualElement class="experience-section">
                     <ui:Label class="section-title" text="Featured Projects" />
                     <ui:Label class="section-subtitle" text="A selection of core engineering work in multiplayer architecture, shaders, and AI systems." />
                 </ui:VisualElement>
 
-                <ui:ScrollView name="ProjectScrollView" class="project-scroll-view" />
+                <!-- Converted from ScrollView to VisualElement -->
+                <ui:VisualElement name="ProjectScrollView" class="project-scroll-view" />
 
                 <!-- Gaming Shelf -->
                 <ui:VisualElement name="GamingShelfView" class="gaming-shelf">
@@ -47,7 +51,8 @@
         <ui:VisualElement name="ProjectDetailView" class="project-detail-view" style="display: none;">
             <ui:VisualElement class="detail-overlay-bg" />
             <ui:VisualElement class="detail-panel">
-                <ui:Button name="BtnBack" class="btn-back btn-secondary" text="← Back to Projects" />
+                
+                <ui:Button name="BtnBack" class="btn-back btn-secondary" text="←" />
 
                 <ui:VisualElement name="DetailImage" class="detail-image" />
 

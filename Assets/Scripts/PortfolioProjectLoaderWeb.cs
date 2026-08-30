@@ -13,7 +13,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     [SerializeField] private string projectDataUrl = "projects.json";
     [SerializeField] private string remoteServerUrl = "https://yournetlifydomain.netlify.app/api/projects.json";
 
-    private ScrollView projectScrollView;
+    private VisualElement projectScrollView;
     private PortfolioController portfolioController;
     private ScrollAnimationController scrollAnimationController;
     private List<Texture2D> cachedTextures = new();
@@ -60,7 +60,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         }
 
         var root = uiDocument.rootVisualElement;
-        projectScrollView = root.Q<ScrollView>("ProjectScrollView");
+        projectScrollView = root.Q<VisualElement>("ProjectScrollView");
         portfolioController = GetComponent<PortfolioController>();
         scrollAnimationController = GetComponent<ScrollAnimationController>();
 
@@ -103,24 +103,17 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             }));
         }
 
-        if (loadSuccess && projectsData.projects != null && projectsData.projects.Length > 0 && !string.IsNullOrEmpty(projectsData.projects[0].GetTitle()))
+        ProjectMetadata[] listToLoad = (loadSuccess && projectsData.projects != null && projectsData.projects.Length > 0 && !string.IsNullOrEmpty(projectsData.projects[0].GetTitle()))
+            ? projectsData.projects
+            : GetDefaultFallbackProjects();
+
+        // Spawn all project cards simultaneously
+        for (int i = 0; i < listToLoad.Length; i++)
         {
-            for (int i = 0; i < projectsData.projects.Length; i++)
-            {
-                yield return StartCoroutine(CreateShowcaseRowAsync(projectsData.projects[i], i));
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Loading default fallback projects...");
-            var defaults = GetDefaultFallbackProjects();
-            for (int i = 0; i < defaults.Length; i++)
-            {
-                yield return StartCoroutine(CreateShowcaseRowAsync(defaults[i], i));
-            }
+            CreateShowcaseRow(listToLoad[i], i);
         }
 
-        // Notify ScrollAnimationController after all items are added to DOM
+        // Notify animation controller
         if (scrollAnimationController != null)
         {
             scrollAnimationController.RefreshShowcaseRows();
@@ -162,7 +155,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 #if UNITY_WEBGL && !UNITY_EDITOR
         using (UnityWebRequest www = UnityWebRequest.Get(path))
         {
-            www.timeout = 10;
+            www.timeout = 3;
             yield return www.SendWebRequest();
             if (www.result == UnityWebRequest.Result.Success)
                 onComplete?.Invoke(JsonUtility.FromJson<ProjectsDataWrapper>(www.downloadHandler.text));
@@ -187,7 +180,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     {
         using (UnityWebRequest www = UnityWebRequest.Get(remoteServerUrl))
         {
-            www.timeout = 10;
+            www.timeout = 3;
             yield return www.SendWebRequest();
             if (www.result == UnityWebRequest.Result.Success)
                 onComplete?.Invoke(JsonUtility.FromJson<ProjectsDataWrapper>(www.downloadHandler.text));
@@ -196,7 +189,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         }
     }
 
-    private IEnumerator CreateShowcaseRowAsync(ProjectMetadata project, int index)
+    private void CreateShowcaseRow(ProjectMetadata project, int index)
     {
         VisualElement rowElement = projectShowcaseRowTemplate.CloneTree();
 
@@ -217,7 +210,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         if (titleLabel != null) titleLabel.text = project.GetTitle();
         if (descriptionLabel != null) descriptionLabel.text = project.GetDescription();
 
-        // Populate tech tag pills dynamically
         if (tagContainer != null)
         {
             tagContainer.Clear();
@@ -230,10 +222,8 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             }
         }
 
-        // Texture container reference
         Texture2D projectTexture = null;
 
-        // Wire buttons
         if (caseStudyButton != null)
         {
             caseStudyButton.clicked += () =>
@@ -267,8 +257,8 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 
         projectScrollView.Add(rowElement);
 
-        // Load project screenshot
-        yield return StartCoroutine(LoadProjectScreenshotAsync(rowElement, project.GetScreenshot(), (loadedTex) =>
+        // Load screenshot asynchronously without blocking UI instantiation
+        StartCoroutine(LoadProjectScreenshotAsync(rowElement, project.GetScreenshot(), (loadedTex) =>
         {
             projectTexture = loadedTex;
         }));
@@ -284,7 +274,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         {
             using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(screenshotPath))
             {
-                www.timeout = 5;
+                www.timeout = 4;
                 yield return www.SendWebRequest();
 
                 if (www.result == UnityWebRequest.Result.Success)
@@ -333,4 +323,4 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             cachedTextures.Add(texture);
         }
     }
-}
+}   

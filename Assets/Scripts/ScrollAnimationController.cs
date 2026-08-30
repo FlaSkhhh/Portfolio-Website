@@ -6,36 +6,30 @@ public class ScrollAnimationController : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
     [SerializeField] private float parallaxMultiplier = 0.05f;
-    [SerializeField] private float fadeInThreshold = 0.85f;
 
-    private ScrollView projectScrollView;
+    private ScrollView mainScrollArea;
+    private VisualElement projectScrollView;
     private List<VisualElement> showcaseRows = new();
-    private Dictionary<VisualElement, bool> hasAnimated = new();
 
     private void OnEnable()
     {
-        if (uiDocument == null)
-            uiDocument = GetComponent<UIDocument>();
-
+        if (uiDocument == null) uiDocument = GetComponent<UIDocument>();
         if (uiDocument == null) return;
 
         var root = uiDocument.rootVisualElement;
-        projectScrollView = root.Q<ScrollView>("ProjectScrollView");
+        mainScrollArea = root.Q<ScrollView>("MainScrollArea");
+        projectScrollView = root.Q<VisualElement>("ProjectScrollView");
 
-        if (projectScrollView != null)
+        if (mainScrollArea != null)
         {
-            projectScrollView.verticalScroller.valueChanged += OnScrollPositionChanged;
-            root.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+            mainScrollArea.verticalScroller.valueChanged += OnScrollPositionChanged;
         }
     }
 
     private void OnDisable()
     {
-        if (projectScrollView != null && projectScrollView.verticalScroller != null)
-            projectScrollView.verticalScroller.valueChanged -= OnScrollPositionChanged;
-
-        if (uiDocument != null && uiDocument.rootVisualElement != null)
-            uiDocument.rootVisualElement.UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+        if (mainScrollArea != null && mainScrollArea.verticalScroller != null)
+            mainScrollArea.verticalScroller.valueChanged -= OnScrollPositionChanged;
     }
 
     public void RefreshShowcaseRows()
@@ -43,58 +37,39 @@ public class ScrollAnimationController : MonoBehaviour
         if (projectScrollView == null) return;
 
         showcaseRows.Clear();
-        showcaseRows.AddRange(projectScrollView.contentContainer.Query(className: "showcase-row").ToList());
+        showcaseRows.AddRange(projectScrollView.Query(className: "showcase-row").ToList());
 
         foreach (var row in showcaseRows)
         {
-            if (!hasAnimated.ContainsKey(row))
-            {
-                hasAnimated[row] = false;
-                row.style.opacity = 0f;
-            }
+            if (row != null) row.style.opacity = 1f;
         }
-
-        OnScrollPositionChanged(projectScrollView.verticalScroller.value);
     }
 
     private void OnScrollPositionChanged(float scrollValue)
     {
-        if (projectScrollView == null || showcaseRows.Count == 0)
-            return;
+        if (mainScrollArea == null || showcaseRows.Count == 0) return;
 
-        float scrollViewHeight = projectScrollView.contentViewport.layout.height;
-        float totalContentHeight = projectScrollView.contentContainer.layout.height;
+        float scrollViewHeight = mainScrollArea.contentViewport.layout.height;
 
         foreach (var row in showcaseRows)
         {
             if (row == null) continue;
 
-            float rowTopInViewport = row.layout.y - projectScrollView.verticalScroller.value;
-            float rowBottomInViewport = rowTopInViewport + row.layout.height;
+            // worldBound automatically accounts for scroll offsets to give true screen position
+            float rowTopInViewport = row.worldBound.y - mainScrollArea.worldBound.y;
+            float rowBottomInViewport = rowTopInViewport + row.worldBound.height;
 
             bool isInView = rowBottomInViewport > 0 && rowTopInViewport < scrollViewHeight;
-
-            if (isInView && hasAnimated.TryGetValue(row, out bool animated) && !animated)
-            {
-                row.style.opacity = 1f;
-                hasAnimated[row] = true;
-            }
 
             if (isInView)
             {
                 var projectImage = row.Q<VisualElement>("ProjectImage");
                 if (projectImage != null)
                 {
-                    float offset = (rowTopInViewport / scrollViewHeight) * 20f * parallaxMultiplier;
+                    float offset = (rowTopInViewport / (scrollViewHeight > 0 ? scrollViewHeight : 1000f)) * 15f * parallaxMultiplier;
                     projectImage.style.translate = new Translate(0, offset, 0);
                 }
             }
         }
-    }
-
-    private void OnGeometryChanged(GeometryChangedEvent evt)
-    {
-        if (projectScrollView != null)
-            OnScrollPositionChanged(projectScrollView.verticalScroller.value);
     }
 }

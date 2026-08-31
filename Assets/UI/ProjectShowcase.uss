@@ -10,13 +10,27 @@
     border-width: 1px;
     border-radius: 14px;
     overflow: hidden;
+    
+    /* Animation settings */
     transition-property: border-color, translate, opacity;
-    transition-duration: 0.2s, 0.2s, 0.4s;
+    transition-duration: 0.2s, 0.6s, 0.8s;
+    transition-timing-function: ease-in-out, ease-out-back, ease-out;
 }
 
-.showcase-row:hover {
+/* CSS States toggled by the C# ScrollAnimationController */
+.showcase-row--hidden {
+    opacity: 0;
+    translate: 0 60px 0;
+}
+
+.showcase-row--visible {
+    opacity: 1;
+    translate: 0 0 0;
+}
+
+.showcase-row.showcase-row--visible:hover {
     border-color: rgba(0, 229, 255, 0.5);
-    translate: 0 -3px 0;
+    translate: 0 -4px 0;
 }
 
 .showcase-row--reverse {

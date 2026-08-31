@@ -52,6 +52,10 @@ public class PortfolioController : MonoBehaviour
         if (introView != null) introView.style.display = DisplayStyle.None;
         if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.Flex;
         if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.None;
+
+        // Tell the loader the page was opened so it can play the transition
+        var loader = GetComponent<PortfolioProjectLoaderWeb>();
+        if (loader != null) loader.OnPortfolioOpened();
     }
 
     private void OnBackToHomeClicked()
@@ -59,6 +63,10 @@ public class PortfolioController : MonoBehaviour
         if (introView != null) introView.style.display = DisplayStyle.Flex;
         if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.None;
         if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.None;
+
+        // Reset the loader state for the next time we enter
+        var loader = GetComponent<PortfolioProjectLoaderWeb>();
+        if (loader != null) loader.OnPortfolioClosed();
     }
 
     public void ShowProjectDetail(string title, string description, string tagString, Texture2D screenshot, string demoUrl = "", string githubUrl = "")
@@ -66,7 +74,6 @@ public class PortfolioController : MonoBehaviour
         currentDemoUrl = demoUrl;
         currentGithubUrl = githubUrl;
 
-        // Save outer scroll state
         var mainScroll = uiDocument.rootVisualElement.Q<ScrollView>("MainScrollArea");
         if (mainScroll != null) previousScrollPosition = mainScroll.verticalScroller.value;
 
@@ -92,7 +99,6 @@ public class PortfolioController : MonoBehaviour
         if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.Flex;
         if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.None;
 
-        // Restore outer scroll state
         var mainScroll = uiDocument.rootVisualElement.Q<ScrollView>("MainScrollArea");
         if (mainScroll != null) mainScroll.verticalScroller.value = previousScrollPosition;
     }

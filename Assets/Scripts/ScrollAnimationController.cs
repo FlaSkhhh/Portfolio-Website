@@ -6,10 +6,12 @@ public class ScrollAnimationController : MonoBehaviour
 {
     [SerializeField] private UIDocument uiDocument;
     [SerializeField] private float parallaxMultiplier = 0.05f;
+    [SerializeField] private long staggerDelayMs = 150;
 
     private ScrollView mainScrollArea;
     private VisualElement projectScrollView;
     private List<VisualElement> showcaseRows = new();
+    private HashSet<VisualElement> revealedRows = new();
 
     private void OnEnable()
     {
@@ -28,47 +30,90 @@ public class ScrollAnimationController : MonoBehaviour
 
     private void OnDisable()
     {
-        if (mainScrollArea != null && mainScrollArea.verticalScroller != null)
+        if (mainScrollArea != null)
             mainScrollArea.verticalScroller.valueChanged -= OnScrollPositionChanged;
     }
 
-    public void RefreshShowcaseRows()
+    // Called by the Loader right after it spawns the cards in the background
+    public void PrepareCardsForAnimation()
     {
         if (projectScrollView == null) return;
 
         showcaseRows.Clear();
+        revealedRows.Clear();
         showcaseRows.AddRange(projectScrollView.Query(className: "showcase-row").ToList());
 
+        // Lock all spawned cards into the hidden state immediately
         foreach (var row in showcaseRows)
         {
-            if (row != null) row.style.opacity = 1f;
+            row.RemoveFromClassList("showcase-row--visible");
+            row.AddToClassList("showcase-row--hidden");
+        }
+    }
+
+    // Called by PortfolioController specifically when you click "Explore"
+    public void TriggerRevealAnimations()
+    {
+        // Wait 100 milliseconds for UI Toolkit to physically render the display:flex layout before calculating math
+        if (mainScrollArea != null)
+        {
+            mainScrollArea.schedule.Execute(EvaluateRowVisibility).StartingIn(100);
         }
     }
 
     private void OnScrollPositionChanged(float scrollValue)
     {
+        EvaluateRowVisibility();
+    }
+
+    private void EvaluateRowVisibility()
+    {
         if (mainScrollArea == null || showcaseRows.Count == 0) return;
 
         float scrollViewHeight = mainScrollArea.contentViewport.layout.height;
+        if (scrollViewHeight <= 0) return;
+
+        int newlyRevealedCount = 0;
 
         foreach (var row in showcaseRows)
         {
-            if (row == null) continue;
+            if (row == null || revealedRows.Contains(row)) continue;
 
-            // worldBound automatically accounts for scroll offsets to give true screen position
             float rowTopInViewport = row.worldBound.y - mainScrollArea.worldBound.y;
             float rowBottomInViewport = rowTopInViewport + row.worldBound.height;
 
-            bool isInView = rowBottomInViewport > 0 && rowTopInViewport < scrollViewHeight;
+            float revealThreshold = scrollViewHeight * 0.90f;
 
-            if (isInView)
+            if (rowTopInViewport < revealThreshold && rowBottomInViewport > 0)
             {
-                var projectImage = row.Q<VisualElement>("ProjectImage");
-                if (projectImage != null)
+                revealedRows.Add(row);
+
+                long delay = newlyRevealedCount * staggerDelayMs;
+
+                row.schedule.Execute(() =>
                 {
-                    float offset = (rowTopInViewport / (scrollViewHeight > 0 ? scrollViewHeight : 1000f)) * 15f * parallaxMultiplier;
-                    projectImage.style.translate = new Translate(0, offset, 0);
-                }
+                    if (row != null)
+                    {
+                        row.RemoveFromClassList("showcase-row--hidden");
+                        row.AddToClassList("showcase-row--visible");
+                    }
+                }).StartingIn(delay);
+
+                newlyRevealedCount++;
+            }
+        }
+
+        foreach (var row in revealedRows)
+        {
+            if (row == null) continue;
+
+            float rowTopInViewport = row.worldBound.y - mainScrollArea.worldBound.y;
+            var projectImage = row.Q<VisualElement>("ProjectImage");
+
+            if (projectImage != null)
+            {
+                float offset = (rowTopInViewport / (scrollViewHeight > 0 ? scrollViewHeight : 1000f)) * 15f * parallaxMultiplier;
+                projectImage.style.translate = new Translate(0, offset, 0);
             }
         }
     }

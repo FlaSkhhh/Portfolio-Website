@@ -32,7 +32,24 @@
                     <ui:Label class="section-title" text="Featured Projects" />
                     <ui:Label class="section-subtitle" text="A selection of core engineering work in multiplayer architecture, shaders, and AI systems." />
                 </ui:VisualElement>
-
+                 <!-- NEW: Retro Arcade Loading Screen -->
+                <ui:VisualElement name="LoadingScreen" class="loading-screen">
+                    <ui:VisualElement class="retro-container">
+                        <ui:Label name="LoadingText" class="retro-text" text="INSERT COIN..." />
+                
+                        <!-- The track the character moves along -->
+                        <ui:VisualElement class="retro-track">
+                            <!-- Dots for the track -->
+                            <ui:VisualElement class="retro-dot" style="left: 25%;" />
+                            <ui:VisualElement class="retro-dot" style="left: 50%;" />
+                            <ui:VisualElement class="retro-dot" style="left: 75%;" />
+                            <ui:VisualElement class="retro-dot" style="left: 100%;" />
+                    
+                            <!-- The moving character -->
+                            <ui:VisualElement name="LoadingCharacter" class="retro-character" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
                 <!-- Converted from ScrollView to VisualElement -->
                 <ui:VisualElement name="ProjectScrollView" class="project-scroll-view" />
 
@@ -70,6 +87,5 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-
     </ui:VisualElement>
 </ui:UXML>

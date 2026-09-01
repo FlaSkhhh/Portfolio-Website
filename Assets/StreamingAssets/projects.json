@@ -23,6 +23,22 @@
       "description": "Custom vertex shader simulating world curvature with procedural environment generation and multi-character selection featuring seamless restart logic.",
       "screenshotUrl": "Screenshots/InfiniteRunner.jpg",
       "caseStudyUrl": "https://yourportfolio.netlify.app/projects/infinite-runner"
+    },
+    {
+      "id": "rollback-netcode-proto",
+      "title": "Deterministic Rollback Netcode Prototype",
+      "tag": "C# | Custom Physics | Bit Packing",
+      "description": "Lockstep rollback networking prototype built from scratch with fixed-point arithmetic, circular state history buffers, and bit-packed input delta compression.",
+      "screenshotUrl": "Screenshots/RollbackNetcode.jpg",
+      "caseStudyUrl": "https://github.com/yourhandle/rollback-netcode"
+    },
+    {
+      "id": "memory-profiler-tool",
+      "title": "Runtime Memory Profiler & Object Pooler",
+      "tag": "Engine Tools | Memory Allocations",
+      "description": "Lightweight in-engine memory allocation auditor and generic multi-tier pool manager eliminating GC spikes across scene streaming cycles.",
+      "screenshotUrl": "Screenshots/MemoryProfiler.jpg",
+      "caseStudyUrl": "https://github.com/yourhandle/memory-profiler"
     }
   ]
 }

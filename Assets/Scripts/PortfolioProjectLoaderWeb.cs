@@ -17,15 +17,16 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     private ScrollAnimationController scrollAnimationController;
     private List<Texture2D> cachedTextures = new();
 
-    // Retro Loader Elements
+    // Loader Elements
     private VisualElement loadingScreen;
     private VisualElement loadingCharacter;
     private Label loadingText;
+
     private int totalProjectsToLoad = 0;
     private int projectsLoaded = 0;
-
     private bool isDataLoaded = false;
     private bool isPortfolioOpen = false;
+    private bool hasPlayedTransition = false; // Prevents the disappearing glitch
 
     [System.Serializable]
     private struct ProjectMetadata
@@ -53,7 +54,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         if (uiDocument == null || projectShowcaseRowTemplate == null) return;
 
         var root = uiDocument.rootVisualElement;
-        
+
         loadingScreen = root.Q<VisualElement>("LoadingScreen");
         loadingCharacter = root.Q<VisualElement>("LoadingCharacter");
         loadingText = root.Q<Label>("LoadingText");
@@ -73,6 +74,38 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     {
         foreach (var texture in cachedTextures) { if (texture != null) Destroy(texture); }
         cachedTextures.Clear();
+    }
+
+    public void OnPortfolioOpened()
+    {
+        isPortfolioOpen = true;
+
+        if (isDataLoaded)
+        {
+            // If data is ready and we haven't played the intro, play it now.
+            if (!hasPlayedTransition)
+            {
+                hasPlayedTransition = true;
+                if (scrollAnimationController != null) scrollAnimationController.PrepareCardsForAnimation();
+                if (loadingScreen != null)
+                {
+                    loadingScreen.style.display = DisplayStyle.Flex;
+                    loadingScreen.style.opacity = 1f;
+                }
+                StartCoroutine(HideLoadingScreen());
+            }
+            // If we have already played it, do nothing! The UI stays perfectly intact.
+        }
+        else
+        {
+            // Still loading in the background
+            if (scrollAnimationController != null) scrollAnimationController.PrepareCardsForAnimation();
+        }
+    }
+
+    public void OnPortfolioClosed()
+    {
+        isPortfolioOpen = false;
     }
 
     private IEnumerator LoadProjectsAsync()
@@ -102,10 +135,16 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         }
 
         if (scrollAnimationController != null) scrollAnimationController.PrepareCardsForAnimation();
+
+        // Failsafe for empty project lists
         if (totalProjectsToLoad == 0)
         {
             isDataLoaded = true;
-            if (isPortfolioOpen) StartCoroutine(HideLoadingScreen());
+            if (isPortfolioOpen && !hasPlayedTransition)
+            {
+                hasPlayedTransition = true;
+                StartCoroutine(HideLoadingScreen());
+            }
         }
     }
 
@@ -124,36 +163,12 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             if (loadingText != null) loadingText.text = "READY";
             if (loadingCharacter != null) loadingCharacter.style.left = Length.Percent(100f);
 
-            // Only auto-hide if they are already staring at the portfolio page
-            if (isPortfolioOpen)
+            if (isPortfolioOpen && !hasPlayedTransition)
             {
+                hasPlayedTransition = true;
                 StartCoroutine(HideLoadingScreen());
             }
         }
-    }
-
-    public void OnPortfolioOpened()
-    {
-        isPortfolioOpen = true;
-
-        // Ensure cards are hidden and ready to animate
-        if (scrollAnimationController != null) scrollAnimationController.PrepareCardsForAnimation();
-
-        if (isDataLoaded)
-        {
-            // Reset loader visuals for the "flash" transition
-            if (loadingScreen != null)
-            {
-                loadingScreen.style.display = DisplayStyle.Flex;
-                loadingScreen.style.opacity = 1f;
-            }
-            StartCoroutine(HideLoadingScreen());
-        }
-    }
-
-    public void OnPortfolioClosed()
-    {
-        isPortfolioOpen = false;
     }
 
     private IEnumerator HideLoadingScreen()
@@ -161,7 +176,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         if (loadingText != null) loadingText.text = "READY";
         if (loadingCharacter != null) loadingCharacter.style.left = Length.Percent(100f);
 
-        // This is the guaranteed brief pause you see when clicking the button
         yield return new WaitForSeconds(0.3f);
 
         if (loadingScreen != null)
@@ -171,7 +185,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             loadingScreen.style.display = DisplayStyle.None;
         }
 
-        // Fire animations after the loader vanishes!
         if (scrollAnimationController != null)
         {
             scrollAnimationController.TriggerRevealAnimations();

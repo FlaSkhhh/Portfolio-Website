@@ -38,6 +38,8 @@ public class PortfolioController : MonoBehaviour
         if (btnBackToHome != null) btnBackToHome.clicked += OnBackToHomeClicked;
         if (btnDetailDemo != null) btnDetailDemo.clicked += () => { if (!string.IsNullOrEmpty(currentDemoUrl)) Application.OpenURL(currentDemoUrl); };
         if (btnDetailGitHub != null) btnDetailGitHub.clicked += () => { if (!string.IsNullOrEmpty(currentGithubUrl)) Application.OpenURL(currentGithubUrl); };
+        var backdrop = root.Q<VisualElement>("DetailBackdrop");
+        if (backdrop != null) backdrop.RegisterCallback<ClickEvent>(evt => OnBackClicked());
     }
 
     private void OnDisable()
@@ -79,13 +81,34 @@ public class PortfolioController : MonoBehaviour
 
         var detailTitle = uiDocument.rootVisualElement.Q<Label>("DetailTitle");
         var detailDescription = uiDocument.rootVisualElement.Q<Label>("DetailDescription");
-        var detailTags = uiDocument.rootVisualElement.Q<Label>("DetailTags");
+        var detailTagsContainer = uiDocument.rootVisualElement.Q<VisualElement>("DetailTagsContainer");
         var detailImage = uiDocument.rootVisualElement.Q<VisualElement>("DetailImage");
 
         if (detailTitle != null) detailTitle.text = title;
         if (detailDescription != null) detailDescription.text = description;
-        if (detailTags != null) detailTags.text = tagString.Replace(",", " • ");
-        if (detailImage != null && screenshot != null) detailImage.style.backgroundImage = new StyleBackground(screenshot);
+
+        // Render tech pills dynamically
+        if (detailTagsContainer != null)
+        {
+            detailTagsContainer.Clear();
+            string[] tags = tagString.Split(new char[] { '|', ',' }, System.StringSplitOptions.RemoveEmptyEntries);
+            foreach (var t in tags)
+            {
+                var pill = new Label(t.Trim());
+                pill.AddToClassList("tech-pill");
+                detailTagsContainer.Add(pill);
+            }
+        }
+
+        if (detailImage != null && screenshot != null)
+        {
+            detailImage.style.backgroundImage = new StyleBackground(screenshot);
+            detailImage.style.display = DisplayStyle.Flex;
+        }
+        else if (detailImage != null)
+        {
+            detailImage.style.display = DisplayStyle.None;
+        }
 
         if (btnDetailDemo != null) btnDetailDemo.style.display = string.IsNullOrEmpty(demoUrl) ? DisplayStyle.None : DisplayStyle.Flex;
         if (btnDetailGitHub != null) btnDetailGitHub.style.display = string.IsNullOrEmpty(githubUrl) ? DisplayStyle.None : DisplayStyle.Flex;

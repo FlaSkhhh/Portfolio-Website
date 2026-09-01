@@ -1,18 +1,17 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <Style src="project://database/Assets/UI/MainPortfolioLayout.uss" />
     <ui:VisualElement class="main-container">
-        
+
         <!-- Header -->
         <ui:VisualElement class="header-bar">
-            <ui:Label class="header-title" text="Shantanu Nandkhile - Game Systems Programmer" />
+            <ui:Label class="header-title" text="Shantanu Nandkhile" />
             <ui:VisualElement class="header-nav">
-                <ui:Button name="NavPortfolio" class="nav-btn" text="Projects" />
                 <ui:Button name="NavContact" class="nav-btn" text="Contact" />
             </ui:VisualElement>
         </ui:VisualElement>
 
         <!-- Main Scrollable Body (Added Name & Permanent Scrollbar here) -->
-        <ui:ScrollView name="MainScrollArea" class="content-area" vertical-scroller-visibility="AlwaysVisible">
+        <ui:ScrollView name="MainScrollArea" class="content-area" vertical-scroller-visibility="Hidden">
             
             <!-- Hero / Intro -->
             <ui:VisualElement name="IntroView" class="intro-view">
@@ -64,26 +63,36 @@
             </ui:VisualElement>
         </ui:ScrollView>
 
-        <!-- Modal Overlay -->
+        <!-- Upgraded Modal Overlay -->
         <ui:VisualElement name="ProjectDetailView" class="project-detail-view" style="display: none;">
-            <ui:VisualElement class="detail-overlay-bg" />
+            <!-- Dark blurred backdrop -->
+            <ui:VisualElement name="DetailBackdrop" class="detail-overlay-bg" />
+
+            <!-- Floating Modal Card -->
             <ui:VisualElement class="detail-panel">
-                
-                <ui:Button name="BtnBack" class="btn-back btn-secondary" text="←" />
-
-                <ui:VisualElement name="DetailImage" class="detail-image" />
-
-                <ui:Label name="DetailTitle" class="detail-title" text="Project Title" />
-
-                <ui:VisualElement class="detail-tags">
-                    <ui:Label name="DetailTags" class="detail-tag-list" text="Tags: " />
+                <!-- Header with Back Button and Title -->
+                <ui:VisualElement class="detail-header-row">
+                    <ui:Button name="BtnBack" class="btn-secondary btn-detail-back" text="←" />
+                    <ui:Label name="DetailTitle" class="detail-title" text="Project Title" />
                 </ui:VisualElement>
 
-                <ui:Label name="DetailDescription" class="detail-description" text="Full breakdown..." />
+                <!-- Scrollable Body for Deep Technical Breakdown -->
+                <ui:ScrollView class="detail-scroll-area">
+                    <ui:VisualElement name="DetailImage" class="detail-image" />
+                    
+                    <ui:VisualElement class="detail-meta">
+                        <ui:Label text="TECH STACK" class="detail-meta-header" />
+                        <ui:VisualElement name="DetailTagsContainer" class="detail-tag-container" />
+                    </ui:VisualElement>
 
+                    <ui:Label text="OVERVIEW &amp; ARCHITECTURE" class="detail-meta-header" />
+                    <ui:Label name="DetailDescription" class="detail-description" text="Full breakdown..." />
+                </ui:ScrollView>
+
+                <!-- Sticky Footer Buttons -->
                 <ui:VisualElement class="detail-footer">
                     <ui:Button name="BtnDetailGitHub" class="btn-secondary" text="GitHub Repository" />
-                    <ui:Button name="BtnDetailDemo" class="btn-primary" text="Play Live Demo" />
+                    <ui:Button name="BtnDetailDemo" class="btn-primary" text="Live Demo / Build" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

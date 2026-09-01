@@ -34,7 +34,6 @@ public class ScrollAnimationController : MonoBehaviour
             mainScrollArea.verticalScroller.valueChanged -= OnScrollPositionChanged;
     }
 
-    // Called by the Loader right after it spawns the cards in the background
     public void PrepareCardsForAnimation()
     {
         if (projectScrollView == null) return;
@@ -43,7 +42,6 @@ public class ScrollAnimationController : MonoBehaviour
         revealedRows.Clear();
         showcaseRows.AddRange(projectScrollView.Query(className: "showcase-row").ToList());
 
-        // Lock all spawned cards into the hidden state immediately
         foreach (var row in showcaseRows)
         {
             row.RemoveFromClassList("showcase-row--visible");
@@ -51,10 +49,8 @@ public class ScrollAnimationController : MonoBehaviour
         }
     }
 
-    // Called by PortfolioController specifically when you click "Explore"
     public void TriggerRevealAnimations()
     {
-        // Wait 100 milliseconds for UI Toolkit to physically render the display:flex layout before calculating math
         if (mainScrollArea != null)
         {
             mainScrollArea.schedule.Execute(EvaluateRowVisibility).StartingIn(100);
@@ -73,7 +69,8 @@ public class ScrollAnimationController : MonoBehaviour
         float scrollViewHeight = mainScrollArea.contentViewport.layout.height;
         if (scrollViewHeight <= 0) return;
 
-        int newlyRevealedCount = 0;
+        // Gather all cards that need to be revealed on this frame
+        List<VisualElement> rowsToRevealThisFrame = new List<VisualElement>();
 
         foreach (var row in showcaseRows)
         {
@@ -86,23 +83,31 @@ public class ScrollAnimationController : MonoBehaviour
 
             if (rowTopInViewport < revealThreshold && rowBottomInViewport > 0)
             {
-                revealedRows.Add(row);
-
-                long delay = newlyRevealedCount * staggerDelayMs;
-
-                row.schedule.Execute(() =>
-                {
-                    if (row != null)
-                    {
-                        row.RemoveFromClassList("showcase-row--hidden");
-                        row.AddToClassList("showcase-row--visible");
-                    }
-                }).StartingIn(delay);
-
-                newlyRevealedCount++;
+                rowsToRevealThisFrame.Add(row);
             }
         }
 
+        // Sort them strictly by their physical Y position on the screen to prevent out-of-order race conditions
+        rowsToRevealThisFrame.Sort((a, b) => a.worldBound.y.CompareTo(b.worldBound.y));
+
+        for (int i = 0; i < rowsToRevealThisFrame.Count; i++)
+        {
+            var row = rowsToRevealThisFrame[i];
+            revealedRows.Add(row);
+
+            long delay = i * staggerDelayMs;
+
+            row.schedule.Execute(() =>
+            {
+                if (row != null)
+                {
+                    row.RemoveFromClassList("showcase-row--hidden");
+                    row.AddToClassList("showcase-row--visible");
+                }
+            }).StartingIn(delay);
+        }
+
+        // Apply parallax tracking
         foreach (var row in revealedRows)
         {
             if (row == null) continue;

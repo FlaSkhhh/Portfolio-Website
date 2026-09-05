@@ -185,6 +185,18 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             loadingScreen.style.display = DisplayStyle.None;
         }
 
+        if (uiDocument != null)
+        {
+            var scrollChevron = uiDocument.rootVisualElement.Q<Label>("ScrollChevron");
+            var mainScroll = uiDocument.rootVisualElement.Q<ScrollView>("MainScrollArea");
+
+            // Only show it if they haven't somehow already scrolled down
+            if (scrollChevron != null && (mainScroll == null || mainScroll.verticalScroller.value < 50f))
+            {
+                scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
+            }
+        }
+
         if (scrollAnimationController != null)
         {
             scrollAnimationController.TriggerRevealAnimations();

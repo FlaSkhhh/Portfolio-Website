@@ -87,8 +87,7 @@ public class ScrollAnimationController : MonoBehaviour
             }
         }
 
-        // Sort them strictly by their physical Y position on the screen to prevent out-of-order race conditions
-        rowsToRevealThisFrame.Sort((a, b) => a.worldBound.y.CompareTo(b.worldBound.y));
+        rowsToRevealThisFrame.Sort((a, b) => showcaseRows.IndexOf(a).CompareTo(showcaseRows.IndexOf(b)));
 
         for (int i = 0; i < rowsToRevealThisFrame.Count; i++)
         {

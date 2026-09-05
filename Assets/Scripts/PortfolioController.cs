@@ -12,10 +12,12 @@ public class PortfolioController : MonoBehaviour
     private Button btnBackToHome;
     private Button btnDetailDemo;
     private Button btnDetailGitHub;
-
+    private Label scrollChevron;
+    private float chevronBounceTimer = 0f;
     private float previousScrollPosition = 0f;
     private string currentDemoUrl;
     private string currentGithubUrl;
+    private bool hasDismissedChevron = false;
 
     private void OnEnable()
     {
@@ -40,6 +42,27 @@ public class PortfolioController : MonoBehaviour
         if (btnDetailGitHub != null) btnDetailGitHub.clicked += () => { if (!string.IsNullOrEmpty(currentGithubUrl)) Application.OpenURL(currentGithubUrl); };
         var backdrop = root.Q<VisualElement>("DetailBackdrop");
         if (backdrop != null) backdrop.RegisterCallback<ClickEvent>(evt => OnBackClicked());
+
+        scrollChevron = root.Q<Label>("ScrollChevron");
+        var mainScroll = root.Q<ScrollView>("MainScrollArea");
+
+        if (mainScroll != null && scrollChevron != null)
+        {
+            scrollChevron.AddToClassList("scroll-chevron--hidden");
+            mainScroll.verticalScroller.valueChanged += (scrollValue) =>
+            {
+                if (hasDismissedChevron) return;
+                if (scrollValue > 50f)
+                {
+                    scrollChevron.AddToClassList("scroll-chevron--hidden");
+                    hasDismissedChevron = true;
+                }
+                else
+                {
+                    scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
+                }
+            };
+        }
     }
 
     private void OnDisable()
@@ -47,6 +70,17 @@ public class PortfolioController : MonoBehaviour
         if (btnEnter != null) btnEnter.clicked -= OnEnterPortfolioClicked;
         if (btnBack != null) btnBack.clicked -= OnBackClicked;
         if (btnBackToHome != null) btnBackToHome.clicked -= OnBackToHomeClicked;
+    }
+
+    private void Update()
+    {
+        // Bounces the chevron up and down
+        if (scrollChevron != null && !scrollChevron.ClassListContains("scroll-chevron--hidden"))
+        {
+            chevronBounceTimer += Time.deltaTime * 3f;
+            float yOffset = Mathf.Sin(chevronBounceTimer) * -10f;
+            scrollChevron.style.translate = new Translate(0, yOffset, 0);
+        }
     }
 
     private void OnEnterPortfolioClicked()
@@ -69,6 +103,8 @@ public class PortfolioController : MonoBehaviour
         // Reset the loader state for the next time we enter
         var loader = GetComponent<PortfolioProjectLoaderWeb>();
         if (loader != null) loader.OnPortfolioClosed();
+        // Hide chevron on the home screen
+        if (scrollChevron != null) scrollChevron.AddToClassList("scroll-chevron--hidden");
     }
 
     public void ShowProjectDetail(string title, string description, string tagString, Texture2D screenshot, string demoUrl = "", string githubUrl = "")

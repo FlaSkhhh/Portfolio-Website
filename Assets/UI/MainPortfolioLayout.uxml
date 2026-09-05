@@ -63,6 +63,7 @@
             </ui:VisualElement>
         </ui:ScrollView>
 
+        <ui:Label name="ScrollChevron" class="scroll-chevron" text="↓" picking-mode="Ignore" />
         <!-- Upgraded Modal Overlay -->
         <ui:VisualElement name="ProjectDetailView" class="project-detail-view" style="display: none;">
             <!-- Dark blurred backdrop -->

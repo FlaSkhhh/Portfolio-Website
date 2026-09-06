@@ -6,7 +6,19 @@
       "tag": "Unity Netcode | 34MB APK",
       "description": "Performance-optimized up to 5v5 team-based multiplayer game utilizing Unity Netcode, Relay, and Lobby services with custom RPCs and cross-platform Android/WebGL simulation.",
       "screenshotUrl": "Screenshots/HandCricket.jpg",
-      "caseStudyUrl": "https://yourportfolio.netlify.app/projects/hand-cricket"
+      "caseStudyUrl": "https://yourportfolio.netlify.app/projects/hand-cricket",
+      "githubUrl": "https://github.com/yourhandle/hand-cricket",
+      "platform": "Android / WebGL",
+      "bodyParagraphs": [
+        "Building a real-time multiplayer game that fits into a 34MB APK required strict asset management and highly optimized network traffic. I utilized Unity Netcode for GameObjects (NGO) alongside Unity Relay to bypass strict NAT punch-through issues on mobile networks.",
+        "To handle the 5v5 matchmaking, I integrated Unity Lobby. State synchronization is kept minimal—only passing enum states and compressed integers via custom RPCs, rather than heavy transform data.",
+        "One of the biggest hurdles was ensuring WebGL and Android clients stayed perfectly synchronized despite frame-rate discrepancies, which was solved by decoupling the game logic tick rate from the rendering framerate."
+      ],
+      "extraScreenshots": [
+        "Screenshots/HandCricket_Matchmaking.jpg",
+        "",
+        "Screenshots/HandCricket_Gameplay.jpg"
+      ]
     },
     {
       "id": "boss-fight",
@@ -14,7 +26,17 @@
       "tag": "AI & FSM | Combat Systems",
       "description": "Modular boss AI designed using Finite State Machines to manage complex behavior transitions, attack patterns, and animation events across multiple combat phases.",
       "screenshotUrl": "Screenshots/BossFight.jpg",
-      "caseStudyUrl": "https://yourportfolio.netlify.app/projects/boss-fight"
+      "caseStudyUrl": "https://yourportfolio.netlify.app/projects/boss-fight",
+      "githubUrl": "https://github.com/yourhandle/boss-fight",
+      "platform": "PC / Mac",
+      "bodyParagraphs": [
+        "To make the boss encounter feel dynamic and readable, I engineered a modular Finite State Machine (FSM) architecture. Instead of massive update loops, each behavior (Idle, Dash, AOE_Attack) is encapsulated in its own state class.",
+        "Transitions between states are driven by distance checks and health thresholds. Furthermore, I tied hitbox activations directly to Animation Events, ensuring the damage frames perfectly sync with the visual swing of the weapon."
+      ],
+      "extraScreenshots": [
+        "null",
+        "Screenshots/BossFight_Phase2.jpg"
+      ]
     },
     {
       "id": "infinite-runner",
@@ -22,7 +44,17 @@
       "tag": "Custom HLSL | Procedural Gen",
       "description": "Custom vertex shader simulating world curvature with procedural environment generation and multi-character selection featuring seamless restart logic.",
       "screenshotUrl": "Screenshots/InfiniteRunner.jpg",
-      "caseStudyUrl": "https://yourportfolio.netlify.app/projects/infinite-runner"
+      "caseStudyUrl": "https://yourportfolio.netlify.app/projects/infinite-runner",
+      "githubUrl": "",
+      "platform": "Mobile",
+      "bodyParagraphs": [
+        "Instead of physically bending the level geometry, I wrote a custom HLSL vertex shader that offsets the Y-axis of vertices based on their Z-distance from the camera. This creates an 'Animal Crossing' style world curvature while maintaining flat physics colliders for precise platforming.",
+        "The procedural generation uses an object pool of track segments, seamlessly recycling them behind the camera and re-spawning them ahead to maintain a strict 60 FPS on lower-end mobile devices."
+      ],
+      "extraScreenshots": [
+        "Screenshots/Runner_ShaderGraph.jpg",
+        "no"
+      ]
     },
     {
       "id": "rollback-netcode-proto",
@@ -30,7 +62,15 @@
       "tag": "C# | Custom Physics | Bit Packing",
       "description": "Lockstep rollback networking prototype built from scratch with fixed-point arithmetic, circular state history buffers, and bit-packed input delta compression.",
       "screenshotUrl": "Screenshots/RollbackNetcode.jpg",
-      "caseStudyUrl": "https://github.com/yourhandle/rollback-netcode"
+      "caseStudyUrl": "",
+      "githubUrl": "https://github.com/yourhandle/rollback-netcode",
+      "platform": "PC",
+      "bodyParagraphs": [
+        "Standard floating-point math is non-deterministic across different CPUs, which breaks rollback networking. I wrote a custom fixed-point math library to ensure 100% deterministic physics simulations.",
+        "Inputs are bit-packed into lightweight integers and sent over UDP. If a packet is dropped, the system utilizes circular state history buffers to rewind the simulation, apply the delayed input, and fast-forward back to the current frame in a single tick."
+      ],
+      "extraScreenshots": [
+      ]
     },
     {
       "id": "memory-profiler-tool",
@@ -38,7 +78,11 @@
       "tag": "Engine Tools | Memory Allocations",
       "description": "Lightweight in-engine memory allocation auditor and generic multi-tier pool manager eliminating GC spikes across scene streaming cycles.",
       "screenshotUrl": "Screenshots/MemoryProfiler.jpg",
-      "caseStudyUrl": "https://github.com/yourhandle/memory-profiler"
+      "caseStudyUrl": "",
+      "githubUrl": "https://github.com/yourhandle/memory-profiler",
+      "platform": "Unity Editor",
+      "bodyParagraphs": [],
+      "extraScreenshots": ["https://github.com/yourhandle/memory-profiler"]
     }
   ]
 }

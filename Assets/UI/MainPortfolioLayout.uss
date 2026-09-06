@@ -1,24 +1,37 @@
 /* ===== GLOBAL TYPOGRAPHY ===== */
 * {
-    -unity-font-definition: url('project://database/Assets/Resources/Inter-Regular.ttf'); 
+    -unity-font-definition: url('project://database/Assets/Resources/Inter-Regular.ttf');
+}
+/* Cyberpunk display font for Headers, Buttons, and Retro text */
+.cyber-text,
+.header-title,
+.section-title,
+.detail-title,
+.detail-meta-header,
+.intro-headline,
+.retro-text {
+    -unity-font-definition: url('project://database/Assets/Resources/Orbitron-Regular.ttf');
+}
+Scroller {
+    display: none;
 }
 
 .main-container {
     width: 100%;
     height: 100%;
     flex-direction: column;
-    background-color: transparent; /* Changed from #0B0C10 */
+    background-color: transparent; 
     color: #FFFFFF;
 }
 
-/* Button Foundation Reset - Increased Sizes and locked flex-shrink */
+/* ===== BASE BUTTON RESET ===== */
 Button {
     border-width: 0;
     font-size: 16px;
     -unity-font-style: bold;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
+    border-radius: 8px; /* Kept for standard UI buttons, overridden for Cyber buttons */
     min-height: 48px;
     height: 48px;
     padding-left: 24px;
@@ -31,30 +44,132 @@ Button {
     transition-duration: 0.15s, 0.15s;
 }
 
-.btn-primary {
-    background-color: #0078D4;
-    color: #FFFFFF;
+/* ===== CYBERPUNK ACTION BUTTONS (Sprite-Based) ===== */
+.cyber-btn {
+    background-color: transparent;
+    border-width: 0;
+    border-radius: 0; /* Prevents Unity from clipping the sharp PNG corners */
+    min-width: 240px;
+    height: 52px;
+    margin-right: 24px;
+    margin-top: 16px;
+    justify-content: center;
+    align-items: center;
 }
 
-.btn-primary:hover {
-    background-color: #0088F0;
-    scale: 1.02 1.02;
+.cyber-shadow, 
+.cyber-body {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    
+    background-image: url('project://database/Assets/Resources/CP_Button_White.png');
+    
+    transition-property: -unity-background-image-tint-color;
+    transition-duration: 0.15s;
 }
 
-.btn-secondary {
-    background-color: rgba(255, 255, 255, 0.06);
-    color: #D1D5E0;
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.15);
+.cyber-shadow {
+    translate: 6px 0; 
 }
 
-.btn-secondary:hover {
-    background-color: rgba(255, 255, 255, 0.12);
-    color: #FFFFFF;
-    border-color: #00E5FF;
+.cyber-text {
+    font-size: 16px;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+    color: #000000;
+}
+.cyber-header {
+    font-size: 20px;
+    -unity-font-style: bold;
+    letter-spacing: -5px;
+    color: #000000;
 }
 
-/* Header */
+.cyber-tag {
+    position: absolute;
+    bottom: -2px;
+    right: 18px; 
+    font-size: 9px;
+    -unity-font-style: bold;
+    color: #000000;
+}
+.tag-cyan { color: #55ead4; }
+
+/* ==========================================
+   CYBERPUNK BUTTON COLOR PRESETS
+========================================== */
+
+/* 1. PRIMARY: Yellow Body / Cyan Accent / Black Text */
+.cyber-btn.primary .cyber-body { -unity-background-image-tint-color: #f3e600; }
+.cyber-btn.primary .cyber-shadow { -unity-background-image-tint-color: #55ead4; }
+.cyber-btn.primary .cyber-text { color: #000000; }
+.cyber-btn.primary:hover .cyber-body { -unity-background-image-tint-color: #55ead4; } 
+.cyber-btn.primary:hover .cyber-shadow { -unity-background-image-tint-color: #c5003c; } 
+.cyber-btn.primary:hover .cyber-text { color: #f3e600; text-shadow: 0 0 10px rgba(243, 230, 0, 0.8); }
+
+/* 2. SECONDARY: Dark Red Body / Bright Red Accent / Cyan Text */
+.cyber-btn.secondary .cyber-body { -unity-background-image-tint-color: #880425; } 
+.cyber-btn.secondary .cyber-shadow { -unity-background-image-tint-color: #c5003c; } 
+.cyber-btn.secondary .cyber-text { color: #55ead4; } 
+.cyber-btn.secondary:hover .cyber-body { -unity-background-image-tint-color: #c5003c; } 
+.cyber-btn.secondary:hover .cyber-shadow { -unity-background-image-tint-color: #f3e600; } 
+.cyber-btn.secondary:hover .cyber-text { color: #000000; }
+
+/* 3. TERTIARY (The 3-Color Special): Bright Red Body / Yellow Accent / Cyan Text */
+.cyber-btn.tertiary .cyber-body { -unity-background-image-tint-color: #c5003c; } 
+.cyber-btn.tertiary .cyber-shadow { -unity-background-image-tint-color: #f3e600; } 
+.cyber-btn.tertiary .cyber-text { color: #55ead4; } 
+.cyber-btn.tertiary .cyber-tag { color: #000000; }
+.cyber-btn.tertiary:hover .cyber-body { -unity-background-image-tint-color: #f3e600; } 
+.cyber-btn.tertiary:hover .cyber-shadow { -unity-background-image-tint-color: #55ead4; } 
+.cyber-btn.tertiary:hover .cyber-text { color: #c5003c; text-shadow: 0 0 10px rgba(197, 0, 60, 0.8); }
+
+/* 4. QUATERNARY: Hot Pink / Neon Green / Black Text */
+.cyber-btn.quaternary .cyber-body { -unity-background-image-tint-color: #FF007C; } 
+.cyber-btn.quaternary .cyber-shadow { -unity-background-image-tint-color: #00FF9D; } 
+.cyber-btn.quaternary .cyber-text { color: #000000; } 
+.cyber-btn.quaternary:hover .cyber-body { -unity-background-image-tint-color: #00FF9D; } 
+.cyber-btn.quaternary:hover .cyber-shadow { -unity-background-image-tint-color: #f3e600; } 
+.cyber-btn.quaternary:hover .cyber-text { color: #FF007C; text-shadow: 0 0 10px rgba(255, 0, 124, 0.8); }
+
+/* 5. GHOST / HACKER: Black Body / Cyan Accent / Yellow Text */
+.cyber-btn.ghost .cyber-body { -unity-background-image-tint-color: rgba(11, 12, 16, 0.95); } 
+.cyber-btn.ghost .cyber-shadow { -unity-background-image-tint-color: #55ead4; } 
+.cyber-btn.ghost .cyber-text { color: #f3e600; } 
+.cyber-btn.ghost .cyber-tag { color: #FF007C; }
+.cyber-btn.ghost:hover .cyber-body { -unity-background-image-tint-color: rgba(85, 234, 212, 0.2); } 
+.cyber-btn.ghost:hover .cyber-shadow { -unity-background-image-tint-color: #f3e600; } 
+.cyber-btn.ghost:hover .cyber-text { color: #55ead4; text-shadow: 0 0 10px rgba(85, 234, 212, 0.8); }
+
+/* ===== SOLID NEON SQUARE BACK BUTTONS ===== */
+.btn-back {
+    background-color: #55ead4; /* Solid Cyan */
+    color: #000000; /* Black Text */
+    border-width: 0;
+    border-radius: 0; /* Sharp Square */
+    
+    border-left-width: 6px;
+    border-left-color: #c5003c; /* Red left accent */
+    
+    height: 44px;
+    padding-left: 20px;
+    padding-right: 24px;
+    -unity-font-style: bold;
+    transition-property: background-color, border-color, color, scale;
+    transition-duration: 0.15s;
+}
+
+.btn-back:hover {
+    background-color: #f3e600; /* Swaps to Yellow */
+    color: #000000;
+    border-left-color: #55ead4; /* Swaps accent to Cyan */
+    scale: 1.05 1.05;
+}
+
+.btn-back-home { margin-bottom: 32px; font-size: 26px; }
+.btn-detail-back { font-size: 24px; margin-right: 16px; height: 40px; }
+
+/* ===== HEADER ===== */
 .header-bar {
     height: 64px;
     background-color: #14161F;
@@ -99,7 +214,7 @@ Button {
     color: #00E5FF;
 }
 
-/* Content Area */
+/* ===== CONTENT AREA ===== */
 .content-area {
     flex-grow: 1;
     width: 100%;
@@ -137,15 +252,6 @@ Button {
     margin-bottom: 24px;
 }
 
-.btn-enter {
-    height: 52px;
-    min-height: 52px;
-    padding-left: 42px;
-    padding-right: 42px;
-    font-size: 17px;
-    margin-top: 16px;
-}
-
 .portfolio-view {
     width: 100%;
     max-width: 2712px;
@@ -153,16 +259,6 @@ Button {
     display: none;
     flex-direction: column;
     padding: 40px 24px;
-}
-
-.btn-back-home, .btn-back {
-    margin-bottom: 32px;
-    height: 44px;
-    min-height: 44px;
-    font-size: 26px; /* Bumps up the size of the arrow */
-    padding-left: 28px;
-    padding-right: 28px;
-    -unity-font-style: bold;
 }
 
 .experience-section {
@@ -186,7 +282,7 @@ Button {
     flex-direction: column;
 }
 
-/* Gaming Shelf */
+/* ===== GAMING SHELF ===== */
 .gaming-shelf {
     width: 100%;
     margin-top: 48px;
@@ -214,85 +310,187 @@ Button {
     margin-bottom: 12px;
 }
 
-/* Modal Overlay */
+/* ===== FULL PAGE CASE STUDY ===== */
 .project-detail-view {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
     width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-}
-
-.detail-overlay-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(5, 6, 8, 0.85);
+    flex-grow: 1; 
+    background-color: transparent;
 }
 
 .detail-panel {
-    width: 90%;
-    max-width: 900px;
-    max-height: 85%;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border-width: 0;
+    border-radius: 0;
+    padding: 0;
+    flex-direction: column;
+}
+
+.detail-header-row {
+    flex-direction: row;
+    align-items: center;
     background-color: #14161F;
-    border-width: 1px;
-    border-color: rgba(0, 229, 255, 0.3);
-    border-radius: 16px;
-    padding: 40px;
-    overflow: hidden;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+    padding: 12px 32px;
+}
+
+.detail-title {
+    font-size: 24px;
+    -unity-font-style: bold;
+    color: #FFFFFF;
+    flex-grow: 1;
+}
+
+.detail-scroll-area {
+    flex-grow: 1;
+    width: 100%;
 }
 
 .detail-image {
     width: 100%;
-    height: 380px;
+    max-width: 1000px; 
+    align-self: center; 
+    height: 450px; 
+    min-height: 300px;
+    max-height: 600px;
     background-color: #0B0C10;
-    border-radius: 10px;
+    border-radius: 12px;
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.08);
-    margin-bottom: 24px;
-    -unity-background-scale-mode: scale-and-crop;
+    margin-top: 32px; 
+    margin-bottom: 40px;
+    -unity-background-scale-mode: scale-to-fit; 
 }
 
-.detail-title {
-    font-size: 38px;
+.detail-meta,
+.detail-meta-header,
+.detail-description,
+.detail-footer {
+    width: 100%;
+    max-width: 900px;
+    align-self: center; 
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.detail-meta-header {
+    font-size: 13px;
     -unity-font-style: bold;
-    color: #FFFFFF;
-    white-space: normal;
-    margin-bottom: 8px;
-}
-
-.detail-tags {
-    margin-bottom: 20px;
-}
-
-.detail-tag-list {
-    font-size: 15px;
+    letter-spacing: 1.5px;
     color: #00E5FF;
-    -unity-font-style: bold;
+    margin-top: 16px;
+    margin-bottom: 12px;
+}
+
+.detail-tag-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
 }
 
 .detail-description {
     font-size: 17px;
-    color: #C3C7D5;
+    color: #C0C5D0;
     white-space: normal;
-    margin-bottom: 32px;
+    margin-bottom: 48px; 
 }
 
 .detail-footer {
     flex-direction: row;
-    align-items: center;
+    justify-content: flex-start; 
+    border-top-width: 1px;
+    border-top-color: rgba(255, 255, 255, 0.08);
+    padding-top: 32px;
+    padding-bottom: 100px; 
 }
 
 .detail-footer Button {
     margin-right: 16px;
+}
+
+/* ===== RETRO LOADING SCREEN ===== */
+.loading-screen {
+    width: 100%;
+    height: 120px;
+    background-color: transparent;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    transition-property: opacity;
+    transition-duration: 0.5s;
+}
+
+.retro-container {
+    width: 300px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.retro-text {
+    color: #FFDE00; 
+    font-size: 16px;
+    -unity-font-style: bold;
+    letter-spacing: 3px;
+    margin-bottom: 24px;
+}
+
+.cyber-spinner {
+    width: 64px;
+    height: 64px;
+    border-width: 4px;
+    border-radius: 50%; /* Creates a perfect circle */
+    
+    /* Creates a dashed neon ring effect */
+    border-color: rgba(85, 234, 212, 0.1); 
+    border-top-color: #55ead4; 
+    border-right-color: #FF007C; 
+}
+
+/* ===== CSS-ONLY SOLID TRIANGLE CHEVRON ===== */
+.scroll-chevron {
+    position: absolute;
+    bottom: 32px; 
+    align-self: center;
+    
+    width: 0;
+    height: 0;
+    background-color: transparent;
+    
+    border-left-width: 16px;
+    border-right-width: 16px;
+    border-top-width: 20px;
+    border-bottom-width: 0;
+    
+    border-left-color: rgba(0,0,0,0);
+    border-right-color: rgba(0,0,0,0);
+    border-top-color: #f3e600; 
+    
+    transition-property: opacity, translate;
+    transition-duration: 0.3s;
+}
+
+.scroll-chevron--hidden {
+    opacity: 0;
+    translate: 0 10px;
+}
+
+/* ===== SKELETON LOADER ===== */
+.skeleton-loader {
+    background-color: rgba(0, 0, 0, 0.6);
+    border-color: rgba(243, 230, 0, 0.3); 
+    border-width: 2px;
+    border-radius: 12px; 
+    justify-content: center;
+    align-items: center;
+}
+
+.skeleton-text {
+    color: #f3e600; 
+    font-size: 14px;
+    letter-spacing: 2px;
+    -unity-font-style: bold;
 }
 
 /* ===== PORTRAIT / MOBILE OVERRIDES ===== */
@@ -330,13 +528,13 @@ Button {
     }
 
     .detail-panel {
-        width: 95%;
-        padding: 24px 16px;
-        max-height: 90%;
+        width: 100%; 
+        padding: 0; 
+        max-height: none; 
     }
 
     .detail-title {
-        font-size: 30px;
+        font-size: 20px;
     }
 
     .detail-description {
@@ -347,177 +545,36 @@ Button {
         padding-left: 10px;
         padding-right: 10px;
     }
-}
-/* ===== RETRO LOADING SCREEN ===== */
-.loading-screen {
-    width: 100%;
-    height: 120px;
-    background-color: transparent;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 24px;
-    transition-property: opacity;
-    transition-duration: 0.5s;
+    
+    .detail-image {
+        height: 250px;
+        margin-bottom: 24px;
+    }
+
+    .detail-meta,
+    .detail-meta-header,
+    .detail-description,
+    .detail-footer {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .detail-footer {
+        flex-direction: column; 
+        padding-bottom: 60px;
+    }
+
+    .detail-footer Button {
+        margin-right: 0;
+        margin-left: 0;
+        margin-bottom: 12px;
+        width: 100%; 
+    }
 }
 
-.retro-container {
-    width: 300px;
-    flex-direction: column;
-    align-items: center;
-}
 
-.retro-text {
-    color: #FFDE00; /* Arcade Yellow */
-    font-size: 16px;
-    -unity-font-style: bold;
-    letter-spacing: 3px;
-    margin-bottom: 24px;
-}
-
-.retro-track {
-    width: 100%;
-    height: 32px;
-    border-bottom-width: 4px;
-    border-bottom-color: #1919A6; /* Arcade Maze Blue */
-    position: relative;
-    justify-content: center;
-}
-
-.retro-dot {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background-color: #FFAAAA;
-    border-radius: 3px;
-    top: 13px; /* Center in the track */
-}
-
-.retro-character {
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    background-color: #FFDE00;
-    border-radius: 12px; /* Makes it a perfect circle */
-    top: 4px;
-    left: 0%;
-    transition-property: left;
-    transition-duration: 0.3s;
-    transition-timing-function: ease-out-back;
-}
-
-/* ===== PROJECT DETAIL MODAL ===== */
-.project-detail-view {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    align-items: center;
-    justify-content: center;
-}
-
-.detail-overlay-bg {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(5, 6, 10, 0.82);
-}
-
-.detail-panel {
-    width: 85%;
-    max-width: 900px;
-    height: 85%;
-    max-height: 750px;
-    background-color: #12141C;
-    border-color: rgba(255, 255, 255, 0.12);
-    border-width: 1px;
-    border-radius: 12px;
-    padding: 24px;
-    flex-direction: column;
-}
-
-.detail-header-row {
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 16px;
-    border-bottom-width: 1px;
-    border-bottom-color: rgba(255, 255, 255, 0.08);
-    padding-bottom: 12px;
-}
-
-.btn-detail-back {
-    height: 38px;
-    font-size: 22px;
-    padding: 0 16px;
-    margin-right: 16px;
-    -unity-font-style: bold;
-}
-
-.detail-title {
-    font-size: 24px;
-    -unity-font-style: bold;
-    color: #FFFFFF;
-    flex-grow: 1;
-}
-
-.detail-scroll-area {
-    flex-grow: 1;
-    margin-bottom: 16px;
-    padding-right: 8px;
-}
-
-.detail-image {
-    width: 100%;
-    height: 340px;
-    border-radius: 8px;
-    background-color: #0E1017;
-    -unity-background-scale-mode: scale-and-crop;
-    margin-bottom: 20px;
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.06);
-}
-
-.detail-meta-header {
-    font-size: 11px;
-    -unity-font-style: bold;
-    letter-spacing: 1.5px;
-    color: #00E5FF;
-    margin-top: 12px;
-    margin-bottom: 8px;
-}
-
-.detail-tag-container {
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin-bottom: 12px;
-}
-
-.detail-description {
-    font-size: 15px;
-    color: #C0C5D0;
-    white-space: normal;
-    margin-bottom: 24px;
-}
-
-.detail-footer {
-    flex-direction: row;
-    justify-content: flex-end;
-    border-top-width: 1px;
-    border-top-color: rgba(255, 255, 255, 0.08);
-    margin-left: 12px;
-    padding-top: 16px;
-}
-
-.scroll-chevron {
-    position: absolute;
-    bottom: 40px; 
-    left: 0;
-    right: 0; 
-    -unity-text-align: middle-center;
-    font-size: 32px;
-    color: #00E5FF;
-    -unity-font-style: bold;
-    transition-property: opacity, translate;
-    transition-duration: 0.3s;
-}
-
-.scroll-chevron--hidden {
-    opacity: 0;
-    translate: 0 10px;
-}
+/* 	#000000	(0,0,0) black
+#c5003c	(197,0,60) bright red
+#880425	(136,4,37) dark red
+#f3e600	(243,230,0) yellow
+#55ead4	(85,234,212) cyan */

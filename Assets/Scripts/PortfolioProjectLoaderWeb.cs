@@ -6,30 +6,34 @@ using System.Collections.Generic;
 
 public class PortfolioProjectLoaderWeb : MonoBehaviour
 {
-    [SerializeField] private UIDocument uiDocument;
-    [SerializeField] private VisualTreeAsset projectShowcaseRowTemplate;
-    [SerializeField] private bool loadFromStreamingAssets = true;
-    [SerializeField] private string projectDataUrl = "projects.json";
-    [SerializeField] private string remoteServerUrl = "https://yournetlifydomain.netlify.app/api/projects.json";
+    [SerializeField] UIDocument uiDocument;
+    [SerializeField] VisualTreeAsset projectShowcaseRowTemplate;
+    [SerializeField] bool loadFromStreamingAssets = true;
+    [SerializeField] string projectDataUrl = "projects.json";
+    [SerializeField] string remoteServerUrl = "https://yournetlifydomain.netlify.app/api/projects.json";
 
-    private VisualElement projectScrollView;
-    private PortfolioController portfolioController;
-    private ScrollAnimationController scrollAnimationController;
-    private List<Texture2D> cachedTextures = new();
+    VisualElement projectScrollView;
+    PortfolioController portfolioController;
+    ScrollAnimationController scrollAnimationController;
+    List<Texture2D> cachedTextures = new();
 
     // Loader Elements
-    private VisualElement loadingScreen;
-    private VisualElement loadingCharacter;
-    private Label loadingText;
+    VisualElement loadingScreen;
+    VisualElement loadingCharacter;
+    VisualElement cyberSpinner;
+    VisualElement scrollChevron;
+    ScrollView mainScrollArea;
+    Label loadingText;
 
-    private int totalProjectsToLoad = 0;
-    private int projectsLoaded = 0;
-    private bool isDataLoaded = false;
-    private bool isPortfolioOpen = false;
-    private bool hasPlayedTransition = false; // Prevents the disappearing glitch
+    int totalProjectsToLoad = 0;
+    int projectsLoaded = 0;
+    bool isDataLoaded = false;
+    bool isPortfolioOpen = false;
+    bool hasPlayedTransition = false; // Prevents the disappearing glitch
+    float spinnerRotation = 0f;
 
     [System.Serializable]
-    private struct ProjectMetadata
+    public struct ProjectMetadata
     {
         public string title; public string Title;
         public string tag; public string Tag;
@@ -38,17 +42,22 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         public string caseStudyUrl; public string githubUrl;
         public string platform; public string Platform;
 
+        //JSON fields for the full Case Study page
+        public string[] bodyParagraphs; // Array of text blocks for the detail page
+        public string[] extraScreenshots; // Array of paths (e.g., "Screenshots/Game_2")
+
         public string GetTitle() => !string.IsNullOrEmpty(title) ? title : Title;
         public string GetTag() => !string.IsNullOrEmpty(tag) ? tag : Tag;
         public string GetDescription() => !string.IsNullOrEmpty(description) ? description : Description;
         public string GetScreenshot() => !string.IsNullOrEmpty(screenshotUrl) ? screenshotUrl : ScreenshotAddress;
         public string GetPlatform() => !string.IsNullOrEmpty(platform) ? platform : (!string.IsNullOrEmpty(Platform) ? Platform : "Unity / C#");
+
     }
 
     [System.Serializable]
-    private struct ProjectsDataWrapper { public ProjectMetadata[] projects; }
+    struct ProjectsDataWrapper { public ProjectMetadata[] projects; }
 
-    private void OnEnable()
+    void OnEnable()
     {
         if (uiDocument == null) uiDocument = GetComponent<UIDocument>();
         if (uiDocument == null || projectShowcaseRowTemplate == null) return;
@@ -62,18 +71,40 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         projectScrollView = root.Q<VisualElement>("ProjectScrollView");
         portfolioController = GetComponent<PortfolioController>();
         scrollAnimationController = GetComponent<ScrollAnimationController>();
+        cyberSpinner = root.Q<VisualElement>("CyberSpinner");
 
         if (projectScrollView != null)
         {
             projectScrollView.Clear();
             StartCoroutine(LoadProjectsAsync());
         }
+
+        mainScrollArea = root.Q<ScrollView>("MainScrollArea");
+        scrollChevron = root.Q<VisualElement>("ScrollChevron");
+
+        if (mainScrollArea != null && scrollChevron != null)
+        {
+            // Check chevron visibility whenever the screen size changes or rows are added
+            mainScrollArea.RegisterCallback<GeometryChangedEvent>(evt => CheckChevronVisibility());
+
+            // Check chevron visibility whenever the user scrolls
+            mainScrollArea.verticalScroller.valueChanged += (v) => CheckChevronVisibility();
+        }
     }
 
-    private void OnDisable()
+    void OnDisable()
     {
-        foreach (var texture in cachedTextures) { if (texture != null) Destroy(texture); }
         cachedTextures.Clear();
+    }
+
+    void Update()
+    {
+        if (cyberSpinner != null && loadingScreen != null && loadingScreen.style.display == DisplayStyle.Flex)
+        {
+            // Spins the ring 360 degrees per second
+            spinnerRotation += Time.deltaTime * 360f;
+            cyberSpinner.style.rotate = new Rotate(Angle.Degrees(spinnerRotation));
+        }
     }
 
     public void OnPortfolioOpened()
@@ -108,7 +139,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         isPortfolioOpen = false;
     }
 
-    private IEnumerator LoadProjectsAsync()
+    IEnumerator LoadProjectsAsync()
     {
         if (loadingText != null) loadingText.text = "LOADING LEVEL...";
         if (loadingCharacter != null) loadingCharacter.style.left = Length.Percent(0f);
@@ -148,7 +179,12 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         }
     }
 
-    private void OnProjectAssetLoaded()
+    public IEnumerator LoadExtraImageRoutine(string path, System.Action<Texture2D> callback)
+    {
+        yield return StartCoroutine(LoadProjectScreenshotAsync(null, path, callback));
+    }
+
+     void OnProjectAssetLoaded()
     {
         projectsLoaded++;
         if (loadingCharacter != null)
@@ -171,7 +207,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         }
     }
 
-    private IEnumerator HideLoadingScreen()
+    IEnumerator HideLoadingScreen()
     {
         if (loadingText != null) loadingText.text = "READY";
         if (loadingCharacter != null) loadingCharacter.style.left = Length.Percent(100f);
@@ -194,6 +230,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             if (scrollChevron != null && (mainScroll == null || mainScroll.verticalScroller.value < 50f))
             {
                 scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
+                CheckChevronVisibility();
             }
         }
 
@@ -203,7 +240,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         }
     }
 
-    private void CreateShowcaseRow(ProjectMetadata project, int index)
+    void CreateShowcaseRow(ProjectMetadata project, int index)
     {
         VisualElement rowElement = projectShowcaseRowTemplate.CloneTree();
         var rootRow = rowElement.Q<VisualElement>(className: "showcase-row") ?? rowElement.Q<VisualElement>("ShowcaseRow");
@@ -231,7 +268,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 
         if (caseStudyButton != null)
         {
-            caseStudyButton.clicked += () => { if (portfolioController != null) portfolioController.ShowProjectDetail(project.GetTitle(), project.GetDescription(), project.GetTag(), projectTexture, project.caseStudyUrl, project.githubUrl); };
+            caseStudyButton.clicked += () => { if (portfolioController != null) portfolioController.ShowProjectDetail(project, projectTexture); };
         }
 
         if (githubButton != null)
@@ -250,9 +287,9 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         }));
     }
 
-    private IEnumerator LoadProjectScreenshotAsync(VisualElement rowElement, string screenshotPath, System.Action<Texture2D> onTextureLoaded)
+    IEnumerator LoadProjectScreenshotAsync(VisualElement rowElement, string screenshotPath, System.Action<Texture2D> onTextureLoaded)
     {
-        if (rowElement == null || string.IsNullOrEmpty(screenshotPath))
+        if (string.IsNullOrEmpty(screenshotPath))
         {
             onTextureLoaded?.Invoke(null);
             yield break;
@@ -267,7 +304,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
                 if (www.result == UnityWebRequest.Result.Success)
                 {
                     var tex = DownloadHandlerTexture.GetContent(www);
-                    ApplyTextureToRow(rowElement, tex);
+                    if (rowElement != null) ApplyTextureToRow(rowElement, tex);
                     onTextureLoaded?.Invoke(tex);
                 }
                 else onTextureLoaded?.Invoke(null);
@@ -291,9 +328,10 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         }
     }
 
-    private void ApplyTextureToRow(VisualElement rowElement, Texture2D texture)
+    void ApplyTextureToRow(VisualElement rowElement, Texture2D texture)
     {
-        if (texture == null) return;
+        //for extrascreenshots, we don't have a rowElement, so we just return if it's null and the invoking function will handle the callback with adding image dynamically.
+        if (rowElement == null || texture == null) return;
         var projectImage = rowElement.Q<VisualElement>(className: "project-image") ?? rowElement.Q<VisualElement>("ProjectImage");
         if (projectImage != null)
         {
@@ -302,8 +340,9 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         }
     }
 
-    private ProjectMetadata[] GetDefaultFallbackProjects()
+    ProjectMetadata[] GetDefaultFallbackProjects()
     {
+        return new ProjectMetadata[] { };
         return new ProjectMetadata[]
         {
             new ProjectMetadata { title = "Real-Time Multiplayer Hand Cricket", tag = "Unity Netcode,Relay & Lobby,Custom RPCs", description = "Performance-optimized up to 5v5 team-based multiplayer game utilizing Unity Netcode, Relay, and Lobby services with custom RPCs and cross-platform Android/WebGL simulation.", screenshotUrl = "Screenshots/HandCricket", platform = "Android / WebGL | 34MB APK" },
@@ -312,7 +351,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         };
     }
 
-    private IEnumerator LoadFromStreamingAssets(System.Action<ProjectsDataWrapper> onComplete)
+    IEnumerator LoadFromStreamingAssets(System.Action<ProjectsDataWrapper> onComplete)
     {
         string path = System.IO.Path.Combine(Application.streamingAssetsPath, projectDataUrl);
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -339,7 +378,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 #endif
     }
 
-    private IEnumerator LoadFromRemoteServer(System.Action<ProjectsDataWrapper> onComplete)
+    IEnumerator LoadFromRemoteServer(System.Action<ProjectsDataWrapper> onComplete)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(remoteServerUrl))
         {
@@ -349,6 +388,22 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
                 onComplete?.Invoke(JsonUtility.FromJson<ProjectsDataWrapper>(www.downloadHandler.text));
             else
                 yield return StartCoroutine(LoadFromStreamingAssets(onComplete));
+        }
+    }
+
+    void CheckChevronVisibility()
+    {
+        if (mainScrollArea == null || scrollChevron == null) return;
+
+        // highValue is 0 if all content fits on the screen perfectly.
+        // We also hide the chevron if the user has scrolled down more than 10 pixels.
+        if (mainScrollArea.verticalScroller.highValue <= 0 || mainScrollArea.verticalScroller.value > 10f)
+        {
+            scrollChevron.AddToClassList("scroll-chevron--hidden");
+        }
+        else
+        {
+            scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
         }
     }
 }

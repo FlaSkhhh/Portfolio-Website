@@ -1,100 +1,82 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <Style src="project://database/Assets/UI/MainPortfolioLayout.uss" />
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/MainPortfolioLayout.uss?fileID=7433441132597879392&amp;guid=2e4354352d70aa8469aab964a493cbc6&amp;type=3#MainPortfolioLayout"/>
     <ui:VisualElement class="main-container">
-
-        <!-- Header -->
         <ui:VisualElement class="header-bar">
-            <ui:Label class="header-title" text="Shantanu Nandkhile" />
+            <ui:Label text="Shantanu Nandkhile" class="header-title"/>
             <ui:VisualElement class="header-nav">
-                <ui:Button name="NavContact" class="nav-btn" text="Contact" />
-            </ui:VisualElement>
+                <ui:Button name="NavContact" class="cyber-btn secondary" style="min-width: 160px; height: 40px; margin-top: 0;">
+                <ui:VisualElement class="cyber-shadow" />
+                <ui:VisualElement class="cyber-body">
+                </ui:VisualElement>
+                <ui:Label text="CONTACT" class="cyber-text" style="font-size: 13px;" />
+            </ui:Button>
+            </ui:VisualElement> 
         </ui:VisualElement>
-
-        <!-- Main Scrollable Body (Added Name & Permanent Scrollbar here) -->
-        <ui:ScrollView name="MainScrollArea" class="content-area" vertical-scroller-visibility="Hidden">
-            
-            <!-- Hero / Intro -->
+        <ui:ScrollView name="MainScrollArea" vertical-scroller-visibility="Hidden" class="content-area">
             <ui:VisualElement name="IntroView" class="intro-view">
                 <ui:VisualElement class="intro-content">
-                    <ui:Label class="intro-headline" text="Systems &amp; Multiplayer Game Programmer" />
-                    <ui:Label class="intro-summary" text="Passionate game systems engineer with production experience in Unity. Specialized in multiplayer architecture, network gameplay, and optimized WebGL/mobile experiences." />
-                    <ui:Button name="BtnEnter" class="btn-enter btn-primary" text="Explore Portfolio" />
+                    <ui:Label text="Systems &amp; Multiplayer Game Programmer" class="intro-headline"/>
+                    <ui:Label text="Passionate game systems engineer with production experience in Unity. Specialized in multiplayer architecture, network gameplay, and optimized WebGL/mobile experiences." class="intro-summary"/>
+                    <ui:Button name="BtnEnter" class="cyber-btn primary" style="margin-top: 24px;">
+                        <ui:VisualElement class="cyber-shadow"/>
+                        <ui:VisualElement class="cyber-body"/>
+                        <ui:Label text="EXPLORE PORTFOLIO" class="cyber-header"/>
+                    </ui:Button>
                 </ui:VisualElement>
             </ui:VisualElement>
-
-            <!-- Main Portfolio Section -->
             <ui:VisualElement name="MainPortfolioView" class="portfolio-view">
-                
-                <ui:Button name="BtnBackToHome" class="btn-secondary btn-back-home" text="←" />
-
+                <ui:Button name="BtnBackToHome" text="←" class="btn-back btn-back-home"/>
                 <ui:VisualElement class="experience-section">
-                    <ui:Label class="section-title" text="Featured Projects" />
-                    <ui:Label class="section-subtitle" text="A selection of core engineering work in multiplayer architecture, shaders, and AI systems." />
+                    <ui:Label text="Featured Projects" class="section-title"/>
+                    <ui:Label text="A selection of core engineering work in multiplayer architecture, shaders, and AI systems." class="section-subtitle"/>
                 </ui:VisualElement>
-                 <!-- NEW: Retro Arcade Loading Screen -->
                 <ui:VisualElement name="LoadingScreen" class="loading-screen">
                     <ui:VisualElement class="retro-container">
-                        <ui:Label name="LoadingText" class="retro-text" text="INSERT COIN..." />
-                
-                        <!-- The track the character moves along -->
-                        <ui:VisualElement class="retro-track">
-                            <!-- Dots for the track -->
-                            <ui:VisualElement class="retro-dot" style="left: 25%;" />
-                            <ui:VisualElement class="retro-dot" style="left: 50%;" />
-                            <ui:VisualElement class="retro-dot" style="left: 75%;" />
-                            <ui:VisualElement class="retro-dot" style="left: 100%;" />
-                    
-                            <!-- The moving character -->
-                            <ui:VisualElement name="LoadingCharacter" class="retro-character" />
-                        </ui:VisualElement>
+                        <ui:VisualElement name="CyberSpinner" class="cyber-spinner" />
+                        <ui:Label name="LoadingText" class="cyber-text" text="DECRYPTING ASSETS..." style="font-size: 14px; margin-top: 16px;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <!-- Converted from ScrollView to VisualElement -->
-                <ui:VisualElement name="ProjectScrollView" class="project-scroll-view" />
-
-                <!-- Gaming Shelf -->
+                <ui:VisualElement name="ProjectScrollView" class="project-scroll-view"/>
                 <ui:VisualElement name="GamingShelfView" class="gaming-shelf">
-                    <ui:Label class="section-title" text="Competitive Shelf" />
+                    <ui:Label text="Competitive Shelf" class="section-title"/>
                     <ui:VisualElement class="gaming-shelf-content">
-                        <ui:Label class="game-card" text="🏆 Clash Royale" />
-                        <ui:Label class="game-card" text="⚔️ Counter-Strike 2" />
+                        <ui:Label text="🏆 Clash Royale" class="game-card"/>
+                        <ui:Label text="⚔️ Counter-Strike 2" class="game-card"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:ScrollView>
-
-        <ui:Label name="ScrollChevron" class="scroll-chevron" text="↓" picking-mode="Ignore" />
-        <!-- Upgraded Modal Overlay -->
+        <ui:Label name="ScrollChevron" picking-mode="Ignore" class="scroll-chevron"/>
         <ui:VisualElement name="ProjectDetailView" class="project-detail-view" style="display: none;">
-            <!-- Dark blurred backdrop -->
-            <ui:VisualElement name="DetailBackdrop" class="detail-overlay-bg" />
-
-            <!-- Floating Modal Card -->
             <ui:VisualElement class="detail-panel">
-                <!-- Header with Back Button and Title -->
                 <ui:VisualElement class="detail-header-row">
-                    <ui:Button name="BtnBack" class="btn-secondary btn-detail-back" text="←" />
-                    <ui:Label name="DetailTitle" class="detail-title" text="Project Title" />
+                    <ui:Button name="BtnBack" text="←" class="btn-back btn-detail-back"/>
+                    <ui:Label name="DetailTitle" text="Project Title" class="detail-title"/>
                 </ui:VisualElement>
-
-                <!-- Scrollable Body for Deep Technical Breakdown -->
                 <ui:ScrollView class="detail-scroll-area">
-                    <ui:VisualElement name="DetailImage" class="detail-image" />
-                    
+                    <ui:VisualElement name="DetailImage" class="detail-image"/>
                     <ui:VisualElement class="detail-meta">
-                        <ui:Label text="TECH STACK" class="detail-meta-header" />
-                        <ui:VisualElement name="DetailTagsContainer" class="detail-tag-container" />
+                        <ui:Label text="TECH STACK" class="detail-meta-header"/>
+                        <ui:VisualElement name="DetailTagsContainer" class="detail-tag-container"/>
+                        <ui:VisualElement class="detail-action-row" style="flex-direction: row;">
+                            <ui:Button name="BtnDetailGitHub" class="cyber-btn tertiary">
+                                <ui:VisualElement class="cyber-shadow"/>
+                                <ui:VisualElement class="cyber-body">
+                                </ui:VisualElement>
+                                <ui:Label text="GITHUB REPO" class="cyber-text"/>
+                            </ui:Button>
+                            <ui:Button name="BtnDetailDemo" class="cyber-btn quaternary">
+                                <ui:VisualElement class="cyber-shadow"/>
+                                <ui:VisualElement class="cyber-body">
+                                </ui:VisualElement>
+                                <ui:Label text="LIVE DEMO" class="cyber-text"/>
+                            </ui:Button>
+                        </ui:VisualElement>
                     </ui:VisualElement>
-
-                    <ui:Label text="OVERVIEW &amp; ARCHITECTURE" class="detail-meta-header" />
-                    <ui:Label name="DetailDescription" class="detail-description" text="Full breakdown..." />
+                    <ui:VisualElement name="DetailDynamicContent" class="detail-dynamic-content"/>
+                    <ui:Label text="OVERVIEW &amp; ARCHITECTURE" class="detail-meta-header"/>
+                    <ui:Label name="DetailDescription" text="Full breakdown..." class="detail-description"/>
                 </ui:ScrollView>
-
-                <!-- Sticky Footer Buttons -->
-                <ui:VisualElement class="detail-footer">
-                    <ui:Button name="BtnDetailGitHub" class="btn-secondary" text="GitHub Repository" />
-                    <ui:Button name="BtnDetailDemo" class="btn-primary" text="Live Demo / Build" />
-                </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

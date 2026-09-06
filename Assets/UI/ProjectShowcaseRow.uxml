@@ -15,13 +15,26 @@
 				<ui:Label class="tech-pill" text="Tech 2" />
 				<ui:Label class="tech-pill" text="Tech 3" />
 			</ui:VisualElement>
-
+ 
 			<ui:Label name="ProjectTitle" class="project-title" text="Project Title" />
 			<ui:Label name="ProjectDescription" class="project-description" text="Project Description" />
 
 			<ui:VisualElement class="button-row">
-				<ui:Button name="BtnCaseStudy" class="btn-primary" text="View Case Study" />
-				<ui:Button name="BtnGitHub" class="btn-secondary" text="GitHub" />
+ 
+				<ui:Button name="BtnCaseStudy" class="cyber-btn ghost" style="min-width: 140px; height: 42px; margin-right: 16px; margin-top: 0;">
+                    <ui:VisualElement class="cyber-shadow" />
+                    <ui:VisualElement class="cyber-body">
+                    </ui:VisualElement>
+                    <ui:Label text="OPEN" class="cyber-text" style="font-size: 13px;" /> 
+                </ui:Button>
+
+				<ui:Button name="BtnGitHub" class="cyber-btn quaternary" style="min-width: 140px; height: 42px; margin-right: 16px; margin-top: 0;">
+                    <ui:VisualElement class="cyber-shadow" />
+                    <ui:VisualElement class="cyber-body"> 
+                    </ui:VisualElement> 
+                    <ui:Label text="GITHUB" class="cyber-text" style="font-size: 13px;" /> 
+                </ui:Button>
+
 			</ui:VisualElement>
 		</ui:VisualElement>
 	</ui:VisualElement>

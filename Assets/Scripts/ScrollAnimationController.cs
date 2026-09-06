@@ -13,7 +13,7 @@ public class ScrollAnimationController : MonoBehaviour
     private List<VisualElement> showcaseRows = new();
     private HashSet<VisualElement> revealedRows = new();
 
-    private void OnEnable()
+    void OnEnable()
     {
         if (uiDocument == null) uiDocument = GetComponent<UIDocument>();
         if (uiDocument == null) return;
@@ -28,7 +28,7 @@ public class ScrollAnimationController : MonoBehaviour
         }
     }
 
-    private void OnDisable()
+    void OnDisable()
     {
         if (mainScrollArea != null)
             mainScrollArea.verticalScroller.valueChanged -= OnScrollPositionChanged;
@@ -57,12 +57,12 @@ public class ScrollAnimationController : MonoBehaviour
         }
     }
 
-    private void OnScrollPositionChanged(float scrollValue)
+    void OnScrollPositionChanged(float scrollValue)
     {
         EvaluateRowVisibility();
     }
 
-    private void EvaluateRowVisibility()
+    void EvaluateRowVisibility()
     {
         if (mainScrollArea == null || showcaseRows.Count == 0) return;
 

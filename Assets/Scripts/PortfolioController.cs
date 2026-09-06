@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class PortfolioController : MonoBehaviour
@@ -19,7 +20,18 @@ public class PortfolioController : MonoBehaviour
     private string currentGithubUrl;
     private bool hasDismissedChevron = false;
 
-    private void OnEnable()
+    [System.Runtime.InteropServices.DllImport("__Internal")]
+    private static extern void WebGLTrapBackButton();
+
+    void Start()
+    {
+        // Only run the JavaScript bridge if we are actually built for WebGL
+#if UNITY_WEBGL && !UNITY_EDITOR
+        WebGLTrapBackButton();
+#endif
+    }
+
+    void OnEnable()
     {
         uiDocument = GetComponent<UIDocument>();
         if (uiDocument == null) return;
@@ -65,14 +77,14 @@ public class PortfolioController : MonoBehaviour
         }
     }
 
-    private void OnDisable()
+    void OnDisable()
     {
         if (btnEnter != null) btnEnter.clicked -= OnEnterPortfolioClicked;
         if (btnBack != null) btnBack.clicked -= OnBackClicked;
         if (btnBackToHome != null) btnBackToHome.clicked -= OnBackToHomeClicked;
     }
 
-    private void Update()
+    void Update()
     {
         // Bounces the chevron up and down
         if (scrollChevron != null && !scrollChevron.ClassListContains("scroll-chevron--hidden"))
@@ -81,9 +93,23 @@ public class PortfolioController : MonoBehaviour
             float yOffset = Mathf.Sin(chevronBounceTimer) * -10f;
             scrollChevron.style.translate = new Translate(0, yOffset, 0);
         }
+
+        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            // If we are looking at a Case Study, go back to the Grid
+            if (projectDetailView != null && projectDetailView.style.display == DisplayStyle.Flex)
+            {
+                OnBackClicked();
+            }
+            // If we are looking at the Grid, go back to the Intro/Home screen
+            else if (mainPortfolioView != null && mainPortfolioView.style.display == DisplayStyle.Flex)
+            {
+                OnBackToHomeClicked();
+            }
+        }
     }
 
-    private void OnEnterPortfolioClicked()
+    void OnEnterPortfolioClicked()
     {
         if (introView != null) introView.style.display = DisplayStyle.None;
         if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.Flex;
@@ -94,7 +120,140 @@ public class PortfolioController : MonoBehaviour
         if (loader != null) loader.OnPortfolioOpened();
     }
 
-    private void OnBackToHomeClicked()
+
+    public void ShowProjectDetail(PortfolioProjectLoaderWeb.ProjectMetadata project, Texture2D heroScreenshot)
+    {
+        currentDemoUrl = project.caseStudyUrl;
+        currentGithubUrl = project.githubUrl;
+
+        var mainScroll = uiDocument.rootVisualElement.Q<ScrollView>("MainScrollArea");
+        if (mainScroll != null)
+        {
+            previousScrollPosition = mainScroll.verticalScroller.value;
+            mainScroll.style.display = DisplayStyle.None;
+        }
+
+        // Hide Chevron globally while in the Case Study
+        var scrollChevron = uiDocument.rootVisualElement.Q<Label>("ScrollChevron");
+        if (scrollChevron != null) scrollChevron.AddToClassList("scroll-chevron--hidden");
+
+        var detailTitle = uiDocument.rootVisualElement.Q<Label>("DetailTitle");
+        var detailTagsContainer = uiDocument.rootVisualElement.Q<VisualElement>("DetailTagsContainer");
+        var detailImage = uiDocument.rootVisualElement.Q<VisualElement>("DetailImage");
+
+        // This is the empty UXML container where we will dump the JSON content
+        var dynamicContent = uiDocument.rootVisualElement.Q<VisualElement>("DetailDynamicContent");
+
+        if (detailTitle != null) detailTitle.text = project.GetTitle();
+
+        // 1. Generate Tags
+        if (detailTagsContainer != null)
+        {
+            detailTagsContainer.Clear();
+            string[] tags = project.GetTag().Split(new char[] { '|', ',' }, System.StringSplitOptions.RemoveEmptyEntries);
+            foreach (var t in tags)
+            {
+                var pill = new Label(t.Trim());
+                pill.AddToClassList("tech-pill");
+                detailTagsContainer.Add(pill);
+            }
+        }
+
+        // 2. Set Hero Image
+        if (detailImage != null && heroScreenshot != null)
+        {
+            detailImage.style.backgroundImage = new StyleBackground(heroScreenshot);
+            detailImage.style.display = DisplayStyle.Flex;
+        }
+        else if (detailImage != null) detailImage.style.display = DisplayStyle.None;
+
+        // Toggle the Action Row Buttons
+        if (btnDetailDemo != null) btnDetailDemo.style.display = string.IsNullOrEmpty(currentDemoUrl) ? DisplayStyle.None : DisplayStyle.Flex;
+        if (btnDetailGitHub != null) btnDetailGitHub.style.display = string.IsNullOrEmpty(currentGithubUrl) ? DisplayStyle.None : DisplayStyle.Flex;
+
+        // 3. GENERATE DYNAMIC JSON CONTENT (Text & Extra Images)
+        if (dynamicContent != null)
+        {
+            dynamicContent.Clear();
+
+            // If bodyParagraphs is empty, fallback to the short card description
+            string[] paragraphs = project.bodyParagraphs != null && project.bodyParagraphs.Length > 0
+                ? project.bodyParagraphs
+                : new string[] { project.GetDescription() };
+
+            for (int i = 0; i < paragraphs.Length; i++)
+            {
+                // Create Paragraph
+                var textLabel = new Label(paragraphs[i]);
+                textLabel.AddToClassList("detail-description");
+                dynamicContent.Add(textLabel);
+                // 1. Determine if the JSON explicitly tells us to skip the image
+                string imgPath = (project.extraScreenshots != null && i < project.extraScreenshots.Length) ? project.extraScreenshots[i] : "";
+                bool skipImage = string.IsNullOrEmpty(imgPath) || imgPath.Trim().ToLower() == "no" || imgPath.Trim().ToLower() == "null";
+
+                // 2. Only spawn the skeleton loader and fetch if we are NOT skipping
+                if (!skipImage)
+                {
+                    var extraImg = new VisualElement();
+                    extraImg.AddToClassList("detail-image");
+                    extraImg.AddToClassList("skeleton-loader"); // Add the dashed wireframe style
+
+                    var skeletonLabel = new Label("AWAITING ASSET...");
+                    skeletonLabel.AddToClassList("skeleton-text");
+                    extraImg.Add(skeletonLabel);
+                    dynamicContent.Add(extraImg);
+                    // Setup Flexbox to center the loading text inside the empty box
+                    extraImg.style.justifyContent = Justify.Center;
+                    extraImg.style.alignItems = Align.Center;
+
+                    // Ask the loader to fetch this specific texture in the background
+                    var loader = GetComponent<PortfolioProjectLoaderWeb>();
+                    if (loader != null)
+                    {
+                        StartCoroutine(loader.LoadExtraImageRoutine(project.extraScreenshots[i], (tex) => {
+                            if (tex != null)
+                            {
+                                // When loaded, apply the image and delete the loading badge!
+                                extraImg.RemoveFromClassList("skeleton-loader");
+                                extraImg.Clear();
+                                extraImg.style.backgroundImage = new StyleBackground(tex); // Apply image
+                            }
+                            else
+                            {
+                                // If the path was bad or failed, just hide the broken box
+                                extraImg.style.display = DisplayStyle.None;
+                            }
+                        }));
+                    }
+                }
+            }
+        }
+
+        if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.None;
+        if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.Flex;
+    }
+
+
+    void OnBackClicked()
+    {
+        if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.Flex;
+        if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.None;
+
+        var mainScroll = uiDocument.rootVisualElement.Q<ScrollView>("MainScrollArea");
+        if (mainScroll != null) mainScroll.style.display = DisplayStyle.Flex;
+        if (mainScroll != null)
+        {
+            mainScroll.schedule.Execute(() =>
+            {
+                mainScroll.verticalScroller.value = previousScrollPosition;
+                if (scrollChevron != null && !hasDismissedChevron && previousScrollPosition < 50f)
+                {
+                    scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
+                }
+            }).StartingIn(10);  //some delay for the card heigh calc to complete for previous position to be set correctly
+        }
+    }
+    void OnBackToHomeClicked()
     {
         if (introView != null) introView.style.display = DisplayStyle.Flex;
         if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.None;
@@ -107,58 +266,17 @@ public class PortfolioController : MonoBehaviour
         if (scrollChevron != null) scrollChevron.AddToClassList("scroll-chevron--hidden");
     }
 
-    public void ShowProjectDetail(string title, string description, string tagString, Texture2D screenshot, string demoUrl = "", string githubUrl = "")
+    // This is explicitly called by our BrowserInput.jslib file when a mobile user swipes "Back"
+    public void OnBrowserBack()
     {
-        currentDemoUrl = demoUrl;
-        currentGithubUrl = githubUrl;
-
-        var mainScroll = uiDocument.rootVisualElement.Q<ScrollView>("MainScrollArea");
-        if (mainScroll != null) previousScrollPosition = mainScroll.verticalScroller.value;
-
-        var detailTitle = uiDocument.rootVisualElement.Q<Label>("DetailTitle");
-        var detailDescription = uiDocument.rootVisualElement.Q<Label>("DetailDescription");
-        var detailTagsContainer = uiDocument.rootVisualElement.Q<VisualElement>("DetailTagsContainer");
-        var detailImage = uiDocument.rootVisualElement.Q<VisualElement>("DetailImage");
-
-        if (detailTitle != null) detailTitle.text = title;
-        if (detailDescription != null) detailDescription.text = description;
-
-        // Render tech pills dynamically
-        if (detailTagsContainer != null)
+        // Re-use the exact same logic we built for the PC Escape key
+        if (projectDetailView != null && projectDetailView.style.display == DisplayStyle.Flex)
         {
-            detailTagsContainer.Clear();
-            string[] tags = tagString.Split(new char[] { '|', ',' }, System.StringSplitOptions.RemoveEmptyEntries);
-            foreach (var t in tags)
-            {
-                var pill = new Label(t.Trim());
-                pill.AddToClassList("tech-pill");
-                detailTagsContainer.Add(pill);
-            }
+            OnBackClicked();
         }
-
-        if (detailImage != null && screenshot != null)
+        else if (mainPortfolioView != null && mainPortfolioView.style.display == DisplayStyle.Flex)
         {
-            detailImage.style.backgroundImage = new StyleBackground(screenshot);
-            detailImage.style.display = DisplayStyle.Flex;
+            OnBackToHomeClicked();
         }
-        else if (detailImage != null)
-        {
-            detailImage.style.display = DisplayStyle.None;
-        }
-
-        if (btnDetailDemo != null) btnDetailDemo.style.display = string.IsNullOrEmpty(demoUrl) ? DisplayStyle.None : DisplayStyle.Flex;
-        if (btnDetailGitHub != null) btnDetailGitHub.style.display = string.IsNullOrEmpty(githubUrl) ? DisplayStyle.None : DisplayStyle.Flex;
-
-        if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.None;
-        if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.Flex;
-    }
-
-    private void OnBackClicked()
-    {
-        if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.Flex;
-        if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.None;
-
-        var mainScroll = uiDocument.rootVisualElement.Q<ScrollView>("MainScrollArea");
-        if (mainScroll != null) mainScroll.verticalScroller.value = previousScrollPosition;
     }
 }

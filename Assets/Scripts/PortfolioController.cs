@@ -176,56 +176,73 @@ public class PortfolioController : MonoBehaviour
         {
             dynamicContent.Clear();
 
-            // If bodyParagraphs is empty, fallback to the short card description
             string[] paragraphs = project.bodyParagraphs != null && project.bodyParagraphs.Length > 0
                 ? project.bodyParagraphs
                 : new string[] { project.GetDescription() };
 
             for (int i = 0; i < paragraphs.Length; i++)
             {
-                // Create Paragraph
-                var textLabel = new Label(paragraphs[i]);
-                textLabel.AddToClassList("detail-description");
-                dynamicContent.Add(textLabel);
-                // 1. Determine if the JSON explicitly tells us to skip the image
+                // 1. Create the Row Container
+                var rowContainer = new VisualElement();
+                rowContainer.AddToClassList("detail-dynamic-row");
+
                 string imgPath = (project.extraScreenshots != null && i < project.extraScreenshots.Length) ? project.extraScreenshots[i] : "";
                 bool skipImage = string.IsNullOrEmpty(imgPath) || imgPath.Trim().ToLower() == "no" || imgPath.Trim().ToLower() == "null";
 
-                // 2. Only spawn the skeleton loader and fetch if we are NOT skipping
+                // Alternate layout: Even rows = Text Left, Odd rows = Text Right
+                if (!skipImage && i % 2 != 0)
+                {
+                    rowContainer.AddToClassList("detail-dynamic-row--reverse");
+                }
+
+                // 2. Create the Text
+                var textLabel = new Label(paragraphs[i]);
+                textLabel.AddToClassList("detail-dynamic-text");
+                if (skipImage)
+                {
+                    // If there's no image, remove the zigzag gap padding
+                    textLabel.AddToClassList("detail-dynamic-text--full");
+                }
+                rowContainer.Add(textLabel);
                 if (!skipImage)
                 {
                     var extraImg = new VisualElement();
-                    extraImg.AddToClassList("detail-image");
-                    extraImg.AddToClassList("skeleton-loader"); // Add the dashed wireframe style
+                    extraImg.AddToClassList("detail-dynamic-image");
+                    extraImg.AddToClassList("skeleton-loader"); // Yellow dashed frame
 
                     var skeletonLabel = new Label("AWAITING ASSET...");
                     skeletonLabel.AddToClassList("skeleton-text");
                     extraImg.Add(skeletonLabel);
-                    dynamicContent.Add(extraImg);
-                    // Setup Flexbox to center the loading text inside the empty box
-                    extraImg.style.justifyContent = Justify.Center;
-                    extraImg.style.alignItems = Align.Center;
 
-                    // Ask the loader to fetch this specific texture in the background
+                    rowContainer.Add(extraImg);
+
+                    // Fetch Image Logic
                     var loader = GetComponent<PortfolioProjectLoaderWeb>();
                     if (loader != null)
                     {
                         StartCoroutine(loader.LoadExtraImageRoutine(project.extraScreenshots[i], (tex) => {
                             if (tex != null)
                             {
-                                // When loaded, apply the image and delete the loading badge!
                                 extraImg.RemoveFromClassList("skeleton-loader");
                                 extraImg.Clear();
-                                extraImg.style.backgroundImage = new StyleBackground(tex); // Apply image
+                                extraImg.style.backgroundImage = new StyleBackground(tex);
                             }
                             else
                             {
-                                // If the path was bad or failed, just hide the broken box
                                 extraImg.style.display = DisplayStyle.None;
+                                textLabel.style.width = new StyleLength(Length.Percent(100)); // Expand text if image fails
                             }
                         }));
                     }
                 }
+                else
+                {
+                    // If the JSON explicitly skips the image, force the text to take up 100% width
+                    textLabel.style.width = new StyleLength(Length.Percent(100));
+                }
+
+                // Add the finished row to the screen
+                dynamicContent.Add(rowContainer);
             }
         }
 

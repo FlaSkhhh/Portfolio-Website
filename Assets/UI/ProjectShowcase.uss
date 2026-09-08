@@ -1,3 +1,6 @@
+Scroller {
+    display: none;
+}
 .showcase-row {
     width: 100%;
     max-width: 2712px;
@@ -5,20 +8,19 @@
     flex-direction: row;
     min-height: 380px;
     max-height: 480px;
-    margin-bottom: 40px;
-    padding: 28px;
+    margin-bottom: 56px; /* Increased breathing room since the box is gone */
+    
+    /* STRIPPED OUT THE BOX */
+    padding: 0; 
+    background-color: rgba(20, 20, 20, 0.4); 
+    border-width: 0;
+    
     align-items: stretch;
-
-    background-color: #14161F;
-    border-color: rgba(255, 255, 255, 0.08);
-    border-width: 1px;
-    border-radius: 14px;
     overflow: hidden;
     
-    /* Animation settings */
     transition-property: border-color, translate, opacity;
     transition-duration: 0.2s, 0.6s, 0.8s;
-    transition-timing-function: ease-in-out, ease-out-back, ease-out;
+    transition-timing-function: ease-out-back, ease-out;
 }
 
 /* CSS States toggled by the C# ScrollAnimationController */
@@ -33,11 +35,8 @@
 }
 
 .showcase-row.showcase-row--visible:hover {
-    border-color: rgba(85, 234, 212, 0.5);
     translate: 0 -4px 0;
-    /* 1st value: border-color delay (0.4s) */
-    /* 2nd value: translate delay (0.4s) */
-    /* 3rd value: opacity delay (0s) - Allows C# fade-in to bypass the hover delay */
+    border-color: #00E5FF;
     transition-delay: 0.4s, 0.4s, 0s; 
 }
 
@@ -51,33 +50,53 @@
 }
 
 .showcase-column--image {
-    width: 40%;
-    max-width: 720px;
-    padding-left: 16px;
-    padding-right: 16px;
+    /* Dynamic sizing instead of strict percentages */
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 400px; /* Ideal starting width */
+    max-width: 650px;  /* Stops the image from getting too massive */
+    
+    padding-left: 5px;
+    padding-right: 32px; /* Creates a strict 32px gap between image and text */
 }
 
 .showcase-column--info {
-    width: 60%;
-    max-width: 720px;
-    padding-left: 24px;
-    padding-right: 24px;
+    /* Forces the text to dynamically fill whatever space the image leaves behind */
+    flex-grow: 2; 
+    
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
-.showcase-row--reverse .showcase-column--info {
-    align-items: flex-end; /* Anchors containers to the right */
+/* Flips the 32px gap to the left side when the layout alternates */
+.showcase-row--reverse .showcase-column--image {
+    padding-right: 5px;
+    padding-left: 32px; 
 }
 
 .project-image {
     width: 100%;
     height: 100%;
-    background-color: #0B0C10;
-    border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
+    
+    /* Transparent dark background */
+    background-color: rgba(11, 12, 16, 0.4); 
+    
+    /* Top and Bottom lines only */
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 0;
+    border-right-width: 0;
+    
+    /* Faded Cyan border */
+    border-color: rgba(85, 234, 212, 0.2); 
+    border-radius: 0;
+    
     position: relative;
     overflow: hidden;
     -unity-background-scale-mode: scale-and-crop;
+
+    transition-property: border-color;
+    transition-duration: 0.3s;
 }
 
 .platform-badge {

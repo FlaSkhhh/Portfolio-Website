@@ -30,6 +30,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     bool isDataLoaded = false;
     bool isPortfolioOpen = false;
     bool hasPlayedTransition = false; // Prevents the disappearing glitch
+    bool hasUserScrolled = false;
     float spinnerRotation = 0f;
 
     [System.Serializable]
@@ -342,7 +343,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 
     ProjectMetadata[] GetDefaultFallbackProjects()
     {
-        return new ProjectMetadata[] { };
         return new ProjectMetadata[]
         {
             new ProjectMetadata { title = "Real-Time Multiplayer Hand Cricket", tag = "Unity Netcode,Relay & Lobby,Custom RPCs", description = "Performance-optimized up to 5v5 team-based multiplayer game utilizing Unity Netcode, Relay, and Lobby services with custom RPCs and cross-platform Android/WebGL simulation.", screenshotUrl = "Screenshots/HandCricket", platform = "Android / WebGL | 34MB APK" },
@@ -397,7 +397,15 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 
         // highValue is 0 if all content fits on the screen perfectly.
         // We also hide the chevron if the user has scrolled down more than 10 pixels.
-        if (mainScrollArea.verticalScroller.highValue <= 0 || mainScrollArea.verticalScroller.value > 10f)
+        var detailView = uiDocument.rootVisualElement.Q<VisualElement>("ProjectDetailView");
+        bool isDetailOpen = detailView != null && detailView.style.display == DisplayStyle.Flex;
+
+        if (mainScrollArea.verticalScroller.value > 10f)
+        {
+            hasUserScrolled = true;
+        }
+
+        if (isDetailOpen || hasUserScrolled || mainScrollArea.verticalScroller.highValue <= 0)
         {
             scrollChevron.AddToClassList("scroll-chevron--hidden");
         }

@@ -367,6 +367,7 @@ Button {
 .detail-meta,
 .detail-meta-header,
 .detail-description,
+.detail-dynamic-content,
 .detail-footer {
     width: 100%;
     max-width: 900px;
@@ -409,8 +410,59 @@ Button {
 .detail-footer Button {
     margin-right: 16px;
 }
+/* ===== ALTERNATING ZIGZAG CASE STUDY ROWS ===== */
+.detail-dynamic-row {
+    flex-direction: row;
+    width: 100%;
+    align-items: center; /* Vertically centers the text alongside the image */
+    margin-bottom: 56px; /* Heavy breathing room between sections */
+}
 
-/* ===== RETRO LOADING SCREEN ===== */
+/* Instantly flips the flexbox layout so Image is Left and Text is Right */
+.detail-dynamic-row--reverse {
+    flex-direction: row-reverse;
+}
+.detail-dynamic-row--reverse .detail-dynamic-text {
+    padding-left: 0;
+    padding-right: 40px; 
+}
+
+.detail-dynamic-image {
+    width: 50%; /* Uses safe percentage scaling instead of hard pixels */
+    max-width: 450px; 
+    height: 300px; 
+    flex-shrink: 0; /* Prevents the image from being squished by long text */
+    
+    background-color: transparent; 
+    border-width: 0; 
+    
+    -unity-background-scale-mode: scale-to-fit;
+    justify-content: center;
+    align-items: center;
+}
+
+.detail-dynamic-text {
+    flex-grow: 1;
+    flex-shrink: 1; /* Allows the text box to compress dynamically */
+    font-size: 17px;
+    color: #C0C5D0;
+    white-space: normal;
+    padding-left: 40px; 
+}
+
+/* Kicks in dynamically via C# when there is no image on the row */
+.detail-dynamic-text--full {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.detail-dynamic-row--reverse .detail-dynamic-text {
+    padding-left: 0;
+    padding-right: 40px; 
+}
+
+/* ===== CP LOADING SCREEN ===== */
 .loading-screen {
     width: 100%;
     height: 120px;
@@ -569,6 +621,25 @@ Button {
         margin-left: 0;
         margin-bottom: 12px;
         width: 100%; 
+    }
+    .detail-dynamic-row, 
+    .detail-dynamic-row--reverse {
+        flex-direction: column; 
+        margin-bottom: 40px;
+    }
+
+    .detail-dynamic-text {
+        width: 100%;
+        margin-bottom: 24px;
+        /* Put the text below the image on mobile */
+        order: 2; 
+    }
+
+    .detail-dynamic-image {
+        width: 100%;
+        height: 220px;
+        margin-bottom: 16px;
+        order: 1; 
     }
 }
 

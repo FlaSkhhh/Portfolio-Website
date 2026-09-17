@@ -4,12 +4,18 @@
         <ui:VisualElement class="header-bar">
             <ui:Label text="Shantanu Nandkhile" class="header-title"/>
             <ui:VisualElement class="header-nav">
-                <ui:Button name="NavContact" class="cyber-btn secondary" style="min-width: 160px; height: 40px; margin-top: 0;">
+                <ui:Button name="NavContact" class="cyber-btn secondary" style="min-width: 140px; height: 40px; margin-top: 0;">
                 <ui:VisualElement class="cyber-shadow" />
                 <ui:VisualElement class="cyber-body">
                 </ui:VisualElement>
                 <ui:Label text="CONTACT" class="cyber-text" style="font-size: 13px;" />
-            </ui:Button>
+                </ui:Button>
+                <ui:Button name="BtnDownloadCV" class="cyber-btn secondary" style="min-width: 140px; height: 40px; margin-top: 0;">
+                <ui:VisualElement class="cyber-shadow" />
+                <ui:VisualElement class="cyber-body">
+                </ui:VisualElement>
+                <ui:Label text="RESUME" class="cyber-text" style="font-size: 13px;" />
+                </ui:Button>
             </ui:VisualElement> 
         </ui:VisualElement>
         <ui:ScrollView name="MainScrollArea" vertical-scroller-visibility="Hidden" class="content-area">

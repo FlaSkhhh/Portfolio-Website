@@ -142,7 +142,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 
     IEnumerator LoadProjectsAsync()
     {
-        if (loadingText != null) loadingText.text = "LOADING LEVEL...";
+        if (loadingText != null) loadingText.text = "LOADING DATA...";
         if (loadingCharacter != null) loadingCharacter.style.left = Length.Percent(0f);
 
         ProjectsDataWrapper projectsData = default;
@@ -168,7 +168,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 
         if (scrollAnimationController != null) scrollAnimationController.PrepareCardsForAnimation();
 
-        // Failsafe for empty project lists
+        //Failsafe for empty project lists
         if (totalProjectsToLoad == 0)
         {
             isDataLoaded = true;

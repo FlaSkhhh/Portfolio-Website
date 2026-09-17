@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<Style src="project://database/Assets/UI/ProjectShowcase.uss" />
+	<Style src="project://database/Assets/Scripts/UI Toolkit Scripts/ProjectShowcase.uss" />
 	<ui:VisualElement class="showcase-row">
 		<!-- Image Column (55%) -->
 		<ui:VisualElement class="showcase-column showcase-column--image">

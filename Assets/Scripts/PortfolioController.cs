@@ -1,33 +1,35 @@
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class PortfolioController : MonoBehaviour
 {
-    private UIDocument uiDocument;
-    private VisualElement introView;
-    private VisualElement mainPortfolioView;
-    private VisualElement projectDetailView;
-    private Button btnEnter;
-    private Button btnBack;
-    private Button btnBackToHome;
-    private Button btnDetailDemo;
-    private Button btnDetailGitHub;
-    private Label scrollChevron;
-    private float chevronBounceTimer = 0f;
-    private float previousScrollPosition = 0f;
-    private string currentDemoUrl;
-    private string currentGithubUrl;
-    private bool hasDismissedChevron = false;
+    UIDocument uiDocument;
+    VisualElement introView;
+    VisualElement mainPortfolioView;
+    VisualElement projectDetailView;
+    Button btnEnter;
+    Button btnBack;
+    Button btnBackToHome;
+    Button btnDetailDemo;
+    Button btnDetailGitHub;
+    Label scrollChevron;
+    float chevronBounceTimer = 0f;
+    float previousScrollPosition = 0f;
+    float dynamicScrollThreshold = 50f;
+    string currentDemoUrl;
+    string currentGithubUrl;
+    bool hasDismissedChevron = false;
 
-    [System.Runtime.InteropServices.DllImport("__Internal")]
-    private static extern void WebGLTrapBackButton();
+    [DllImport("__Internal")] private static extern void WebGLInitHistory();
+    [DllImport("__Internal")] private static extern void WebGLPushHistoryState(string view);
+    [DllImport("__Internal")] private static extern void WebGLGoBack();
 
     void Start()
     {
-        // Only run the JavaScript bridge if we are actually built for WebGL
 #if UNITY_WEBGL && !UNITY_EDITOR
-        WebGLTrapBackButton();
+        WebGLInitHistory();   
 #endif
     }
 
@@ -61,10 +63,44 @@ public class PortfolioController : MonoBehaviour
         if (mainScroll != null && scrollChevron != null)
         {
             scrollChevron.AddToClassList("scroll-chevron--hidden");
+            dynamicScrollThreshold = 50f;
+
+            // 1. GEOMETRY LISTENER: Calculates the screen size dynamically
+            mainScroll.RegisterCallback<GeometryChangedEvent>(evt =>
+            {
+                float contentHeight = mainScroll.contentContainer.layout.height;
+                float viewportHeight = mainScroll.layout.height;
+
+                // Wait until layout is fully calculated
+                if (contentHeight == 0 || viewportHeight == 0) return;
+
+                // A. Does all the content fit on the screen right now? 
+                // If so, hide the chevron entirely because there is nowhere to scroll!
+                if (contentHeight <= viewportHeight)
+                {
+                    scrollChevron.AddToClassList("scroll-chevron--hidden");
+                    hasDismissedChevron = true;
+                }
+                else
+                {
+                    // B. Set the threshold to exactly 10% of the user's current screen height
+                    dynamicScrollThreshold = viewportHeight * 0.1f;
+
+                    // If they resize the window and haven't scrolled down yet, show the chevron
+                    if (mainScroll.verticalScroller.value < dynamicScrollThreshold)
+                    {
+                        scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
+                        hasDismissedChevron = false;
+                    }
+                }
+            });
+
+            // 2. SCROLL LISTENER: Uses the dynamic threshold we just calculated
             mainScroll.verticalScroller.valueChanged += (scrollValue) =>
             {
                 if (hasDismissedChevron) return;
-                if (scrollValue > 50f)
+
+                if (scrollValue > dynamicScrollThreshold)
                 {
                     scrollChevron.AddToClassList("scroll-chevron--hidden");
                     hasDismissedChevron = true;
@@ -93,23 +129,33 @@ public class PortfolioController : MonoBehaviour
             float yOffset = Mathf.Sin(chevronBounceTimer) * -10f;
             scrollChevron.style.translate = new Translate(0, yOffset, 0);
         }
-
-        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            // If we are looking at a Case Study, go back to the Grid
-            if (projectDetailView != null && projectDetailView.style.display == DisplayStyle.Flex)
-            {
-                OnBackClicked();
-            }
-            // If we are looking at the Grid, go back to the Intro/Home screen
-            else if (mainPortfolioView != null && mainPortfolioView.style.display == DisplayStyle.Flex)
-            {
-                OnBackToHomeClicked();
-            }
-        }
+    }
+    void OnEnterPortfolioClicked()
+    {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        WebGLPushHistoryState("projects");
+#endif
+        OnBrowserStateChanged("projects"); // Force UI update locally
     }
 
-    void OnEnterPortfolioClicked()
+    void OnBackClicked()
+    {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        WebGLGoBack(); // Triggers popstate -> OnBrowserStateChanged
+#else
+        OnBrowserStateChanged("projects"); // Fallback for Editor
+#endif
+    }
+
+    void OnBackToHomeClicked()
+    {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        WebGLGoBack();
+#endif
+        OnBrowserStateChanged("intro");
+    }
+
+   /* void OnEnterPortfolioClicked()
     {
         if (introView != null) introView.style.display = DisplayStyle.None;
         if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.Flex;
@@ -118,7 +164,7 @@ public class PortfolioController : MonoBehaviour
         // Tell the loader the page was opened so it can play the transition
         var loader = GetComponent<PortfolioProjectLoaderWeb>();
         if (loader != null) loader.OnPortfolioOpened();
-    }
+    }*/
 
 
     public void ShowProjectDetail(PortfolioProjectLoaderWeb.ProjectMetadata project, Texture2D heroScreenshot)
@@ -245,13 +291,18 @@ public class PortfolioController : MonoBehaviour
                 dynamicContent.Add(rowContainer);
             }
         }
+        string projectNameRoute = project.GetTitle().Replace(" ", "-").ToLower();
+#if UNITY_WEBGL && !UNITY_EDITOR
+        WebGLPushHistoryState(projectNameRoute);
+#endif
+        OnBrowserStateChanged(projectNameRoute);
 
-        if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.None;
-        if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.Flex;
+        /*if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.None;
+        if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.Flex;*/
     }
 
 
-    void OnBackClicked()
+    /*void OnBackClicked()
     {
         if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.Flex;
         if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.None;
@@ -281,19 +332,51 @@ public class PortfolioController : MonoBehaviour
         if (loader != null) loader.OnPortfolioClosed();
         // Hide chevron on the home screen
         if (scrollChevron != null) scrollChevron.AddToClassList("scroll-chevron--hidden");
-    }
+    }*/
 
-    // This is explicitly called by our BrowserInput.jslib file when a mobile user swipes "Back"
-    public void OnBrowserBack()
+    // Called by JS OR our C# fallback methods
+    public void OnBrowserStateChanged(string view)
     {
-        // Re-use the exact same logic we built for the PC Escape key
-        if (projectDetailView != null && projectDetailView.style.display == DisplayStyle.Flex)
+        if (view == "intro" || view == "home")
         {
-            OnBackClicked();
+            if (introView != null) introView.style.display = DisplayStyle.Flex;
+            if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.None;
+            if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.None;
+
+            var loader = GetComponent<PortfolioProjectLoaderWeb>();
+            if (loader != null) loader.OnPortfolioClosed();
+
+            if (scrollChevron != null) scrollChevron.AddToClassList("scroll-chevron--hidden");
         }
-        else if (mainPortfolioView != null && mainPortfolioView.style.display == DisplayStyle.Flex)
+        else if (view == "projects")
         {
-            OnBackToHomeClicked();
+            if (introView != null) introView.style.display = DisplayStyle.None;
+            if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.Flex;
+            if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.None;
+
+            var loader = GetComponent<PortfolioProjectLoaderWeb>();
+            if (loader != null) loader.OnPortfolioOpened();
+
+            // Perfect Scroll Restoration (Moved here from your old OnBackClicked)
+            var mainScroll = uiDocument.rootVisualElement.Q<ScrollView>("MainScrollArea");
+            if (mainScroll != null)
+            {
+                mainScroll.style.display = DisplayStyle.Flex;
+                mainScroll.schedule.Execute(() =>
+                {
+                    mainScroll.verticalScroller.value = previousScrollPosition;
+                    if (scrollChevron != null && !hasDismissedChevron && previousScrollPosition < 50f)
+                    {
+                        scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
+                    }
+                }).StartingIn(10);
+            }
+        }
+        else
+        {
+            if (introView != null) introView.style.display = DisplayStyle.None;
+            if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.None;
+            if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.Flex;
         }
     }
 }

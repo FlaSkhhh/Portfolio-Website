@@ -9,17 +9,24 @@ public class PortfolioController : MonoBehaviour
     VisualElement introView;
     VisualElement mainPortfolioView;
     VisualElement projectDetailView;
+    VisualElement swipeIndicatorBack;
+    VisualElement swipeIndicatorForward;
+    VisualElement activeIndicator; // Tracks which one is currently being dragged
+    VisualElement heroPortal;
+    Label headerName;
+    Label scrollChevron;
+    Button headerExploreBtn;
     Button btnEnter;
     Button btnBack;
     Button btnBackToHome;
     Button btnDetailDemo;
     Button btnDetailGitHub;
-    Label scrollChevron;
     float chevronBounceTimer = 0f;
     float previousScrollPosition = 0f;
     float dynamicScrollThreshold = 50f;
     string currentDemoUrl;
     string currentGithubUrl;
+    bool hasTeleported = false;
     bool hasDismissedChevron = false;
 
     [DllImport("__Internal")] private static extern void WebGLInitHistory();
@@ -45,15 +52,21 @@ public class PortfolioController : MonoBehaviour
         projectDetailView = root.Q<VisualElement>("ProjectDetailView");
         btnEnter = root.Q<Button>("BtnEnter");
         btnBack = root.Q<Button>("BtnBack");
+        swipeIndicatorBack = root.Q<VisualElement>("SwipeIndicatorBack");
+        swipeIndicatorForward = root.Q<VisualElement>("SwipeIndicatorForward");
         btnBackToHome = root.Q<Button>("BtnBackToHome");
         btnDetailDemo = root.Q<Button>("BtnDetailDemo");
         btnDetailGitHub = root.Q<Button>("BtnDetailGitHub");
+        headerExploreBtn = root.Q<Button>("HeaderExploreBtn");
+        headerName = root.Q<Label>("HeaderName");
+        heroPortal = root.Q<VisualElement>("HeroPortal");
 
         if (btnEnter != null) btnEnter.clicked += OnEnterPortfolioClicked;
         if (btnBack != null) btnBack.clicked += OnBackClicked;
         if (btnBackToHome != null) btnBackToHome.clicked += OnBackToHomeClicked;
         if (btnDetailDemo != null) btnDetailDemo.clicked += () => { if (!string.IsNullOrEmpty(currentDemoUrl)) Application.OpenURL(currentDemoUrl); };
         if (btnDetailGitHub != null) btnDetailGitHub.clicked += () => { if (!string.IsNullOrEmpty(currentGithubUrl)) Application.OpenURL(currentGithubUrl); };
+        if (headerExploreBtn != null) headerExploreBtn.clicked += OnEnterPortfolioClicked;  
         var backdrop = root.Q<VisualElement>("DetailBackdrop");
         if (backdrop != null) backdrop.RegisterCallback<ClickEvent>(evt => OnBackClicked());
 
@@ -65,17 +78,20 @@ public class PortfolioController : MonoBehaviour
             scrollChevron.AddToClassList("scroll-chevron--hidden");
             dynamicScrollThreshold = 50f;
 
-            // 1. GEOMETRY LISTENER: Calculates the screen size dynamically
+
+            // Ensure they are fully removed from layout on boot so they don't block clicks
+            if (headerName != null) headerName.style.display = DisplayStyle.None;
+            if (headerExploreBtn != null) headerExploreBtn.style.display = DisplayStyle.None;
+
+            // Geometry listener for the Chevron...
             mainScroll.RegisterCallback<GeometryChangedEvent>(evt =>
             {
                 float contentHeight = mainScroll.contentContainer.layout.height;
                 float viewportHeight = mainScroll.layout.height;
+                float viewportWidth = mainScroll.layout.width;
 
-                // Wait until layout is fully calculated
                 if (contentHeight == 0 || viewportHeight == 0) return;
 
-                // A. Does all the content fit on the screen right now? 
-                // If so, hide the chevron entirely because there is nowhere to scroll!
                 if (contentHeight <= viewportHeight)
                 {
                     scrollChevron.AddToClassList("scroll-chevron--hidden");
@@ -83,10 +99,7 @@ public class PortfolioController : MonoBehaviour
                 }
                 else
                 {
-                    // B. Set the threshold to exactly 10% of the user's current screen height
                     dynamicScrollThreshold = viewportHeight * 0.1f;
-
-                    // If they resize the window and haven't scrolled down yet, show the chevron
                     if (mainScroll.verticalScroller.value < dynamicScrollThreshold)
                     {
                         scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
@@ -95,21 +108,65 @@ public class PortfolioController : MonoBehaviour
                 }
             });
 
-            // 2. SCROLL LISTENER: Uses the dynamic threshold we just calculated
+            // The Scroll Listener
             mainScroll.verticalScroller.valueChanged += (scrollValue) =>
             {
-                if (hasDismissedChevron) return;
-
-                if (scrollValue > dynamicScrollThreshold)
+                // 1. Hide chevron on scroll
+                if (!hasDismissedChevron)
                 {
-                    scrollChevron.AddToClassList("scroll-chevron--hidden");
-                    hasDismissedChevron = true;
+                    if (scrollValue > dynamicScrollThreshold)
+                    {
+                        scrollChevron.AddToClassList("scroll-chevron--hidden");
+                        hasDismissedChevron = true;
+                    }
+                    else scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
                 }
-                else
+                if(heroPortal != null)
                 {
-                    scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
+                    // Counters the scroll view to keep it on screen, then lets it scroll away!
+                    float stickyY = Mathf.Clamp(scrollValue, 0, 350f);
+                    heroPortal.style.translate = new Translate(0, stickyY, 0);
+                }
+
+                // 2. THE ONE-WAY HEADER REVEAL
+                // Adjust this number based on how far down your "About" section is
+                float teleportThreshold = 400f;
+
+                if (!hasTeleported && scrollValue >= teleportThreshold)
+                {
+                    hasTeleported = true; // Locks it so it never fires again
+
+                    // Unhide the elements in the layout
+                    if (headerName != null) headerName.style.display = DisplayStyle.Flex;
+                    if (headerExploreBtn != null) headerExploreBtn.style.display = DisplayStyle.Flex;
+
+                    // Wait 20ms for the UI layout to recalculate, then remove the hidden CSS class
+                    // This triggers the smooth slide-out animation!
+                    mainScroll.schedule.Execute(() =>
+                    {
+                        if (headerName != null) headerName.RemoveFromClassList("header-teleport-item--hidden");
+                        if (headerExploreBtn != null) headerExploreBtn.RemoveFromClassList("header-teleport-item--hidden");
+                    }).StartingIn(20);
                 }
             };
+            if (heroPortal != null)
+            {
+                heroPortal.schedule.Execute(() =>
+                {
+                    // 1. SLOW WAVE: Changed 2f to 0.5f so it takes longer to complete a cycle
+                    float t = (Mathf.Sin(Time.time * 0.5f) + 1f) / 2f;
+
+                    // 2. SMALL COLOR SHIFT: Two similar, warm colors
+                    // The original neon orange
+                    Color baseOrange = new Color(1f, 0.45f, 0f);
+                    // A slightly darker, fiery red-orange
+                    Color deepOrange = new Color(1f, 0.20f, 0f);
+
+                    // 3. Apply the smooth, subtle blend
+                    heroPortal.style.unityBackgroundImageTintColor = Color.Lerp(baseOrange, deepOrange, t);
+
+                }).Every(16);
+            }
         }
     }
 
@@ -118,6 +175,7 @@ public class PortfolioController : MonoBehaviour
         if (btnEnter != null) btnEnter.clicked -= OnEnterPortfolioClicked;
         if (btnBack != null) btnBack.clicked -= OnBackClicked;
         if (btnBackToHome != null) btnBackToHome.clicked -= OnBackToHomeClicked;
+        if (headerExploreBtn != null) headerExploreBtn.clicked -= OnEnterPortfolioClicked;
     }
 
     void Update()
@@ -301,39 +359,6 @@ public class PortfolioController : MonoBehaviour
         if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.Flex;*/
     }
 
-
-    /*void OnBackClicked()
-    {
-        if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.Flex;
-        if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.None;
-
-        var mainScroll = uiDocument.rootVisualElement.Q<ScrollView>("MainScrollArea");
-        if (mainScroll != null) mainScroll.style.display = DisplayStyle.Flex;
-        if (mainScroll != null)
-        {
-            mainScroll.schedule.Execute(() =>
-            {
-                mainScroll.verticalScroller.value = previousScrollPosition;
-                if (scrollChevron != null && !hasDismissedChevron && previousScrollPosition < 50f)
-                {
-                    scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
-                }
-            }).StartingIn(10);  //some delay for the card heigh calc to complete for previous position to be set correctly
-        }
-    }
-    void OnBackToHomeClicked()
-    {
-        if (introView != null) introView.style.display = DisplayStyle.Flex;
-        if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.None;
-        if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.None;
-
-        // Reset the loader state for the next time we enter
-        var loader = GetComponent<PortfolioProjectLoaderWeb>();
-        if (loader != null) loader.OnPortfolioClosed();
-        // Hide chevron on the home screen
-        if (scrollChevron != null) scrollChevron.AddToClassList("scroll-chevron--hidden");
-    }*/
-
     // Called by JS OR our C# fallback methods
     public void OnBrowserStateChanged(string view)
     {
@@ -377,6 +402,122 @@ public class PortfolioController : MonoBehaviour
             if (introView != null) introView.style.display = DisplayStyle.None;
             if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.None;
             if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.Flex;
+        }
+    }
+
+    public void PlaySwipeFeedback(string direction)
+    {
+        var swipeIndicator = uiDocument.rootVisualElement.Q<VisualElement>("SwipeIndicator");
+        if (swipeIndicator == null) return;
+
+        // Reset any ongoing animations
+        swipeIndicator.RemoveFromClassList("swipe-anim--back");
+        swipeIndicator.RemoveFromClassList("swipe-anim--forward");
+
+        if (direction == "back")
+        {
+            // Triggers a USS class that slides it from Left to Center
+            swipeIndicator.AddToClassList("swipe-anim--back");
+        }
+        else if (direction == "forward")
+        {
+            // Triggers a USS class that slides it from Right to Center
+            swipeIndicator.AddToClassList("swipe-anim--forward");
+        }
+    }
+
+    // Called dozens of times a second by JS during a drag
+    public void UpdateSwipeVisual(string data)
+    {
+        // data comes in as "0.45|back"
+        string[] split = data.Split('|');
+        if (split.Length < 2) return;
+
+        float screenWidth = uiDocument.rootVisualElement.layout.width;
+        // Fallback just in case UI Toolkit hasn't calculated layout yet on frame 1
+        if (screenWidth == 0) screenWidth = Screen.width;
+
+        // Calculate exactly 30% of the screen width!
+        float maxPullDistance = Mathf.Max(screenWidth * 0.30f, 170f + (screenWidth * 0.15f));
+
+        if (float.TryParse(split[0], out float progress))
+        {
+            string direction = split[1];
+
+            // 1. Pick the correct indicator
+            activeIndicator = (direction == "back") ? swipeIndicatorBack : swipeIndicatorForward;
+            if (activeIndicator == null) return;
+
+            // 2. Unhide it
+            activeIndicator.style.display = DisplayStyle.Flex;
+
+            // 3. Math for the visual drag
+            // Move inward up to 120px, scale up to 1.2x, fade in fully
+            float moveX = Mathf.Lerp(0, maxPullDistance, progress);
+            float scale = Mathf.Lerp(0.5f, 1.2f, progress);
+            float fade = Mathf.Lerp(0f, 1f, progress);
+
+            // Apply direction (pull right for back, pull left for forward)
+            float finalX = (direction == "back") ? moveX : -moveX;
+
+            // UI Toolkit retains the Y translate from our USS (-50%), so we keep it!
+            activeIndicator.style.translate = new Translate(finalX, new Length(-50, LengthUnit.Percent), 0);
+            activeIndicator.style.scale = new Scale(new Vector2(scale, scale));
+            activeIndicator.style.opacity = fade;
+        }
+    }
+
+    // Called once when the user lifts their finger
+    public void EndSwipeVisual(string result)
+    {
+        if (activeIndicator == null) return;
+
+        // 1. CAPTURE IT LOCALLY so the timers don't throw a NullReferenceException
+        VisualElement targetIndicator = activeIndicator;
+        activeIndicator = null;
+
+        if (result == "success")
+        {
+            targetIndicator.AddToClassList("swipe-indicator--success");
+
+            // 1. Pop up to 1.3x
+            targetIndicator.style.scale = new Scale(new Vector2(1.3f, 1.3f));
+            targetIndicator.style.opacity = 1f;
+
+            // 2. Shrink completely away (0.01f prevents WebGL math crashes)
+            targetIndicator.schedule.Execute(() =>
+            {
+                targetIndicator.style.scale = new Scale(new Vector2(0.01f, 0.01f));
+                targetIndicator.style.opacity = 0f;
+            }).StartingIn(150);
+
+            // 3. Cleanup
+            targetIndicator.schedule.Execute(() =>
+            {
+                targetIndicator.style.display = DisplayStyle.None;
+                targetIndicator.RemoveFromClassList("swipe-indicator--success");
+
+                // Reset scale to 1f while hidden so layout memory is clean
+                targetIndicator.style.scale = new Scale(new Vector2(1f, 1f));
+                targetIndicator.style.translate = new Translate(0, new Length(-50, LengthUnit.Percent), 0);
+            }).StartingIn(350);
+        }
+        else
+        {
+            // SWIPE CANCELLED
+            targetIndicator.style.translate = new Translate(0, new Length(-50, LengthUnit.Percent), 0);
+
+            // Shrink completely away
+            targetIndicator.style.scale = new Scale(new Vector2(0.01f, 0.01f));
+            targetIndicator.style.opacity = 0f;
+
+            targetIndicator.schedule.Execute(() =>
+            {
+                targetIndicator.style.display = DisplayStyle.None;
+
+                // Reset scale to 1f while hidden
+                targetIndicator.style.scale = new Scale(new Vector2(1f, 1f));
+            }).StartingIn(200);
         }
     }
 }

@@ -1,33 +1,47 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/MainPortfolioLayout.uss?fileID=7433441132597879392&amp;guid=2e4354352d70aa8469aab964a493cbc6&amp;type=3#MainPortfolioLayout"/>
+    <Style src="project://database/Assets/Scripts/UI%20Toolkit%20Scripts/MainPortfolioLayout.uss?fileID=7433441132597879392&amp;guid=2e4354352d70aa8469aab964a493cbc6&amp;type=3#MainPortfolioLayout"/>
     <ui:VisualElement class="main-container">
         <ui:VisualElement class="header-bar">
-            <ui:Label text="Shantanu Nandkhile" class="header-title"/>
-            <ui:VisualElement class="header-nav">
+            <ui:VisualElement class="header-side header-side--left">
+                <ui:VisualElement class="portal portal--blue portal--vertical-header"/>
+                <ui:Label name="HeaderName" text="SHANTANU NANDKHILE" class="header-title header-teleport-item header-teleport-item--hidden"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="HeaderNav" class="header-side header-side--right">
+                <ui:Button name="HeaderExploreBtn" class="cyber-btn primary header-teleport-item header-teleport-item--hidden" style="min-width: 120px; height: 40px; margin-top: 0; margin-right: 12px;">
+                    <ui:VisualElement class="cyber-shadow"/>
+                    <ui:VisualElement class="cyber-body"/>
+                    <ui:Label text="Projects" class="cyber-text" style="font-size: 13px; color: rgb(0, 0, 0);"/>
+                </ui:Button>
                 <ui:Button name="NavContact" class="cyber-btn secondary" style="min-width: 140px; height: 40px; margin-top: 0;">
-                <ui:VisualElement class="cyber-shadow" />
-                <ui:VisualElement class="cyber-body">
-                </ui:VisualElement>
-                <ui:Label text="CONTACT" class="cyber-text" style="font-size: 13px;" />
+                    <ui:VisualElement class="cyber-shadow"/>
+                    <ui:VisualElement class="cyber-body"/>
+                    <ui:Label text="CONTACT" class="cyber-text" style="font-size: 13px;"/>
                 </ui:Button>
                 <ui:Button name="BtnDownloadCV" class="cyber-btn secondary" style="min-width: 140px; height: 40px; margin-top: 0;">
-                <ui:VisualElement class="cyber-shadow" />
-                <ui:VisualElement class="cyber-body">
-                </ui:VisualElement>
-                <ui:Label text="RESUME" class="cyber-text" style="font-size: 13px;" />
+                    <ui:VisualElement class="cyber-shadow"/>
+                    <ui:VisualElement class="cyber-body"/>
+                    <ui:Label text="RESUME" class="cyber-text" style="font-size: 13px;"/>
                 </ui:Button>
-            </ui:VisualElement> 
+            </ui:VisualElement>
         </ui:VisualElement>
-        <ui:ScrollView name="MainScrollArea" vertical-scroller-visibility="Hidden" class="content-area">
+        <ui:ScrollView name="MainScrollArea" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" class="content-area">
             <ui:VisualElement name="IntroView" class="intro-view">
-                <ui:VisualElement class="intro-content">
-                    <ui:Label text="Systems &amp; Multiplayer Game Programmer" class="intro-headline"/>
-                    <ui:Label text="Passionate game systems engineer with production experience in Unity. Specialized in multiplayer architecture, network gameplay, and optimized WebGL/mobile experiences." class="intro-summary"/>
-                    <ui:Button name="BtnEnter" class="cyber-btn primary" style="margin-top: 24px;">
+                <ui:VisualElement picking-mode="Ignore" class="hero-portal-container">
+                    <ui:VisualElement name="HeroPortal" picking-mode="Ignore" class="portal portal--horizontal-hero"/>
+                    <ui:Label text="HELLO THERE, I&apos;M SHANTANU" name="Label" class="intro-headline"/>
+                    <ui:Button name="BtnEnter" class="cyber-btn primary" style="margin-top: 32px; align-self: center; flex-direction: row;">
                         <ui:VisualElement class="cyber-shadow"/>
                         <ui:VisualElement class="cyber-body"/>
-                        <ui:Label text="EXPLORE PORTFOLIO" class="cyber-header"/>
+                        <ui:Label text="PROJECTS" class="cyber-header"/>
                     </ui:Button>
+                </ui:VisualElement>
+                <ui:VisualElement name="AboutSection" class="about-section">
+                    <ui:Label text="ABOUT ME" class="section-title" style="color: rgb(0, 229, 255); margin-bottom: 24px;"/>
+                    <ui:Label text="Systems &amp; Multiplayer Game Programmer" class="intro-summary" style="color: rgb(255, 255, 255); font-size: 24px;"/>
+                    <ui:Label text="Passionate game systems engineer with production experience in Unity. Specialized in multiplayer architecture, network gameplay, and optimized WebGL/mobile experiences." class="intro-summary"/>
+                    <ui:VisualElement style="height: 600px; width: 100%; border-width: 1px; border-color: rgba(255, 255, 255, 0.1); margin-top: 50px; align-items: center; justify-content: center; border-radius: 12px;">
+                        <ui:Label text="[ More About Content Will Go Here ]" style="color: rgb(142, 149, 165); font-size: 16px;"/>
+                    </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="MainPortfolioView" class="portfolio-view">
@@ -38,8 +52,8 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="LoadingScreen" class="loading-screen">
                     <ui:VisualElement class="retro-container">
-                        <ui:VisualElement name="CyberSpinner" class="cyber-spinner" />
-                        <ui:Label name="LoadingText" class="cyber-text" text="DECRYPTING ASSETS..." style="font-size: 14px; margin-top: 16px;" />
+                        <ui:VisualElement name="CyberSpinner" class="cyber-spinner"/>
+                        <ui:Label name="LoadingText" text="DECRYPTING ASSETS..." class="cyber-text" style="font-size: 14px; margin-top: 16px;"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="ProjectScrollView" class="project-scroll-view"/>
@@ -67,14 +81,12 @@
                         <ui:VisualElement class="detail-action-row" style="flex-direction: row;">
                             <ui:Button name="BtnDetailGitHub" class="cyber-btn tertiary">
                                 <ui:VisualElement class="cyber-shadow"/>
-                                <ui:VisualElement class="cyber-body">
-                                </ui:VisualElement>
+                                <ui:VisualElement class="cyber-body"/>
                                 <ui:Label text="GITHUB REPO" class="cyber-text"/>
                             </ui:Button>
                             <ui:Button name="BtnDetailDemo" class="cyber-btn quaternary">
                                 <ui:VisualElement class="cyber-shadow"/>
-                                <ui:VisualElement class="cyber-body">
-                                </ui:VisualElement>
+                                <ui:VisualElement class="cyber-body"/>
                                 <ui:Label text="LIVE DEMO" class="cyber-text"/>
                             </ui:Button>
                         </ui:VisualElement>
@@ -84,6 +96,28 @@
                     <ui:Label name="DetailDescription" text="Full breakdown..." class="detail-description"/>
                 </ui:ScrollView>
             </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="SwipeIndicatorBack" class="swipe-indicator swipe-indicator--back">
+        <ui:VisualElement class="chev-scaler pos-3">
+            <ui:VisualElement class="chev-shape chev-left chev-outline color-cyan"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="chev-scaler pos-2">
+            <ui:VisualElement class="chev-shape chev-left chev-solid color-cyan"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="chev-scaler pos-1">
+            <ui:VisualElement class="chev-shape chev-left chev-solid color-magenta"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="SwipeIndicatorForward" class="swipe-indicator swipe-indicator--forward">
+        <ui:VisualElement class="chev-scaler pos-3">
+            <ui:VisualElement class="chev-shape chev-right chev-outline color-cyan"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="chev-scaler pos-2">
+            <ui:VisualElement class="chev-shape chev-right chev-solid color-cyan"/>
+        </ui:VisualElement>
+        <ui:VisualElement class="chev-scaler pos-1">
+            <ui:VisualElement class="chev-shape chev-right chev-solid color-magenta"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

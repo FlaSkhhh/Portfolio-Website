@@ -1,9 +1,9 @@
 === Portfolio Website PROJECT TIME LOG ===
 
-Total time spent on this project : 10h : 01m
+Total time spent on this project : 22h : 19m
 
 IGNORE THE LAST PART!!
 
-17/09/2026
-5
-RAW_TOTAL_SECONDS:36111.7735015544
+20/09/2026
+8
+RAW_TOTAL_SECONDS:80347.8158232873

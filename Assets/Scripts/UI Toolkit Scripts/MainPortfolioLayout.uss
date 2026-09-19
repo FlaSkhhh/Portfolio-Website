@@ -222,11 +222,11 @@ Button {
 
 .intro-view {
     width: 100%;
-    min-height: 520px;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 60px 24px;
+    /* Pushes content from the top down so scrolling works naturally */
+    justify-content: flex-start; 
+    padding: 0; 
 }
 
 .intro-content {
@@ -250,6 +250,14 @@ Button {
     white-space: normal;
     -unity-text-align: middle-center;
     margin-bottom: 24px;
+}
+
+.about-section {
+    width: 100%;
+    max-width: 800px;
+    align-items: center;
+    padding-top: 100px;
+    padding-bottom: 200px; 
 }
 
 .portfolio-view {
@@ -544,6 +552,283 @@ Button {
     letter-spacing: 2px;
     -unity-font-style: bold;
 }
+/*
+.swipe-indicator {
+    position: absolute;
+    top: 50%; 
+    width: 60px;
+    height: 30px;
+    translate: 0 -50%;
+    
+    border-radius: 0; 
+    background-color: #55ead4; 
+    color: #000000; 
+    -unity-font-style: bold;
+    font-size: 16px;
+    
+    align-items: center;
+    justify-content: center;
+    display: none; 
+    opacity: 0;
+    
+    transition-property: translate, scale, opacity, background-color;
+    transition-duration: 0.1s, 0.15s, 0.15s, 0.1s; 
+    transition-timing-function: ease-out-bounce;
+}
+
+.swipe-indicator--back { 
+    left: -60px; 
+    border-left-width: 6px;
+    border-left-color: #c5003c; 
+}
+
+
+.swipe-indicator--forward { 
+    right: -60px; 
+    border-right-width: 6px;
+    border-right-color: #c5003c; 
+}
+
+
+.swipe-indicator--success {
+    background-color: #f3e600; 
+}
+/*
+/* --- HOLOGRAPHIC HUD BRACKET --- */
+/* --- THE INVISIBLE CONTAINER --- */
+/* --- THE INVISIBLE CONTAINER --- */
+/* ==========================================
+   THE INVISIBLE CONTAINER
+========================================== */
+/* ==========================================
+   THE INVISIBLE CONTAINER
+========================================== */
+/* ==========================================
+   THE INVISIBLE CONTAINER
+========================================== */
+.swipe-indicator {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    width: 140px;  
+    height: 100px;  
+    
+    display: none; 
+    opacity: 0;
+    
+    transition-property: translate, scale, opacity;
+    transition-duration: 0.1s, 0.15s, 0.15s; 
+    transition-timing-function: ease-out-bounce;
+}
+
+.swipe-indicator--back { left: -140px; }
+.swipe-indicator--forward { right: -140px; }
+
+
+/* ==========================================
+   TRANSFORM SEPARATION (The Symmetry Fix!)
+========================================== */
+
+/* 1. The Wrapper: Handles positioning and global squashing */
+.chev-scaler {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    
+    width: 48px;
+    height: 48px;
+    align-items: center; 
+    justify-content: center;
+    
+    /* Squashes the box horizontally and stretches vertically in GLOBAL space */
+    scale: 0.75 1.4; 
+}
+
+/* 2. The Shape: Draws the actual rotated geometry safely inside */
+.chev-shape {
+    transition-property: border-color;
+    transition-duration: 0.15s;
+}
+
+/* --- THE SHAPES --- */
+.chev-solid {
+    width: 36px; height: 36px;
+    border-width: 18px; 
+}
+.chev-outline {
+    width: 48px; height: 48px;
+    border-width: 8px; 
+}
+
+/* --- THE DIRECTIONS --- */
+.chev-left {
+    rotate: -45deg;
+    border-right-width: 0;
+    border-bottom-width: 0;
+}
+.chev-right {
+    rotate: 45deg;
+    border-left-width: 0;
+    border-bottom-width: 0;
+}
+
+/* --- THE COLORS --- */
+.color-magenta { border-color: #E6005C; }
+.color-cyan { border-color: #55ead4; }
+
+
+/* ==========================================
+   POSITIONS & TIGHT SPACING
+========================================== */
+/* Left Indicator */
+.swipe-indicator--back .pos-1 { left: 15px; } 
+.swipe-indicator--back .pos-2 { left: 45px; } 
+.swipe-indicator--back .pos-3 { left: 69px; } 
+
+/* Right Indicator */
+.swipe-indicator--forward .pos-1 { right: 15px; }
+.swipe-indicator--forward .pos-2 { right: 45px; }
+.swipe-indicator--forward .pos-3 { right: 69px; }
+
+
+/* ==========================================
+   THE "SUCCESS" FLASH 
+========================================== */
+.swipe-indicator--success .chev-shape {
+    border-color: #f3e600; 
+}
+
+
+
+
+/* ==========================================
+   DIMENSIONAL RIFTS (Unity-Safe Neon Glow)
+========================================== */
+.portal {
+    background-color: transparent; 
+    border-width: 0; 
+    border-radius: 50%; /* Keeps the bounding box oval */
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* ==========================================
+   PORTAL WRAPPER FIX
+========================================== */
+/* ==========================================
+   PORTAL WRAPPER FIX (Perfect Scaling Pivot)
+========================================== */
+.portal-wrapper {
+    position: absolute; 
+    top: 100px; 
+    
+    /* We explicitly tell the wrapper how big the rotated child is */
+    width: 300px;  
+    height: 100px; 
+    
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    
+    /* Guarantees it scales from the dead center in both directions */
+    transform-origin: center; 
+}
+
+/* Ceiling Portal (Horizontal) */
+.portal--horizontal-hero {
+    position: absolute;
+    top: 40px;
+    align-self: center;
+    
+    /* Loads the horizontal image */
+    background-image: url('project://database/Assets/Resources/Portal_Horizontal.png'); 
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: #ff7300; 
+    
+    /* Perfect percentage scaling (Length and Thickness) */
+    width: 100%; 
+    height: 20%; 
+}
+
+/* Left Wall Portal (Vertical) */
+.portal--vertical-header {
+    /* Loads the vertical image */
+    background-image: url('project://database/Assets/Resources/Portal_V.png');
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-background-image-tint-color: #00E5FF;
+    
+    /* Standard fixed pixels for the header bar */
+    width: 30px; 
+    height: 80px; 
+    margin-right: 15px; 
+}
+
+/* ==========================================
+   HERO LAYOUT (Centered Text)
+========================================== */
+.hero-portal-container {
+    width: 100%;
+    height: 100%; 
+    min-height: 800px; 
+    flex-direction: column; 
+    align-items: center;
+    
+    /* This automatically pushes your Name and Button to the vertical center of the screen! */
+    justify-content: center; 
+}
+
+
+.header-side {
+    flex-direction: row;
+    align-items: center;
+}   
+.header-side--left { justify-content: flex-start; }
+.header-side--right { justify-content: flex-end; }
+
+
+/* ==========================================
+   THE SLINGSHOT / TELEPORT ANIMATION
+========================================== */
+.header-teleport-item {
+    transition-property: translate, opacity;
+    transition-duration: 0.5s; /* Slightly longer so you can see it fly across the screen */
+    transition-timing-function: ease-out-back; 
+}
+
+/* The Name pops out of the left portal */
+#HeaderName.header-teleport-item--hidden {
+    opacity: 0;
+    translate: -60px 0; 
+}
+
+/* Normal resting state in the header */
+.header-item--popped {
+    scale: 1 1;
+    opacity: 1;
+    translate: 0 0; 
+}
+
+/* Hides Name slightly left into the portal */
+#HeaderName.header-item--hidden {
+    scale: 0.1 0.1;
+    opacity: 0;
+    translate: -60px 0; 
+}
+
+/* Yanks the Right-Side buttons 1500px to the left to hide them in the portal! */
+#HeaderNav.header-item--hidden {
+    scale: 0.1 0.1;
+    opacity: 0;
+    translate: -1500px 0; 
+}
+
+#HeaderExploreBtn.header-teleport-item--hidden {
+    opacity: 0;
+    translate: -1500px 0; 
+}
+
+
+
+
 
 /* ===== PORTRAIT / MOBILE OVERRIDES ===== */
 @media (max-width: 1400px) {
@@ -642,6 +927,7 @@ Button {
         order: 1; 
     }
 }
+
 
 
 /* 	#000000	(0,0,0) black

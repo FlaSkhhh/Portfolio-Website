@@ -8,10 +8,10 @@ using System.Globalization;
 [InitializeOnLoad]
 public static class ProjectTimer
 {
-    private const string LAST_CHECK_KEY = "PTimer_LastCheckTime";
-    private static readonly double intervalSecs = 600.0;
-    private static string folderPath = Application.dataPath + "/Editor/ZProjectTimeTracker";
-    private static string logFilePath = folderPath + "/ProjectTimeLog.txt";
+    const string LAST_CHECK_KEY = "PTimer_LastCheckTime";
+    static readonly double intervalSecs = 600.0;
+    static string folderPath = Application.dataPath + "/Editor/ZProjectTimeTracker";
+    static string logFilePath = folderPath + "/ProjectTimeLog.txt";
 
     static ProjectTimer()
     {
@@ -47,6 +47,7 @@ public static class ProjectTimer
     static void OnQuitting()
     {
         SaveToLog();
+        AssetDatabase.ImportAsset("Assets/Editor/ZProjectTimeTracker/ProjectTimeLog.txt", ImportAssetOptions.ForceUpdate);
     }
 
     static void SaveToLog()
@@ -83,7 +84,6 @@ public static class ProjectTimer
         };
 
         File.WriteAllLines(logFilePath, fileContent);
-        AssetDatabase.ImportAsset("Assets/Editor/ZProjectTimeTracker/ProjectTimeLog.txt", ImportAssetOptions.ForceUpdate);
     }
 
     static double ParseTotalTimeFromLog()

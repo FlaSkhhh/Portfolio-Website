@@ -745,8 +745,8 @@ Button {
     -unity-background-image-tint-color: #ff7300; 
     
     /* Perfect percentage scaling (Length and Thickness) */
-    width: 100%; 
-    height: 20%; 
+    width: 80%; 
+    height: 30%; 
 }
 
 /* Left Wall Portal (Vertical) */
@@ -831,103 +831,105 @@ Button {
 
 
 /* ===== PORTRAIT / MOBILE OVERRIDES ===== */
-@media (max-width: 1400px) {
-    .header-bar,
-    .intro-content,
-    .portfolio-view,
-    .experience-section,
-    .detail-panel {
-        width: 100%;
-        align-items: stretch;
-    }
+/* Apparantly the uss doesnt understand @media thing at all*/
 
-    .header-bar {
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-
-    .intro-headline {
-        font-size: 48px;
-        width: 100%;
-    }
-
-    .intro-summary {
-        font-size: 19px;
-        width: 100%;
-    }
-
-    .section-title {
-        font-size: 32px;
-    }
-
-    .portfolio-view {
-        padding: 24px 16px;
-    }
-
-    .detail-panel {
-        width: 100%; 
-        padding: 0; 
-        max-height: none; 
-    }
-
-    .detail-title {
-        font-size: 20px;
-    }
-
-    .detail-description {
-        font-size: 16px;
-    }
-
-    .nav-btn {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-    
-    .detail-image {
-        height: 250px;
-        margin-bottom: 24px;
-    }
-
-    .detail-meta,
-    .detail-meta-header,
-    .detail-description,
-    .detail-footer {
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-
-    .detail-footer {
-        flex-direction: column; 
-        padding-bottom: 60px;
-    }
-
-    .detail-footer Button {
-        margin-right: 0;
-        margin-left: 0;
-        margin-bottom: 12px;
-        width: 100%; 
-    }
-    .detail-dynamic-row, 
-    .detail-dynamic-row--reverse {
-        flex-direction: column; 
-        margin-bottom: 40px;
-    }
-
-    .detail-dynamic-text {
-        width: 100%;
-        margin-bottom: 24px;
-        /* Put the text below the image on mobile */
-        order: 2; 
-    }
-
-    .detail-dynamic-image {
-        width: 100%;
-        height: 220px;
-        margin-bottom: 16px;
-        order: 1; 
-    }
+.is-mobile .header-bar,
+.is-mobile .intro-content,
+.is-mobile .portfolio-view,
+.is-mobile .experience-section,
+.is-mobile .detail-panel {
+    width: 100%;
+    align-items: stretch;
 }
 
+.is-mobile .header-bar {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.is-mobile .intro-headline {
+    font-size: 48px;
+    width: 100%;
+}
+
+.is-mobile .intro-summary {
+    font-size: 19px;
+    width: 100%;
+}
+
+.is-mobile .section-title {
+    font-size: 32px;
+}
+
+.is-mobile .portfolio-view {
+    padding: 24px 16px;
+}
+
+.is-mobile .detail-panel {
+    width: 100%; 
+    padding: 0; 
+    max-height: none; 
+}
+
+.is-mobile .detail-title {
+    font-size: 20px;
+}
+
+.is-mobile .detail-description {
+    font-size: 16px;
+}
+
+.is-mobile .nav-btn {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.is-mobile .detail-image {
+    height: 250px;
+    margin-bottom: 24px;
+}
+
+.is-mobile .detail-meta,
+.is-mobile .detail-meta-header,
+.is-mobile .detail-description,
+.is-mobile .detail-footer {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.is-mobile .detail-footer {
+    flex-direction: column; 
+    padding-bottom: 60px;
+}
+
+.is-mobile .detail-footer Button {
+    margin-right: 0;
+    margin-left: 0;
+    margin-bottom: 12px;
+    width: 100%; 
+}
+
+.is-mobile .detail-dynamic-row, 
+.is-mobile .detail-dynamic-row--reverse {
+    flex-direction: column; 
+    margin-bottom: 40px;
+}
+
+.is-mobile .detail-dynamic-text {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.is-mobile .detail-dynamic-image {
+    width: 100%;
+    height: 220px;
+    margin-bottom: 16px;
+}
+
+.is-mobile .portal--horizontal-hero {
+    width: 100%; 
+    height: 25%; 
+}
 
 
 /* 	#000000	(0,0,0) black

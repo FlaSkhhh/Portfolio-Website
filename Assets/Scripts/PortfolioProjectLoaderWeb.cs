@@ -83,13 +83,12 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         mainScrollArea = root.Q<ScrollView>("MainScrollArea");
         scrollChevron = root.Q<VisualElement>("ScrollChevron");
 
-        if (mainScrollArea != null && scrollChevron != null)
+        if (mainScrollArea != null)
         {
-            // Check chevron visibility whenever the screen size changes or rows are added
-            mainScrollArea.RegisterCallback<GeometryChangedEvent>(evt => CheckChevronVisibility());
-
-            // Check chevron visibility whenever the user scrolls
-            mainScrollArea.verticalScroller.valueChanged += (v) => CheckChevronVisibility();
+            if (scrollChevron != null)
+            {
+                mainScrollArea.verticalScroller.valueChanged += (v) => CheckChevronVisibility();
+            }
         }
     }
 

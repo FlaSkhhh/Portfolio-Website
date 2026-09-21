@@ -46,6 +46,11 @@ public class PortfolioController : MonoBehaviour
         if (uiDocument == null) return;
 
         var root = uiDocument.rootVisualElement;
+        root.Query<ScrollView>().ForEach(scrollView =>
+        {
+            scrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
+            scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
+        });
 
         introView = root.Q<VisualElement>("IntroView");
         mainPortfolioView = root.Q<VisualElement>("MainPortfolioView");
@@ -91,6 +96,15 @@ public class PortfolioController : MonoBehaviour
                 float viewportWidth = mainScroll.layout.width;
 
                 if (contentHeight == 0 || viewportHeight == 0) return;
+
+                if (viewportWidth < viewportHeight)
+                {
+                    root.AddToClassList("is-mobile");
+                }
+                else
+                {
+                    root.RemoveFromClassList("is-mobile");
+                }
 
                 if (contentHeight <= viewportHeight)
                 {

@@ -177,91 +177,90 @@ Scroller {
     margin-left: 12px; /* Flips the button spacing */
 }
 /* ===== RESPONSIVE PORTRAIT QUERY ===== */
-@media (max-width: 1400px) {
-    .showcase-row {
-        flex-direction: column;
-        width: 100%;
-        min-height: auto;
-        max-height: none; /* CRITICAL: Allows vertical stacking without chopping off text */
-        padding: 20px;
-        margin-bottom: 28px;
-        align-items: stretch;
-    }
+/* ===== RESPONSIVE PORTRAIT QUERY ===== */
+.is-mobile .showcase-row {
+    flex-direction: column;
+    width: 100%;
+    min-height: auto;
+    max-height: none; 
+    padding: 20px;
+    margin-bottom: 28px;
+    align-items: stretch;
+}
 
-    .showcase-row--reverse {
-        flex-direction: column;
-    }
+.is-mobile .showcase-row--reverse {
+    flex-direction: column;
+}
 
-    .showcase-column--image {
-        width: 100%;
-        max-width: none; /* Reset ceiling */
-        min-height: 60vw; /* Scales the image naturally with phone width */
-        height: 60vw;
-        max-height: none; /* Reset ceiling */
-        margin-bottom: 24px;
-        padding-left: 0;
-        padding-right: 0;
-        flex-shrink: 0;
-    }
+.is-mobile .showcase-column--image {
+    width: 100%;
+    max-width: none; 
+    /* FIXED: Replaced invalid 60vw with standard 250px */
+    min-height: 250px; 
+    height: 250px;
+    max-height: none; 
+    margin-bottom: 24px;
+    padding-left: 0;
+    padding-right: 0;
+    flex-shrink: 0;
+}
 
-    .project-image {
-        width: 100%;
-        height: 100%;
-        min-height: 60vw;
-        max-height: none; /* Reset ceiling */
-    }
+.is-mobile .project-image {
+    width: 100%;
+    height: 100%;
+    min-height: 250px;
+    max-height: none; 
+}
 
-    .showcase-column--info {
-        width: 100%;
-        max-width: none; /* Reset ceiling */
-        padding-left: 0;
-        padding-right: 0;
-    }
+.is-mobile .showcase-column--info {
+    width: 100%;
+    max-width: none; 
+    padding-left: 0;
+    padding-right: 0;
+}
 
-    .project-title {
-        font-size: 28px;
-        width: 100%;
-    }
+.is-mobile .project-title {
+    font-size: 28px;
+    width: 100%;
+}
 
-    .project-description {
-        font-size: 17px;
-        width: 100%;
-    }
+.is-mobile .project-description {
+    font-size: 17px;
+    width: 100%;
+}
 
-    .button-row {
-        flex-direction: column;
-        width: 100%;
-    }
+.is-mobile .button-row {
+    flex-direction: column;
+    width: 100%;
+}
 
-    .btn-primary,
-    .btn-secondary {
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 12px;
-    }
+.is-mobile .btn-primary,
+.is-mobile .btn-secondary {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 12px;
+}
 
-    /* Reset reverse alignment back to normal for stacked mobile cards */
-    .showcase-row--reverse .showcase-column--info {
-        align-items: flex-start;
-    }
+.is-mobile .showcase-row--reverse .showcase-column--info {
+    align-items: flex-start;
+}
 
-    .showcase-row--reverse .project-title,
-    .showcase-row--reverse .project-description {
-        -unity-text-align: upper-left;
-    }
+.is-mobile .showcase-row--reverse .project-title,
+.is-mobile .showcase-row--reverse .project-description {
+    -unity-text-align: upper-left;
+}
 
-    .showcase-row--reverse .tag-container,
-    .showcase-row--reverse .button-row {
-        justify-content: flex-start;
-    }
+.is-mobile .showcase-row--reverse .tag-container,
+.is-mobile .showcase-row--reverse .button-row {
+    justify-content: flex-start;
+}
 
-    .showcase-row--reverse .button-row Button {
-        margin-left: 0;
-        margin-right: 12px;
-    }
-    
-    .showcase-row--reverse .platform-badge {
-        left: auto;
-        right: 16px;
-    }
+.is-mobile .showcase-row--reverse .button-row Button {
+    margin-left: 0;
+    margin-right: 12px;
+}
+
+.is-mobile .showcase-row--reverse .platform-badge {
+    left: auto;
+    right: 16px;
 }

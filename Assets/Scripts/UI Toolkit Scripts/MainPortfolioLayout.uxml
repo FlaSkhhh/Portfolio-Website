@@ -28,7 +28,7 @@
             <ui:VisualElement name="IntroView" class="intro-view">
                 <ui:VisualElement picking-mode="Ignore" class="hero-portal-container">
                     <ui:VisualElement name="HeroPortal" picking-mode="Ignore" class="portal portal--horizontal-hero"/>
-                    <ui:Label text="HELLO THERE, I&apos;M SHANTANU" name="Label" class="intro-headline"/>
+                    <ui:Label text="HELLO THERE &#10; I&apos;M SHANTANU" name="Label" class="intro-headline"/>
                     <ui:Button name="BtnEnter" class="cyber-btn primary" style="margin-top: 32px; align-self: center; flex-direction: row;">
                         <ui:VisualElement class="cyber-shadow"/>
                         <ui:VisualElement class="cyber-body"/>

@@ -11,8 +11,9 @@ public class PortfolioController : MonoBehaviour
     VisualElement projectDetailView;
     VisualElement swipeIndicatorBack;
     VisualElement swipeIndicatorForward;
-    VisualElement activeIndicator; // Tracks which one is currently being dragged
+    VisualElement activeIndicator; // Tracks back or forward is currently being dragged 
     VisualElement heroPortal;
+    VisualElement introHeadline;
     Label headerName;
     Label scrollChevron;
     Button headerExploreBtn;
@@ -28,6 +29,8 @@ public class PortfolioController : MonoBehaviour
     string currentGithubUrl;
     bool hasTeleported = false;
     bool hasDismissedChevron = false;
+
+    string activePageState = "intro";
 
     [DllImport("__Internal")] private static extern void WebGLInitHistory();
     [DllImport("__Internal")] private static extern void WebGLPushHistoryState(string view);
@@ -65,6 +68,7 @@ public class PortfolioController : MonoBehaviour
         headerExploreBtn = root.Q<Button>("HeaderExploreBtn");
         headerName = root.Q<Label>("HeaderName");
         heroPortal = root.Q<VisualElement>("HeroPortal");
+        introHeadline = root.Q<VisualElement>(className: "intro-headline");
 
         if (btnEnter != null) btnEnter.clicked += OnEnterPortfolioClicked;
         if (btnBack != null) btnBack.clicked += OnBackClicked;
@@ -120,12 +124,23 @@ public class PortfolioController : MonoBehaviour
                         hasDismissedChevron = false;
                     }
                 }
+
+                var heroContainer = root.Q<VisualElement>(className: "hero-portal-container");
+                if (heroContainer != null)
+                {
+                    heroContainer.style.height = viewportHeight;
+                    heroContainer.style.minHeight = viewportHeight; // Overrides the 800px in your USS
+                }
             });
 
             // The Scroll Listener
             mainScroll.verticalScroller.valueChanged += (scrollValue) =>
             {
-                // 1. Hide chevron on scroll
+                if (activePageState != "intro" && activePageState != "home")
+                {
+                    return;
+                }
+
                 if (!hasDismissedChevron)
                 {
                     if (scrollValue > dynamicScrollThreshold)
@@ -135,16 +150,42 @@ public class PortfolioController : MonoBehaviour
                     }
                     else scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
                 }
-                if(heroPortal != null)
-                {
-                    // Counters the scroll view to keep it on screen, then lets it scroll away!
-                    float stickyY = Mathf.Clamp(scrollValue, 0, 350f);
-                    heroPortal.style.translate = new Translate(0, stickyY, 0);
-                }
 
+                float screenHeight = mainScroll.layout.height;
+                if (screenHeight > 0)
+                {
+                    // 1. THE COLLISION POINT
+                    // Text is at 50% (center). Portal is roughly 15% from the top. 
+                    // Distance for them to meet is 35% of the screen height.
+                    float collisionDistance = screenHeight * 0.35f;
+
+                    // 2. TEXT FADE (Engulfed exactly as it hits the portal)
+                    // It stays fully visible, then rapidly fades out over the 100 pixels right before collision.
+                    float textFadeStart = Mathf.Max(0, collisionDistance - 100f);
+                    float textAlpha = 1f - Mathf.InverseLerp(textFadeStart, collisionDistance, scrollValue);
+
+                    if (introHeadline != null) introHeadline.style.opacity = textAlpha;
+                    if (btnEnter != null) btnEnter.style.opacity = textAlpha;
+
+                    // 3. PORTAL STICKY & FADE
+                    if (heroPortal != null)
+                    {
+                        // CRITICAL: The portal sticks perfectly (matches scroll) UNTIL the collision distance.
+                        // After collision, it locks its offset, allowing it to naturally scroll UP and off the screen.
+                        float stickyY = Mathf.Clamp(scrollValue, 0, collisionDistance);
+                        heroPortal.style.translate = new Translate(0, stickyY, 0);
+
+                        // We fade the portal out slowly AFTER it starts moving up, so it doesn't pop out of existence.
+                        // Starts fading at collision, and is completely gone 400 pixels later.
+                        float portalAlpha = 1f - Mathf.InverseLerp(collisionDistance, collisionDistance + 400f, scrollValue);
+
+                        heroPortal.style.opacity = portalAlpha;
+                        heroPortal.style.display = portalAlpha <= 0f ? DisplayStyle.None : DisplayStyle.Flex;
+                    }
+                }
                 // 2. THE ONE-WAY HEADER REVEAL
                 // Adjust this number based on how far down your "About" section is
-                float teleportThreshold = 400f;
+                float teleportThreshold = screenHeight * 0.5f;
 
                 if (!hasTeleported && scrollValue >= teleportThreshold)
                 {
@@ -376,6 +417,11 @@ public class PortfolioController : MonoBehaviour
     // Called by JS OR our C# fallback methods
     public void OnBrowserStateChanged(string view)
     {
+        if (string.IsNullOrEmpty(view) || view == "undefined")
+        {
+            view = "intro";
+        }
+        activePageState = view;
         if (view == "intro" || view == "home")
         {
             if (introView != null) introView.style.display = DisplayStyle.Flex;
@@ -503,7 +549,7 @@ public class PortfolioController : MonoBehaviour
             {
                 targetIndicator.style.scale = new Scale(new Vector2(0.01f, 0.01f));
                 targetIndicator.style.opacity = 0f;
-            }).StartingIn(150);
+            }).StartingIn(140);
 
             // 3. Cleanup
             targetIndicator.schedule.Execute(() =>
@@ -514,7 +560,7 @@ public class PortfolioController : MonoBehaviour
                 // Reset scale to 1f while hidden so layout memory is clean
                 targetIndicator.style.scale = new Scale(new Vector2(1f, 1f));
                 targetIndicator.style.translate = new Translate(0, new Length(-50, LengthUnit.Percent), 0);
-            }).StartingIn(350);
+            }).StartingIn(150);
         }
         else
         {
@@ -531,7 +577,7 @@ public class PortfolioController : MonoBehaviour
 
                 // Reset scale to 1f while hidden
                 targetIndicator.style.scale = new Scale(new Vector2(1f, 1f));
-            }).StartingIn(200);
+            }).StartingIn(10);
         }
     }
 }

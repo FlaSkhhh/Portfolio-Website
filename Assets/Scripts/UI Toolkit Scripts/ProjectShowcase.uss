@@ -176,91 +176,143 @@ Scroller {
     margin-right: 0;
     margin-left: 12px; /* Flips the button spacing */
 }
+
+
+
 /* ===== RESPONSIVE PORTRAIT QUERY ===== */
+
+
+
 /* ===== RESPONSIVE PORTRAIT QUERY ===== */
-.is-mobile .showcase-row {
+
+/* 1. ROW SETUP */
+.is-mobile .showcase-row,
+.is-mobile .showcase-row--reverse {
     flex-direction: column;
     width: 100%;
     min-height: auto;
-    max-height: none; 
+    max-height: 9999px; /* Kills the 480px desktop limit */
     padding: 20px;
-    margin-bottom: 28px;
-    align-items: stretch;
+    margin-bottom: 48px;
 }
 
-.is-mobile .showcase-row--reverse {
-    flex-direction: column;
-}
-
+/* 2. THE IMAGE (80% Width) */
 .is-mobile .showcase-column--image {
-    width: 100%;
-    max-width: none; 
-    /* FIXED: Replaced invalid 60vw with standard 250px */
-    min-height: 250px; 
-    height: 250px;
-    max-height: none; 
-    margin-bottom: 24px;
-    padding-left: 0;
-    padding-right: 0;
+    width: 80%;
+    flex-basis: auto; 
+    flex-grow: 0;
+    height: 160px;
+    min-height: 160px;
+    margin-bottom: 24px; /* Image height (160) + Margin (24) = 184px total block */
+    padding: 0;
     flex-shrink: 0;
 }
 
-.is-mobile .project-image {
-    width: 100%;
-    height: 100%;
-    min-height: 250px;
-    max-height: none; 
-}
+.is-mobile .showcase-row .showcase-column--image { align-self: flex-start; }
+.is-mobile .showcase-row--reverse .showcase-column--image { align-self: flex-end; }
 
+.is-mobile .project-image { width: 100%; height: 100%; }
+
+/* 3. THE INFO CONTAINER */
 .is-mobile .showcase-column--info {
     width: 100%;
-    max-width: none; 
-    padding-left: 0;
-    padding-right: 0;
+    padding: 0;
 }
-
-.is-mobile .project-title {
-    font-size: 28px;
-    width: 100%;
-}
-
+/* ==========================================
+   TEXT (Safely below the image)
+========================================== */
+.is-mobile .project-title,
 .is-mobile .project-description {
-    font-size: 17px;
     width: 100%;
+    -unity-text-align: upper-left; 
 }
 
-.is-mobile .button-row {
+.is-mobile .project-title { font-size: 24px; margin-bottom: 10px; }
+.is-mobile .project-description { font-size: 15px; margin-bottom: 24px; }
+
+/* ==========================================
+   THE HASHTAG FIX (#C#, 3D, etc.)
+========================================== */
+.is-mobile .tag-container {
+    position: absolute;
+    
+    /* 160px Image Height + 24px Image Margin = 184px */
+    /* This yanks the tags completely out of the text block and pins them to the top! */
+    top: -184px; 
+    translate: 0 0; /* Clears any leftover translates */
+    
+    width: 20%;
+    height: 160px; /* Matches the image height perfectly */
+    
     flex-direction: column;
-    width: 100%;
+    justify-content: flex-start; 
+    align-items: center;
 }
 
-.is-mobile .btn-primary,
-.is-mobile .btn-secondary {
-    width: 100%;
-    margin-right: 0;
-    margin-bottom: 12px;
+/* Normal row: Tags in the right gap */
+.is-mobile .showcase-row .tag-container { 
+    right: 0; 
+    left: auto; 
 }
 
-.is-mobile .showcase-row--reverse .showcase-column--info {
-    align-items: flex-start;
+/* Reverse row: Tags in the left gap */
+.is-mobile .showcase-row--reverse .tag-container { 
+    left: 0; 
+    right: auto; 
 }
 
-.is-mobile .showcase-row--reverse .project-title,
-.is-mobile .showcase-row--reverse .project-description {
-    -unity-text-align: upper-left;
-}
-
-.is-mobile .showcase-row--reverse .tag-container,
-.is-mobile .showcase-row--reverse .button-row {
-    justify-content: flex-start;
-}
-
-.is-mobile .showcase-row--reverse .button-row Button {
+/* The actual #C# and 3D bubbles */
+.is-mobile .tech-pill {
+    font-size: 10px;
+    padding: 6px 4px;
+    margin-top: 0;
     margin-left: 0;
-    margin-right: 12px;
+    margin-right: 0;
+    margin-bottom: 6px; 
+    white-space: normal;
+    -unity-text-align: middle-center;
+    width: 90%; 
 }
 
-.is-mobile .showcase-row--reverse .platform-badge {
-    left: auto;
-    right: 16px;
+/* ==========================================
+   BUTTONS (Strict 140x42 Size)
+========================================== */
+.is-mobile .button-row {
+    flex-direction: row; 
+    justify-content: flex-start;
+    align-items: flex-start; 
+    width: 100%;
+    height: auto; 
+    min-height: 42px; 
+    flex-shrink: 0; 
+    flex-wrap: wrap; 
+}
+
+.is-mobile .button-row Button,
+.is-mobile .cyber-btn {
+    position: relative;
+    
+    /* LOCKED WIDTH */
+    width: 140px; 
+    min-width: 140px; 
+    max-width: 140px; 
+    
+    /* LOCKED HEIGHT */
+    height: 42px;
+    min-height: 42px; 
+    max-height: 42px; 
+    
+    flex-shrink: 0; 
+    margin: 0 12px 12px 0; 
+    padding: 0;
+}
+
+/* Text scale adjustment to fit perfectly inside 42px */
+.is-mobile .cyber-btn .cyber-text {
+    font-size: 13px; 
+}
+
+.is-mobile .showcase-row--reverse .button-row Button,
+.is-mobile .showcase-row--reverse .cyber-btn {
+    margin: 0 12px 12px 0;
 }

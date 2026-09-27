@@ -15,6 +15,10 @@
 Scroller {
     display: none;
 }
+.is-mobile .intro-headline {
+    font-size: 36px; /* Reduced from 48px */
+    width: 100%;
+}
 
 .main-container {
     width: 100%;
@@ -929,6 +933,29 @@ Button {
 .is-mobile .portal--horizontal-hero {
     width: 100%; 
     height: 25%; 
+}
+/* ==========================================
+   MOBILE HEADER FIXES
+========================================== */
+.is-mobile .portal--vertical-header {
+    width: 24px; 
+    height: 60px;
+    margin-right: 10px;
+    /* CRITICAL: Prevents the text from squishing the portal */
+    flex-shrink: 0; 
+}
+
+.is-mobile .header-title {
+    font-size: 15px; /* Scaled down for mobile */
+    flex-shrink: 1;  /* Allows the text to wrap/shrink if necessary */
+    white-space: nowrap;
+}
+
+.is-mobile .header-nav .nav-btn {
+    font-size: 13px; /* Smaller text for mobile nav */
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-right: 6px; /* Tighter button spacing */
 }
 
 

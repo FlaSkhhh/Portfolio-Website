@@ -1,5 +1,5 @@
 .project-card {
-    width: 380px;
+    width: 90%;
     flex-direction: column;
     background-color: rgb(30, 30, 30);
     border-left-width: 1px;
@@ -18,6 +18,12 @@
     margin-right: 12px;
     margin-top: 12px;
     margin-bottom: 12px;
+}
+.is-mobile .project-card {
+    width: 90%;
+    /* Strips the margins so a 100% width doesn't overflow the screen */
+    margin-left: 0; 
+    margin-right: 0;
 }
 
 .card-image-container {

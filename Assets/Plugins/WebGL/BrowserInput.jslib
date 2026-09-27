@@ -25,7 +25,7 @@ mergeInto(LibraryManager.library, {
     var lastNavTime = 0;
     function triggerNav(direction) {
       var now = Date.now();
-      if (now - lastNavTime < 750) return;
+      if (now - lastNavTime < 400) return;
       lastNavTime = now; 
 
       if (direction === 'back') window.history.back();
@@ -40,36 +40,49 @@ mergeInto(LibraryManager.library, {
         }
     }
     
-    // ==========================================
-    // TRACKPAD
+// ==========================================
+    // TRACKPAD (With Momentum Lockout)
     // ==========================================
     var trackpadAccX = 0;
     var trackpadTimer = null;
     var trackpadThreshold = 150; 
+    var commitThreshold = 350;   
     var isTpSwiping = false;
     var tpDir = null;
 
-   window.addEventListener('wheel', function (e) {      
+    // --- NEW: Momentum Lockout Variables ---
+    var isTrackpadLocked = false;
+    var trackpadLockoutTimer = null;
+
+    window.addEventListener('wheel', function (e) {      
+        
+        // --- 1. THE MOMENTUM EATER ---
+        // If we just successfully swiped, ignore all events and keep resetting the 
+        // timer until the trackpad is completely silent for 100ms.
+        if (isTrackpadLocked) {
+            clearTimeout(trackpadLockoutTimer);
+            trackpadLockoutTimer = setTimeout(function() {
+                isTrackpadLocked = false;
+            }, 100);
+            return;
+        }
+
         if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;      
         
         if (!isTpSwiping) {
             tpDir = (e.deltaX < 0) ? 'back' : 'forward';
 
-            // 2. HISTORY-AWARE GUARDS!
             var canGoBack = window._historyIndex > 0;
             var canGoForward = window._historyIndex < window._maxHistoryIndex;
 
-            // Instantly kill the swipe if no history exists in that direction
             if (tpDir === 'back' && !canGoBack) return;
             if (tpDir === 'forward' && !canGoForward) return;
 
             isTpSwiping = true;
         }
 
-        // If swipe was rejected above, do nothing
         if (!isTpSwiping) return;
 
-        // DIRECTIONAL CLAMPING
         if (tpDir === 'back') {
             trackpadAccX += e.deltaX;
             if (trackpadAccX > 0) trackpadAccX = 0; 
@@ -79,34 +92,49 @@ mergeInto(LibraryManager.library, {
             if (trackpadAccX < 0) trackpadAccX = 0; 
         }
 
-        var progress = Math.min(Math.abs(trackpadAccX) / trackpadThreshold, 1.0);
+        var absX = Math.abs(trackpadAccX);
+        var progress = Math.min(absX / trackpadThreshold, 1.0);
         sendVisualUpdate('UpdateSwipeVisual', progress + '|' + tpDir);
 
+        // --- 2. THE COMMIT (Success) ---
+        if (absX >= commitThreshold) {
+            sendVisualUpdate('EndSwipeVisual', 'success');
+            var finalDir = tpDir; 
+            setTimeout(function() { triggerNav(finalDir); }, 50);
+
+            // Clean up state
+            isTpSwiping = false;
+            tpDir = null;
+            trackpadAccX = 0;
+            clearTimeout(trackpadTimer);
+
+            // --- ACTIVATE MOMENTUM LOCKOUT ---
+            // Lock the trackpad so the leftover inertia doesn't trigger a second swipe
+            isTrackpadLocked = true;
+            trackpadLockoutTimer = setTimeout(function() {
+                isTrackpadLocked = false;
+            }, 100);
+            return;
+        }
+
+        // --- 3. THE RELEASE (Cancel) ---
         clearTimeout(trackpadTimer);
         
         trackpadTimer = setTimeout(function() {
-            var didTrigger = false;
-            if (tpDir === 'back' && trackpadAccX <= -trackpadThreshold) didTrigger = true; 
-            else if (tpDir === 'forward' && trackpadAccX >= trackpadThreshold) didTrigger = true;
-            
-            sendVisualUpdate('EndSwipeVisual', didTrigger ? 'success' : 'cancelled');
-
-            if (didTrigger) {
-                // BUGFIX: Cache tpDir locally so the timeout doesn't lose it!
-                var finalDir = tpDir; 
-                setTimeout(function() { triggerNav(finalDir); }, 150);
-            }
+            sendVisualUpdate('EndSwipeVisual', 'cancelled');
             
             isTpSwiping = false;
             tpDir = null;
             trackpadAccX = 0; 
-        }, 150);
+        }, 80); 
 
     }, { passive: true, capture: true });
+
 
     // ==========================================
     // MOBILE
     // ==========================================
+
     var touchStartX = 0, touchStartY = 0, swipeMode = null;
     var maxDragDistance = Math.max(window.innerWidth * 0.30, 1); 
     var isTouchLocked = false;
@@ -161,9 +189,7 @@ mergeInto(LibraryManager.library, {
         sendVisualUpdate('EndSwipeVisual', result);
         
         if (didTrigger) {
-            // BUGFIX: Cache swipeMode safely!
-            var finalDir = swipeMode; 
-            setTimeout(function() { triggerNav(finalDir); }, 150);
+            triggerNav(swipeMode);
         }
 
         swipeMode = null; 

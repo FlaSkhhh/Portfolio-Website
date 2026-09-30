@@ -190,33 +190,46 @@ Scroller {
 .is-mobile .showcase-row--reverse {
     flex-direction: column;
     width: 100%;
-    min-height: auto;
-    max-height: 9999px; /* Kills the 480px desktop limit */
     padding: 20px;
     margin-bottom: 48px;
+    align-items: flex-start;
+
+    min-height: auto;   /* desktop: 380px */
+    max-height: none;   /* desktop: 480px, the main culprit */
 }
 
 /* 2. THE IMAGE (80% Width) */
 .is-mobile .showcase-column--image {
+    position: relative;
     width: 80%;
-    flex-basis: auto; 
-    flex-grow: 0;
-    height: 160px;
-    min-height: 160px;
-    margin-bottom: 24px; /* Image height (160) + Margin (24) = 184px total block */
+    max-width: none; 
+
+    height: 0;
     padding: 0;
+    padding-bottom: 45%;
+
+    /* RESTORED: This pushes the title down, creating the physical gap */
+    margin-bottom: 24px; 
+    flex-grow: 0; 
     flex-shrink: 0;
+    flex-basis: auto;
 }
 
 .is-mobile .showcase-row .showcase-column--image { align-self: flex-start; }
 .is-mobile .showcase-row--reverse .showcase-column--image { align-self: flex-end; }
-
-.is-mobile .project-image { width: 100%; height: 100%; }
+.is-mobile .project-image { 
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%; 
+}
 
 /* 3. THE INFO CONTAINER */
 .is-mobile .showcase-column--info {
     width: 100%;
     padding: 0;
+    flex-grow: 0; 
+    flex-shrink: 0; 
+    justify-content: flex-start; 
 }
 /* ==========================================
    TEXT (Safely below the image)
@@ -227,7 +240,7 @@ Scroller {
     -unity-text-align: upper-left; 
 }
 
-.is-mobile .project-title { font-size: 24px; margin-bottom: 10px; }
+.is-mobile .project-title { font-size: 24px; margin-top: 0; margin-bottom: 10px; }
 .is-mobile .project-description { font-size: 15px; margin-bottom: 24px; }
 
 /* ==========================================
@@ -236,17 +249,24 @@ Scroller {
 .is-mobile .tag-container {
     position: absolute;
     
-    /* 160px Image Height + 24px Image Margin = 184px */
-    /* This yanks the tags completely out of the text block and pins them to the top! */
-    top: -184px; 
-    translate: 0 0; /* Clears any leftover translates */
+    /* Anchors to the top of the text block */
+    bottom: 100%; 
+    
+    /* Jumps exactly over the image's 24px bottom margin */
+    margin-bottom: 24px; 
     
     width: 20%;
-    height: 160px; /* Matches the image height perfectly */
+    height: 0;
+    padding-bottom: 45%; 
     
-    flex-direction: column;
+    /* STACKS VERTICALLY */
+    flex-direction: column; 
+    
+    /* CRITICAL YOGA FIX: Prevents the 0-height container from instantly wrapping items sideways */
+    flex-wrap: nowrap; 
+    
     justify-content: flex-start; 
-    align-items: center;
+    align-items: center; 
 }
 
 /* Normal row: Tags in the right gap */
@@ -262,16 +282,32 @@ Scroller {
 }
 
 /* The actual #C# and 3D bubbles */
+/* ==========================================
+   THE HASHTAGS (Calibrated for 5 Pills)
+========================================== */
 .is-mobile .tech-pill {
-    font-size: 10px;
-    padding: 6px 4px;
-    margin-top: 0;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 6px; 
-    white-space: normal;
+    /* Bumped up for actual mobile screen readability */
+    font-size: 13px; 
+    
+    /* 5px vertical padding for a button-like feel, 
+       2px horizontal padding maximizes room for long words like 'Multiplayer' */
+    padding: 10px 6px; 
+    
+    margin: 0 0 25px 0; 
+    
+    /* Allow the pill to use the entire 20% column width */
+    width: auto;
+    max-width: 80%;
+    min-width: 50%;
+    height : 35px;
+    
+    /* CRITICAL YOGA FIX: Forbids the 0-height parent container from crushing the pills */
+    flex-shrink: 0; 
+    
     -unity-text-align: middle-center;
-    width: 90%; 
+    
+    /* Allows longer tags to cleanly drop to a second line inside the pill */
+    white-space: normal; 
 }
 
 /* ==========================================

@@ -7,23 +7,28 @@
                 <ui:Label name="HeaderName" text="SHANTANU NANDKHILE" class="header-title header-teleport-item header-teleport-item--hidden"/>
             </ui:VisualElement>
             <ui:VisualElement name="HeaderNav" class="header-side header-side--right">
-                <ui:Button name="HeaderExploreBtn" class="cyber-btn primary header-teleport-item header-teleport-item--hidden" style="min-width: 120px; height: 40px; margin-top: 0; margin-right: 12px;">
+                <ui:Button name="HeaderExploreBtn" class="cyber-btn primary header-teleport-item header-teleport-item--hidden">
                     <ui:VisualElement class="cyber-shadow"/>
                     <ui:VisualElement class="cyber-body"/>
-                    <ui:Label text="Projects" class="cyber-text" style="font-size: 13px; color: rgb(0, 0, 0);"/>
+                    <ui:Label text="PROJECTS" class="cyber-text"/>
                 </ui:Button>
-                <ui:Button name="NavContact" class="cyber-btn secondary" style="min-width: 140px; height: 40px; margin-top: 0;">
+                <ui:Button name="NavContact" class="cyber-btn secondary">
                     <ui:VisualElement class="cyber-shadow"/>
                     <ui:VisualElement class="cyber-body"/>
-                    <ui:Label text="CONTACT" class="cyber-text" style="font-size: 13px;"/>
+                    <ui:Label text="CONTACT" class="cyber-text"/>
                 </ui:Button>
-                <ui:Button name="BtnDownloadCV" class="cyber-btn secondary" style="min-width: 140px; height: 40px; margin-top: 0;">
+                <ui:Button name="BtnDownloadCV" class="cyber-btn secondary">
                     <ui:VisualElement class="cyber-shadow"/>
                     <ui:VisualElement class="cyber-body"/>
-                    <ui:Label text="RESUME" class="cyber-text" style="font-size: 13px;"/>
+                    <ui:Label text="RESUME" class="cyber-text"/>
                 </ui:Button>
             </ui:VisualElement>
         </ui:VisualElement>
+              
+        <ui:VisualElement name="PortfolioHeaderRow" class="portfolio-header-row" style="display: none;">
+            <ui:Button name="BtnBackToHome" text="←" class="btn-back btn-detail-back"/>
+        </ui:VisualElement>
+
         <ui:ScrollView name="MainScrollArea" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" class="content-area">
             <ui:VisualElement name="IntroView" class="intro-view">
                 <ui:VisualElement picking-mode="Ignore" class="hero-portal-container">
@@ -44,8 +49,10 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
+      
+
             <ui:VisualElement name="MainPortfolioView" class="portfolio-view">
-                <ui:Button name="BtnBackToHome" text="←" class="btn-back btn-back-home"/>
+
                 <ui:VisualElement class="experience-section">
                     <ui:Label text="Featured Projects" class="section-title"/>
                     <ui:Label text="A selection of core engineering work in multiplayer architecture, shaders, and AI systems." class="section-subtitle"/>

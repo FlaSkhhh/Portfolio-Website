@@ -1,4 +1,6 @@
-.project-card {
+Scroller {
+    display: none;
+}.project-card {
     width: 90%;
     flex-direction: column;
     background-color: rgb(30, 30, 30);

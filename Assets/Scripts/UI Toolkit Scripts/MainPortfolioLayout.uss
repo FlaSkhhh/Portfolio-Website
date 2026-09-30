@@ -273,6 +273,15 @@ Button {
     padding: 40px 24px;
 }
 
+.portfolio-header-row {
+    flex-direction: row;
+    align-items: center;
+    background-color: transparent;
+    border-bottom-width: 0px;
+    padding: 12px 32px;
+    flex-shrink: 0;
+}
+
 .experience-section {
     margin-bottom: 36px;
 }
@@ -469,10 +478,6 @@ Button {
     padding-right: 0;
 }
 
-.detail-dynamic-row--reverse .detail-dynamic-text {
-    padding-left: 0;
-    padding-right: 40px; 
-}
 
 /* ===== CP LOADING SCREEN ===== */
 .loading-screen {
@@ -556,57 +561,7 @@ Button {
     letter-spacing: 2px;
     -unity-font-style: bold;
 }
-/*
-.swipe-indicator {
-    position: absolute;
-    top: 50%; 
-    width: 60px;
-    height: 30px;
-    translate: 0 -50%;
-    
-    border-radius: 0; 
-    background-color: #55ead4; 
-    color: #000000; 
-    -unity-font-style: bold;
-    font-size: 16px;
-    
-    align-items: center;
-    justify-content: center;
-    display: none; 
-    opacity: 0;
-    
-    transition-property: translate, scale, opacity, background-color;
-    transition-duration: 0.1s, 0.15s, 0.15s, 0.1s; 
-    transition-timing-function: ease-out-bounce;
-}
 
-.swipe-indicator--back { 
-    left: -60px; 
-    border-left-width: 6px;
-    border-left-color: #c5003c; 
-}
-
-
-.swipe-indicator--forward { 
-    right: -60px; 
-    border-right-width: 6px;
-    border-right-color: #c5003c; 
-}
-
-
-.swipe-indicator--success {
-    background-color: #f3e600; 
-}
-/*
-/* --- HOLOGRAPHIC HUD BRACKET --- */
-/* --- THE INVISIBLE CONTAINER --- */
-/* --- THE INVISIBLE CONTAINER --- */
-/* ==========================================
-   THE INVISIBLE CONTAINER
-========================================== */
-/* ==========================================
-   THE INVISIBLE CONTAINER
-========================================== */
 /* ==========================================
    THE INVISIBLE CONTAINER
 ========================================== */
@@ -762,7 +717,9 @@ Button {
     
     /* Standard fixed pixels for the header bar */
     width: 30px; 
+    min-width : 30px;
     height: 80px; 
+    min-height: 80px;
     margin-right: 15px; 
 }
 
@@ -793,43 +750,58 @@ Button {
    THE SLINGSHOT / TELEPORT ANIMATION
 ========================================== */
 .header-teleport-item {
-    transition-property: translate, opacity;
-    transition-duration: 0.5s; /* Slightly longer so you can see it fly across the screen */
+    transition-property: translate, opacity, scale; 
+    transition-duration: 0.5s; 
     transition-timing-function: ease-out-back; 
 }
 
-/* The Name pops out of the left portal */
-#HeaderName.header-teleport-item--hidden {
-    opacity: 0;
-    translate: -60px 0; 
-}
-
-/* Normal resting state in the header */
-.header-item--popped {
+/* Resting state */
+.header-teleport-item--popped {
     scale: 1 1;
     opacity: 1;
     translate: 0 0; 
 }
 
-/* Hides Name slightly left into the portal */
-#HeaderName.header-item--hidden {
+/* Name hides left */
+#HeaderName.header-teleport-item--hidden {
     scale: 0.1 0.1;
     opacity: 0;
     translate: -60px 0; 
+    min-width: 300px
 }
 
-/* Yanks the Right-Side buttons 1500px to the left to hide them in the portal! */
-#HeaderNav.header-item--hidden {
+/* Explore Button hides WAY left */
+#HeaderExploreBtn.header-teleport-item--hidden {
     scale: 0.1 0.1;
     opacity: 0;
     translate: -1500px 0; 
 }
-
-#HeaderExploreBtn.header-teleport-item--hidden {
-    opacity: 0;
-    translate: -1500px 0; 
+/* ==========================================
+   DESKTOP HEADER BUTTONS (Standardized)
+========================================== */
+#HeaderExploreBtn,
+#NavContact,
+#BtnDownloadCV {
+    min-width: 140px;
+    height: 40px;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 30px; /* Perfect desktop gap */
+    padding: 0;
 }
 
+/* Locks the text size since inline styles are gone */
+#HeaderExploreBtn .cyber-text,
+#NavContact .cyber-text,
+#BtnDownloadCV .cyber-text {
+    font-size: 13px; 
+}
+
+/* Keeps the final button completely flush with the right edge */
+#BtnDownloadCV {
+    margin-right: 0;
+}
 
 
 
@@ -951,13 +923,29 @@ Button {
     white-space: nowrap;
 }
 
-.is-mobile .header-nav .nav-btn {
-    font-size: 13px; /* Smaller text for mobile nav */
-    padding-left: 8px;
-    padding-right: 8px;
-    margin-right: 6px; /* Tighter button spacing */
+.is-mobile #HeaderExploreBtn,
+.is-mobile #NavContact,
+.is-mobile #BtnDownloadCV {
+    min-width: 120px;  
+    height: 35px;     
+    margin-top: 2.5px;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 18px; /* Tighter gap between buttons */
+    padding: 0;
 }
 
+/* Scales the text down to fit the smaller button height */
+.is-mobile #HeaderExploreBtn .cyber-text,
+.is-mobile #NavContact .cyber-text,
+.is-mobile #BtnDownloadCV .cyber-text {
+    font-size: 12px; 
+}
+
+/* Keeps the final button flush with the edge of the screen */
+.is-mobile #BtnDownloadCV {
+    margin-right: 0;
+}
 
 /* 	#000000	(0,0,0) black
 #c5003c	(197,0,60) bright red

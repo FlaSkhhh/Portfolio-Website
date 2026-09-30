@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using System.Collections.Generic;
 
 public class PortfolioController : MonoBehaviour
 {
@@ -13,6 +13,7 @@ public class PortfolioController : MonoBehaviour
     VisualElement swipeIndicatorForward;
     VisualElement activeIndicator; // Tracks back or forward is currently being dragged 
     VisualElement heroPortal;
+    VisualElement portfolioHeaderRow;       //for non scrolling back button
     VisualElement introHeadline;
     Label headerName;
     Label scrollChevron;
@@ -22,9 +23,9 @@ public class PortfolioController : MonoBehaviour
     Button btnBackToHome;
     Button btnDetailDemo;
     Button btnDetailGitHub;
+    Dictionary<string, float> pageScrollPositions = new Dictionary<string, float>();
     float chevronBounceTimer = 0f;
-    float previousScrollPosition = 0f;
-    float dynamicScrollThreshold = 50f;
+    float dynamicScrollThreshold = 50f;     //for chebron hiding
     string currentDemoUrl;
     string currentGithubUrl;
     bool hasTeleported = false;
@@ -69,6 +70,7 @@ public class PortfolioController : MonoBehaviour
         headerName = root.Q<Label>("HeaderName");
         heroPortal = root.Q<VisualElement>("HeroPortal");
         introHeadline = root.Q<VisualElement>(className: "intro-headline");
+        portfolioHeaderRow = root.Q<VisualElement>("PortfolioHeaderRow");
 
         if (btnEnter != null) btnEnter.clicked += OnEnterPortfolioClicked;
         if (btnBack != null) btnBack.clicked += OnBackClicked;
@@ -104,10 +106,12 @@ public class PortfolioController : MonoBehaviour
                 if (viewportWidth < viewportHeight)
                 {
                     root.AddToClassList("is-mobile");
+                    if (headerName != null) headerName.text = "SHANTANU NANDKHILE"; 
                 }
                 else
                 {
                     root.RemoveFromClassList("is-mobile");
+                    if (headerName != null) headerName.text = "SHANTANU NANDKHILE";
                 }
 
                 if (contentHeight <= viewportHeight)
@@ -285,12 +289,6 @@ public class PortfolioController : MonoBehaviour
         currentDemoUrl = project.caseStudyUrl;
         currentGithubUrl = project.githubUrl;
 
-        var mainScroll = uiDocument.rootVisualElement.Q<ScrollView>("MainScrollArea");
-        if (mainScroll != null)
-        {
-            previousScrollPosition = mainScroll.verticalScroller.value;
-            mainScroll.style.display = DisplayStyle.None;
-        }
 
         // Hide Chevron globally while in the Case Study
         var scrollChevron = uiDocument.rootVisualElement.Q<Label>("ScrollChevron");
@@ -421,47 +419,81 @@ public class PortfolioController : MonoBehaviour
         {
             view = "intro";
         }
+
+        var mainScroll = uiDocument.rootVisualElement.Q<ScrollView>("MainScrollArea");
+
+        // 1. CACHE LIST SCROLL POSITIONS ONLY
+        // We only save the scroll state if we are leaving a list page. We NEVER save the detail page scroll.
+        if (mainScroll != null && !string.IsNullOrEmpty(activePageState))
+        {
+            if (activePageState == "intro" || activePageState == "projects")
+            {
+                pageScrollPositions[activePageState] = mainScroll.verticalScroller.value;
+            }
+        }
+
         activePageState = view;
+
+        // 2. TOGGLE VIEWS
         if (view == "intro" || view == "home")
         {
             if (introView != null) introView.style.display = DisplayStyle.Flex;
             if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.None;
             if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.None;
+            if (portfolioHeaderRow != null) portfolioHeaderRow.style.display = DisplayStyle.None;
 
             var loader = GetComponent<PortfolioProjectLoaderWeb>();
             if (loader != null) loader.OnPortfolioClosed();
-
             if (scrollChevron != null) scrollChevron.AddToClassList("scroll-chevron--hidden");
+
+            // Restore Intro scroll position
+            if (mainScroll != null)
+            {
+                mainScroll.schedule.Execute(() => {
+                    mainScroll.verticalScroller.value = pageScrollPositions.ContainsKey(view) ? pageScrollPositions[view] : 0f;
+                }).StartingIn(10);
+            }
         }
         else if (view == "projects")
         {
             if (introView != null) introView.style.display = DisplayStyle.None;
             if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.Flex;
             if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.None;
+            if (portfolioHeaderRow != null) portfolioHeaderRow.style.display = DisplayStyle.Flex;
 
             var loader = GetComponent<PortfolioProjectLoaderWeb>();
             if (loader != null) loader.OnPortfolioOpened();
 
-            // Perfect Scroll Restoration (Moved here from your old OnBackClicked)
-            var mainScroll = uiDocument.rootVisualElement.Q<ScrollView>("MainScrollArea");
+            // Restore Projects list scroll position
             if (mainScroll != null)
             {
                 mainScroll.style.display = DisplayStyle.Flex;
-                mainScroll.schedule.Execute(() =>
-                {
-                    mainScroll.verticalScroller.value = previousScrollPosition;
-                    if (scrollChevron != null && !hasDismissedChevron && previousScrollPosition < 50f)
+                mainScroll.schedule.Execute(() => {
+                    float savedScroll = pageScrollPositions.ContainsKey(view) ? pageScrollPositions[view] : 0f;
+                    mainScroll.verticalScroller.value = savedScroll;
+
+                    if (scrollChevron != null && !hasDismissedChevron && savedScroll < 50f)
                     {
                         scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
                     }
                 }).StartingIn(10);
             }
         }
-        else
+        else // DETAIL VIEW (A Specific Project)
         {
             if (introView != null) introView.style.display = DisplayStyle.None;
             if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.None;
             if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.Flex;
+            if (portfolioHeaderRow != null) portfolioHeaderRow.style.display = DisplayStyle.None;
+
+            // CRITICAL FIX: Always start a new project at the absolute top (0f)
+            if (mainScroll != null)
+            {
+                mainScroll.style.display = DisplayStyle.Flex;
+                mainScroll.schedule.Execute(() => {
+                    mainScroll.verticalScroller.value = 0f;
+                }).StartingIn(10);
+            }
         }
     }
 

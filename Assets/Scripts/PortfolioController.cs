@@ -413,6 +413,7 @@ public class PortfolioController : MonoBehaviour
     }
 
     // Called by JS OR our C# fallback methods
+    // Called by JS OR our C# fallback methods
     public void OnBrowserStateChanged(string view)
     {
         if (string.IsNullOrEmpty(view) || view == "undefined")
@@ -423,7 +424,6 @@ public class PortfolioController : MonoBehaviour
         var mainScroll = uiDocument.rootVisualElement.Q<ScrollView>("MainScrollArea");
 
         // 1. CACHE LIST SCROLL POSITIONS ONLY
-        // We only save the scroll state if we are leaving a list page. We NEVER save the detail page scroll.
         if (mainScroll != null && !string.IsNullOrEmpty(activePageState))
         {
             if (activePageState == "intro" || activePageState == "projects")
@@ -449,6 +449,7 @@ public class PortfolioController : MonoBehaviour
             // Restore Intro scroll position
             if (mainScroll != null)
             {
+                mainScroll.style.display = DisplayStyle.Flex; // CRITICAL: Turn main scroll back on
                 mainScroll.schedule.Execute(() => {
                     mainScroll.verticalScroller.value = pageScrollPositions.ContainsKey(view) ? pageScrollPositions[view] : 0f;
                 }).StartingIn(10);
@@ -467,7 +468,7 @@ public class PortfolioController : MonoBehaviour
             // Restore Projects list scroll position
             if (mainScroll != null)
             {
-                mainScroll.style.display = DisplayStyle.Flex;
+                mainScroll.style.display = DisplayStyle.Flex; // CRITICAL: Turn main scroll back on
                 mainScroll.schedule.Execute(() => {
                     float savedScroll = pageScrollPositions.ContainsKey(view) ? pageScrollPositions[view] : 0f;
                     mainScroll.verticalScroller.value = savedScroll;
@@ -486,12 +487,15 @@ public class PortfolioController : MonoBehaviour
             if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.Flex;
             if (portfolioHeaderRow != null) portfolioHeaderRow.style.display = DisplayStyle.None;
 
-            // CRITICAL FIX: Always start a new project at the absolute top (0f)
-            if (mainScroll != null)
+            // CRITICAL FIX: Hide the entire MainScrollArea so it stops pushing the detail view down!
+            if (mainScroll != null) mainScroll.style.display = DisplayStyle.None;
+
+            var detailScroll = uiDocument.rootVisualElement.Q<ScrollView>("DetailScrollArea");
+
+            if (detailScroll != null)
             {
-                mainScroll.style.display = DisplayStyle.Flex;
-                mainScroll.schedule.Execute(() => {
-                    mainScroll.verticalScroller.value = 0f;
+                detailScroll.schedule.Execute(() => {
+                    detailScroll.verticalScroller.value = 0f;
                 }).StartingIn(10);
             }
         }

@@ -80,7 +80,7 @@
                     <ui:Button name="BtnBack" text="←" class="btn-back btn-detail-back"/>
                     <ui:Label name="DetailTitle" text="Project Title" class="detail-title"/>
                 </ui:VisualElement>
-                <ui:ScrollView class="detail-scroll-area">
+                <ui:ScrollView name="DetailScrollArea" class="detail-scroll-area">
                     <ui:VisualElement name="DetailImage" class="detail-image"/>
                     <ui:VisualElement class="detail-meta">
                         <ui:Label text="TECH STACK" class="detail-meta-header"/>

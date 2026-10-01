@@ -1,8 +1,10 @@
-using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.UIElements;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem.XR;
+using UnityEngine.Networking;
+using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public class PortfolioProjectLoaderWeb : MonoBehaviour
 {
@@ -283,6 +285,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         StartCoroutine(LoadProjectScreenshotAsync(rowElement, project.GetScreenshot(), (loadedTex) =>
         {
             projectTexture = loadedTex;
+            ApplyTextureToRow(rowElement, loadedTex, project);
             OnProjectAssetLoaded();
         }));
     }
@@ -304,7 +307,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
                 if (www.result == UnityWebRequest.Result.Success)
                 {
                     var tex = DownloadHandlerTexture.GetContent(www);
-                    if (rowElement != null) ApplyTextureToRow(rowElement, tex);
                     onTextureLoaded?.Invoke(tex);
                 }
                 else onTextureLoaded?.Invoke(null);
@@ -321,33 +323,44 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 
             if (request.asset is Texture2D tex)
             {
-                ApplyTextureToRow(rowElement, tex);
                 onTextureLoaded?.Invoke(tex);
             }
             else onTextureLoaded?.Invoke(null);
         }
     }
 
-    void ApplyTextureToRow(VisualElement rowElement, Texture2D texture)
+    void ApplyTextureToRow(VisualElement rowElement, Texture2D texture, ProjectMetadata projectData)
     {
-        //for extrascreenshots, we don't have a rowElement, so we just return if it's null and the invoking function will handle the callback with adding image dynamically.
         if (rowElement == null || texture == null) return;
+
         var projectImage = rowElement.Q<VisualElement>(className: "project-image") ?? rowElement.Q<VisualElement>("ProjectImage");
+        var projectTitle = rowElement.Q<Label>(className: "project-title") ?? rowElement.Q<Label>("ProjectTitle");
+
         if (projectImage != null)
         {
             projectImage.style.backgroundImage = new StyleBackground(texture);
             cachedTextures.Add(texture);
+
+            // 1. Image Click
+            projectImage.RegisterCallback<ClickEvent>(evt =>
+            {
+                if (portfolioController != null) portfolioController.ShowProjectDetail(projectData, texture);
+            });
+        }
+
+        // 2. Title Click
+        if (projectTitle != null)
+        {
+            projectTitle.RegisterCallback<ClickEvent>(evt =>
+            {
+                if (portfolioController != null) portfolioController.ShowProjectDetail(projectData, texture);
+            });
         }
     }
 
     ProjectMetadata[] GetDefaultFallbackProjects()
     {
-        return new ProjectMetadata[]
-        {
-            new ProjectMetadata { title = "Real-Time Multiplayer Hand Cricket", tag = "Unity Netcode,Relay & Lobby,Custom RPCs", description = "Performance-optimized up to 5v5 team-based multiplayer game utilizing Unity Netcode, Relay, and Lobby services with custom RPCs and cross-platform Android/WebGL simulation.", screenshotUrl = "Screenshots/HandCricket", platform = "Android / WebGL | 34MB APK" },
-            new ProjectMetadata { title = "State-Based 2D Boss Fight", tag = "AI & FSM,Combat Systems,Animation Events", description = "Modular boss AI designed using Finite State Machines to manage complex behavior transitions, attack patterns, and animation events across multiple combat phases.", screenshotUrl = "Screenshots/BossFight", platform = "PC / WebGL" },
-            new ProjectMetadata { title = "Infinite Runner with Custom Shader", tag = "Custom HLSL,Procedural Gen,Curvature Shader", description = "Custom vertex shader simulating world curvature with procedural environment generation and multi-character selection featuring seamless restart logic.", screenshotUrl = "Screenshots/InfiniteRunner", platform = "Mobile / WebGL" }
-        };
+        return new ProjectMetadata[]{};
     }
 
     IEnumerator LoadFromStreamingAssets(System.Action<ProjectsDataWrapper> onComplete)

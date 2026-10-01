@@ -77,26 +77,20 @@ Scroller {
 .project-image {
     width: 100%;
     height: 100%;
-    
-    /* Transparent dark background */
     background-color: rgba(11, 12, 16, 0.4); 
-    
-    /* Top and Bottom lines only */
     border-top-width: 2px;
     border-bottom-width: 2px;
     border-left-width: 0;
     border-right-width: 0;
-    
-    /* Faded Cyan border */
     border-color: rgba(85, 234, 212, 0.2); 
     border-radius: 0;
-    
     position: relative;
     overflow: hidden;
     -unity-background-scale-mode: scale-and-crop;
 
-    transition-property: border-color;
-    transition-duration: 0.3s;
+    /* UPDATED: Added scale and background tint so Unity knows to animate them */
+    transition-property: border-color, scale, -unity-background-image-tint-color;
+    transition-duration: 0.3s, 0.2s, 0.2s;
 }
 
 .platform-badge {
@@ -146,6 +140,10 @@ Scroller {
     color: #FFFFFF;
     white-space: normal;
     margin-bottom: 14px;
+    
+    /* UPDATED: Allows the text color to fade smoothly */
+    transition-property: color;
+    transition-duration: 0.2s;
 }
 
 .project-description {
@@ -179,7 +177,26 @@ Scroller {
 
 
 
-/* ===== RESPONSIVE PORTRAIT QUERY ===== */
+/* --- DESKTOP HOVER STATES --- */
+.project-image:hover {
+    scale: 1.02 1.02;
+    -unity-background-image-tint-color: #FFFFFF;
+    border-color: #00E5FF;
+}
+.project-title:hover {
+    color: #00E5FF;
+}
+
+/* --- MOBILE / MOUSE CLICK STATES --- */
+.project-image:active {
+    translate: 0 2px 0; /* Pushes down safely instead of scaling */
+    -unity-background-image-tint-color: #A0A5B5; /* Dims to confirm touch */
+    transition-duration: 0.05s, 0.05s, 0.05s; 
+}
+.project-title:active {
+    color: #00E5FF; /* Flashes cyan when tapped */
+    transition-duration: 0.05s;
+}
 
 
 
@@ -315,7 +332,7 @@ Scroller {
 ========================================== */
 .is-mobile .button-row {
     flex-direction: row; 
-    justify-content: flex-start;
+    justify-content: center;
     align-items: flex-start; 
     width: 100%;
     height: auto; 

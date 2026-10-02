@@ -25,7 +25,7 @@ mergeInto(LibraryManager.library, {
     var lastNavTime = 0;
     function triggerNav(direction) {
       var now = Date.now();
-      if (now - lastNavTime < 400) return;
+      if (now - lastNavTime < 50) return;
       lastNavTime = now; 
 
       if (direction === 'back') window.history.back();
@@ -41,94 +41,139 @@ mergeInto(LibraryManager.library, {
     }
     
 // ==========================================
-    // TRACKPAD (With Momentum Lockout)
+    // TRACKPAD (Decay Gravity Well)
     // ==========================================
     var trackpadAccX = 0;
     var trackpadTimer = null;
-    var trackpadThreshold = 150; 
-    var commitThreshold = 350;   
+    var commitThreshold = 400;   
     var isTpSwiping = false;
     var tpDir = null;
 
-    // --- NEW: Momentum Lockout Variables ---
     var isTrackpadLocked = false;
     var trackpadLockoutTimer = null;
+    var prevMag = 0; 
+    var slowDragAccX = 0; 
 
     window.addEventListener('wheel', function (e) {      
-        
-        // --- 1. THE MOMENTUM EATER ---
-        // If we just successfully swiped, ignore all events and keep resetting the 
-        // timer until the trackpad is completely silent for 100ms.
-        if (isTrackpadLocked) {
-            clearTimeout(trackpadLockoutTimer);
-            trackpadLockoutTimer = setTimeout(function() {
+        var currentMag = Math.abs(e.deltaX);
+        var currentDir = (e.deltaX < 0) ? 'back' : 'forward';
+
+        // 1. THE STRICT DIAGONAL GATE (0-15 Degrees)
+        if (Math.abs(e.deltaY) > 2 && currentMag <= Math.abs(e.deltaY) * 3.5) {
+            if (isTrackpadLocked) {
                 isTrackpadLocked = false;
-            }, 100);
-            return;
+                clearTimeout(trackpadLockoutTimer);
+            }
+            prevMag = currentMag; 
+            slowDragAccX = 0;
+            return; 
+        }
+        
+        // 2. THE GHOST EATER
+        if (isTrackpadLocked) {
+            e.preventDefault(); 
+            prevMag = currentMag; 
+            slowDragAccX = 0;
+            return; 
         }
 
-        if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;      
-        
+        // 3. THE KICKSTART
         if (!isTpSwiping) {
-            tpDir = (e.deltaX < 0) ? 'back' : 'forward';
+            if ((currentDir === 'back' && slowDragAccX <= 0) || (currentDir === 'forward' && slowDragAccX >= 0)) {
+                // Direction matches
+            } else {
+                slowDragAccX = 0; 
+            }
+
+            // The Active Decay + Your Gravity Well
+            if (currentMag >= prevMag) {
+                slowDragAccX += e.deltaX; // Bank credit
+            } else {
+                var decay = currentMag + 5; // Decelerating shrinks credit
+                if (slowDragAccX > 0) {
+                    slowDragAccX -= decay;
+                    // YOUR FIX: The Gravity Well. Snap tiny lingering noise to 0.
+                    if (slowDragAccX < 15) slowDragAccX = 0; 
+                } else if (slowDragAccX < 0) {
+                    slowDragAccX += decay;
+                    if (slowDragAccX > -15) slowDragAccX = 0;
+                }
+            }
+
+            var isSurging = currentMag >= prevMag + 25;
+            var isObviouslyFast = currentMag >= 80;
+            var isDeliberateSlowDrag = Math.abs(slowDragAccX) > 180; 
+
+            if (!isSurging && !isObviouslyFast && !isDeliberateSlowDrag) {
+                prevMag = currentMag;
+                return;
+            }
 
             var canGoBack = window._historyIndex > 0;
             var canGoForward = window._historyIndex < window._maxHistoryIndex;
 
-            if (tpDir === 'back' && !canGoBack) return;
-            if (tpDir === 'forward' && !canGoForward) return;
+            if (currentDir === 'back' && !canGoBack) { prevMag = currentMag; slowDragAccX = 0; return; }
+            if (currentDir === 'forward' && !canGoForward) { prevMag = currentMag; slowDragAccX = 0; return; }
 
             isTpSwiping = true;
-        }
-
-        if (!isTpSwiping) return;
-
-        if (tpDir === 'back') {
-            trackpadAccX += e.deltaX;
-            if (trackpadAccX > 0) trackpadAccX = 0; 
-        } 
-        else if (tpDir === 'forward') {
-            trackpadAccX += e.deltaX;
-            if (trackpadAccX < 0) trackpadAccX = 0; 
-        }
-
-        var absX = Math.abs(trackpadAccX);
-        var progress = Math.min(absX / trackpadThreshold, 1.0);
-        sendVisualUpdate('UpdateSwipeVisual', progress + '|' + tpDir);
-
-        // --- 2. THE COMMIT (Success) ---
-        if (absX >= commitThreshold) {
-            sendVisualUpdate('EndSwipeVisual', 'success');
-            var finalDir = tpDir; 
-            setTimeout(function() { triggerNav(finalDir); }, 50);
-
-            // Clean up state
-            isTpSwiping = false;
-            tpDir = null;
-            trackpadAccX = 0;
-            clearTimeout(trackpadTimer);
-
-            // --- ACTIVATE MOMENTUM LOCKOUT ---
-            // Lock the trackpad so the leftover inertia doesn't trigger a second swipe
-            isTrackpadLocked = true;
-            trackpadLockoutTimer = setTimeout(function() {
-                isTrackpadLocked = false;
-            }, 100);
-            return;
-        }
-
-        // --- 3. THE RELEASE (Cancel) ---
-        clearTimeout(trackpadTimer);
-        
-        trackpadTimer = setTimeout(function() {
-            sendVisualUpdate('EndSwipeVisual', 'cancelled');
+            tpDir = currentDir;
             
-            isTpSwiping = false;
-            tpDir = null;
-            trackpadAccX = 0; 
-        }, 80); 
+            // Hand off 50% of the drag distance so the UI indicator spawns already connected to their finger
+            trackpadAccX = isDeliberateSlowDrag ? slowDragAccX * 0.5 : 0;
+            slowDragAccX = 0; 
+        }
 
-    }, { passive: true, capture: true });
+        // 4. SMOOTH DISTANCE ACCUMULATION
+        if (isTpSwiping) {
+            e.preventDefault(); 
+
+            if (currentDir === tpDir) {
+                trackpadAccX += e.deltaX;
+            }
+
+            var absX = Math.abs(trackpadAccX);
+            var progress = Math.min(absX / commitThreshold, 1.0);
+            sendVisualUpdate('UpdateSwipeVisual', progress + '|' + tpDir);
+
+            // --- THE COMMIT ---
+            if (absX >= commitThreshold) {
+                sendVisualUpdate('EndSwipeVisual', 'success');
+                var finalDir = tpDir; 
+                setTimeout(function() { triggerNav(finalDir); }, 50);
+
+                isTpSwiping = false;
+                tpDir = null;
+                trackpadAccX = 0;
+                clearTimeout(trackpadTimer);
+
+                isTrackpadLocked = true;
+                clearTimeout(trackpadLockoutTimer); 
+                trackpadLockoutTimer = setTimeout(function() { 
+                    isTrackpadLocked = false; 
+                }, 350); 
+                
+                return;
+            }
+
+            // --- THE RELEASE (Cancel) ---
+            clearTimeout(trackpadTimer);
+            trackpadTimer = setTimeout(function() {
+                sendVisualUpdate('EndSwipeVisual', 'cancelled');
+                isTpSwiping = false;
+                tpDir = null;
+                trackpadAccX = 0; 
+                
+                isTrackpadLocked = true;
+                clearTimeout(trackpadLockoutTimer);
+                trackpadLockoutTimer = setTimeout(function() {
+                    isTrackpadLocked = false;
+                }, 350);
+            }, 120); 
+        }
+
+        prevMag = currentMag; 
+
+    }, { passive: false, capture: true });
 
 
     // ==========================================
@@ -195,8 +240,16 @@ mergeInto(LibraryManager.library, {
         swipeMode = null; 
         isTouchLocked = false;
     }, { passive: true, capture: true });  
-  },
 
+	window.addEventListener('touchcancel', function (e) { 
+        if (!swipeMode) return;
+        
+        sendVisualUpdate('EndSwipeVisual', 'cancelled');
+        swipeMode = null; 
+        isTouchLocked = false; // CRITICAL: Frees the swipe engine if the browser aborts the touch
+    }, { passive: true, capture: true });
+  },
+    
   WebGLPushHistoryState: function (viewNamePtr) {
     var viewName = UTF8ToString(viewNamePtr);
     window._portfolioCurrentState = viewName; 

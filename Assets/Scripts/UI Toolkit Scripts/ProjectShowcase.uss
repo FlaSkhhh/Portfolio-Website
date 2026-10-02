@@ -174,7 +174,10 @@ Scroller {
     margin-right: 0;
     margin-left: 12px; /* Flips the button spacing */
 }
-
+.button-row .cyber-btn {
+    width: 200px; 
+    min-width: 200px; 
+}
 
 
 /* --- DESKTOP HOVER STATES --- */

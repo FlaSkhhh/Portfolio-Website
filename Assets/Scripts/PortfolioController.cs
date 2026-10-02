@@ -54,6 +54,10 @@ public class PortfolioController : MonoBehaviour
         {
             scrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
             scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
+        }); 
+        root.Query<ScrollView>().ForEach(scrollView =>
+        {
+            scrollView.mode = ScrollViewMode.Vertical;
         });
 
         introView = root.Q<VisualElement>("IntroView");
@@ -106,12 +110,10 @@ public class PortfolioController : MonoBehaviour
                 if (viewportWidth < viewportHeight)
                 {
                     root.AddToClassList("is-mobile");
-                    if (headerName != null) headerName.text = "SHANTANU NANDKHILE"; 
                 }
                 else
                 {
                     root.RemoveFromClassList("is-mobile");
-                    if (headerName != null) headerName.text = "SHANTANU NANDKHILE";
                 }
 
                 if (contentHeight <= viewportHeight)
@@ -413,7 +415,6 @@ public class PortfolioController : MonoBehaviour
     }
 
     // Called by JS OR our C# fallback methods
-    // Called by JS OR our C# fallback methods
     public void OnBrowserStateChanged(string view)
     {
         if (string.IsNullOrEmpty(view) || view == "undefined")
@@ -445,13 +446,16 @@ public class PortfolioController : MonoBehaviour
             var loader = GetComponent<PortfolioProjectLoaderWeb>();
             if (loader != null) loader.OnPortfolioClosed();
             if (scrollChevron != null) scrollChevron.AddToClassList("scroll-chevron--hidden");
+            if (hasTeleported && headerExploreBtn != null) headerExploreBtn.style.display = DisplayStyle.Flex;
 
             // Restore Intro scroll position
             if (mainScroll != null)
             {
                 mainScroll.style.display = DisplayStyle.Flex; // CRITICAL: Turn main scroll back on
+                mainScroll.style.opacity = 0f;
                 mainScroll.schedule.Execute(() => {
                     mainScroll.verticalScroller.value = pageScrollPositions.ContainsKey(view) ? pageScrollPositions[view] : 0f;
+                    mainScroll.style.opacity = 1f;
                 }).StartingIn(10);
             }
         }
@@ -461,6 +465,7 @@ public class PortfolioController : MonoBehaviour
             if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.Flex;
             if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.None;
             if (portfolioHeaderRow != null) portfolioHeaderRow.style.display = DisplayStyle.Flex;
+            if (headerExploreBtn != null) headerExploreBtn.style.display = DisplayStyle.None;
 
             var loader = GetComponent<PortfolioProjectLoaderWeb>();
             if (loader != null) loader.OnPortfolioOpened();
@@ -469,6 +474,7 @@ public class PortfolioController : MonoBehaviour
             if (mainScroll != null)
             {
                 mainScroll.style.display = DisplayStyle.Flex; // CRITICAL: Turn main scroll back on
+                mainScroll.style.opacity = 0f;  
                 mainScroll.schedule.Execute(() => {
                     float savedScroll = pageScrollPositions.ContainsKey(view) ? pageScrollPositions[view] : 0f;
                     mainScroll.verticalScroller.value = savedScroll;
@@ -477,6 +483,7 @@ public class PortfolioController : MonoBehaviour
                     {
                         scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
                     }
+                    mainScroll.style.opacity = 1f;
                 }).StartingIn(10);
             }
         }
@@ -486,6 +493,7 @@ public class PortfolioController : MonoBehaviour
             if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.None;
             if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.Flex;
             if (portfolioHeaderRow != null) portfolioHeaderRow.style.display = DisplayStyle.None;
+            if (headerExploreBtn != null) headerExploreBtn.style.display = DisplayStyle.None;
 
             // CRITICAL FIX: Hide the entire MainScrollArea so it stops pushing the detail view down!
             if (mainScroll != null) mainScroll.style.display = DisplayStyle.None;
@@ -494,8 +502,10 @@ public class PortfolioController : MonoBehaviour
 
             if (detailScroll != null)
             {
+                detailScroll.style.opacity = 0f;
                 detailScroll.schedule.Execute(() => {
                     detailScroll.verticalScroller.value = 0f;
+                    detailScroll.style.opacity = 1f;
                 }).StartingIn(10);
             }
         }

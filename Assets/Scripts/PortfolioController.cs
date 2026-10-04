@@ -5,7 +5,10 @@ using System.Collections.Generic;
 
 public class PortfolioController : MonoBehaviour
 {
+    PortfolioProjectLoaderWeb loader;
     UIDocument uiDocument;
+    ScrollView mainScroll;
+    ScrollView detailScroll;
     VisualElement introView;
     VisualElement mainPortfolioView;
     VisualElement projectDetailView;
@@ -15,8 +18,13 @@ public class PortfolioController : MonoBehaviour
     VisualElement heroPortal;
     VisualElement portfolioHeaderRow;       //for non scrolling back button
     VisualElement introHeadline;
+    VisualElement detailTagsContainer;
+    VisualElement detailImage;
+    VisualElement dynamicContent;
+    //VisualElement swipeIndicator;
     Label headerName;
     Label scrollChevron;
+    Label detailTitle;
     Button headerExploreBtn;
     Button btnEnter;
     Button btnBack;
@@ -27,9 +35,12 @@ public class PortfolioController : MonoBehaviour
     float chevronBounceTimer = 0f;
     float dynamicScrollThreshold = 50f;     //for chebron hiding
     string currentDemoUrl;
-    string currentGithubUrl;
+    string currentGithubUrl; 
     bool hasTeleported = false;
-    bool hasDismissedChevron = false;
+    bool hasDismissedChevronIntro = false;
+    bool hasDismissedChevronProjects = false;
+    bool isIntroTextFullyHidden = false;
+    bool isPortalFullyHidden = false;
 
     string activePageState = "intro";
 
@@ -47,6 +58,8 @@ public class PortfolioController : MonoBehaviour
     void OnEnable()
     {
         uiDocument = GetComponent<UIDocument>();
+        loader = GetComponent<PortfolioProjectLoaderWeb>();
+
         if (uiDocument == null) return;
 
         var root = uiDocument.rootVisualElement;
@@ -54,9 +67,6 @@ public class PortfolioController : MonoBehaviour
         {
             scrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
             scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
-        }); 
-        root.Query<ScrollView>().ForEach(scrollView =>
-        {
             scrollView.mode = ScrollViewMode.Vertical;
         });
 
@@ -75,6 +85,15 @@ public class PortfolioController : MonoBehaviour
         heroPortal = root.Q<VisualElement>("HeroPortal");
         introHeadline = root.Q<VisualElement>(className: "intro-headline");
         portfolioHeaderRow = root.Q<VisualElement>("PortfolioHeaderRow");
+        mainScroll = root.Q<ScrollView>("MainScrollArea");
+        detailScroll = root.Q<ScrollView>("DetailScrollArea");
+        scrollChevron = root.Q<Label>("ScrollChevron");
+        detailTitle = uiDocument.rootVisualElement.Q<Label>("DetailTitle");
+        detailTagsContainer = uiDocument.rootVisualElement.Q<VisualElement>("DetailTagsContainer");
+        detailImage = uiDocument.rootVisualElement.Q<VisualElement>("DetailImage");
+        dynamicContent = uiDocument.rootVisualElement.Q<VisualElement>("DetailDynamicContent");
+        //swipeIndicator = uiDocument.rootVisualElement.Q<VisualElement>("SwipeIndicator");
+
 
         if (btnEnter != null) btnEnter.clicked += OnEnterPortfolioClicked;
         if (btnBack != null) btnBack.clicked += OnBackClicked;
@@ -85,8 +104,7 @@ public class PortfolioController : MonoBehaviour
         var backdrop = root.Q<VisualElement>("DetailBackdrop");
         if (backdrop != null) backdrop.RegisterCallback<ClickEvent>(evt => OnBackClicked());
 
-        scrollChevron = root.Q<Label>("ScrollChevron");
-        var mainScroll = root.Q<ScrollView>("MainScrollArea");
+        var heroContainer = root.Q<VisualElement>(className: "hero-portal-container");
 
         if (mainScroll != null && scrollChevron != null)
         {
@@ -98,7 +116,12 @@ public class PortfolioController : MonoBehaviour
             if (headerName != null) headerName.style.display = DisplayStyle.None;
             if (headerExploreBtn != null) headerExploreBtn.style.display = DisplayStyle.None;
 
-            // Geometry listener for the Chevron...
+
+            float lastViewportWidth = 0f;
+            float lastViewportHeight = 0f;
+            float lastContentHeight = 0f;
+            string lastPageState = "";
+
             mainScroll.RegisterCallback<GeometryChangedEvent>(evt =>
             {
                 float contentHeight = mainScroll.contentContainer.layout.height;
@@ -107,31 +130,36 @@ public class PortfolioController : MonoBehaviour
 
                 if (contentHeight == 0 || viewportHeight == 0) return;
 
-                if (viewportWidth < viewportHeight)
+                if (Mathf.Approximately(contentHeight, lastContentHeight) &&
+                    Mathf.Approximately(viewportHeight, lastViewportHeight) &&
+                    Mathf.Approximately(viewportWidth, lastViewportWidth) &&
+                    activePageState == lastPageState)
                 {
-                    root.AddToClassList("is-mobile");
+                    return;
+                }
+                // Update the trackers so we know for next time
+                lastContentHeight = contentHeight;
+                lastViewportHeight = viewportHeight;
+                lastViewportWidth = viewportWidth;
+                lastPageState = activePageState;
+
+                // --- EVERYTHING BELOW HERE NOW ONLY RUNS WHEN TRULY NECESSARY ---
+
+                if (viewportWidth < viewportHeight) { root.AddToClassList("is-mobile"); }
+                else { root.RemoveFromClassList("is-mobile"); }
+
+                bool isCurrentlyDismissed = (activePageState == "projects") ? hasDismissedChevronProjects : hasDismissedChevronIntro;
+
+                if (!isCurrentlyDismissed && contentHeight > viewportHeight && mainScroll.verticalScroller.value < dynamicScrollThreshold)
+                {
+                    scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
                 }
                 else
-                {
-                    root.RemoveFromClassList("is-mobile");
-                }
-
-                if (contentHeight <= viewportHeight)
                 {
                     scrollChevron.AddToClassList("scroll-chevron--hidden");
-                    hasDismissedChevron = true;
-                }
-                else
-                {
-                    dynamicScrollThreshold = viewportHeight * 0.1f;
-                    if (mainScroll.verticalScroller.value < dynamicScrollThreshold)
-                    {
-                        scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
-                        hasDismissedChevron = false;
-                    }
                 }
 
-                var heroContainer = root.Q<VisualElement>(className: "hero-portal-container");
+                
                 if (heroContainer != null)
                 {
                     heroContainer.style.height = viewportHeight;
@@ -139,70 +167,96 @@ public class PortfolioController : MonoBehaviour
                 }
             });
 
-            // The Scroll Listener
+            // The Scroll Listener (Highly Optimized)
             mainScroll.verticalScroller.valueChanged += (scrollValue) =>
             {
-                if (activePageState != "intro" && activePageState != "home")
-                {
-                    return;
-                }
+                if (activePageState != "intro" && activePageState != "projects") return;
 
-                if (!hasDismissedChevron)
+                // ==========================================
+                // 1. CHEVRON LOGIC (Runs on Intro and Projects)
+                // ==========================================
+                if (activePageState == "intro")
                 {
-                    if (scrollValue > dynamicScrollThreshold)
+                    if (!hasDismissedChevronIntro && scrollValue > 50f)
                     {
+                        hasDismissedChevronIntro = true;
                         scrollChevron.AddToClassList("scroll-chevron--hidden");
-                        hasDismissedChevron = true;
                     }
-                    else scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
+                }
+                else if (activePageState == "projects")
+                {
+                    if (!hasDismissedChevronProjects && scrollValue > 50f)
+                    {
+                        hasDismissedChevronProjects = true;
+                        scrollChevron.AddToClassList("scroll-chevron--hidden");
+                    }
+                    return; // CRITICAL OPTIMIZATION: Stop executing! The rest is only for the Intro page.
                 }
 
-                float screenHeight = mainScroll.layout.height;
-                if (screenHeight > 0)
+                // ==========================================
+                // 2. PARALLAX & FADE MATH (ONLY runs on Intro)
+                // ==========================================
+                // Use our cached screen height from the GeometryEvent instead of querying UI Toolkit layout!
+                if (lastViewportHeight <= 0) return;
+
+                float collisionDistance = lastViewportHeight * 0.35f;
+                float textFadeStart = Mathf.Max(0, collisionDistance - 100f);
+                float portalFadeEnd = collisionDistance + 400f;
+
+                // --- TEXT FADE ---
+                if (scrollValue >= collisionDistance)
                 {
-                    // 1. THE COLLISION POINT
-                    // Text is at 50% (center). Portal is roughly 15% from the top. 
-                    // Distance for them to meet is 35% of the screen height.
-                    float collisionDistance = screenHeight * 0.35f;
-
-                    // 2. TEXT FADE (Engulfed exactly as it hits the portal)
-                    // It stays fully visible, then rapidly fades out over the 100 pixels right before collision.
-                    float textFadeStart = Mathf.Max(0, collisionDistance - 100f);
+                    // Put it to sleep. Only apply opacity = 0 ONCE.
+                    if (!isIntroTextFullyHidden)
+                    {
+                        if (introHeadline != null) introHeadline.style.opacity = 0f;
+                        if (btnEnter != null) btnEnter.style.opacity = 0f;
+                        isIntroTextFullyHidden = true;
+                    }
+                }
+                else
+                {
+                    isIntroTextFullyHidden = false;
                     float textAlpha = 1f - Mathf.InverseLerp(textFadeStart, collisionDistance, scrollValue);
-
                     if (introHeadline != null) introHeadline.style.opacity = textAlpha;
                     if (btnEnter != null) btnEnter.style.opacity = textAlpha;
+                }
 
-                    // 3. PORTAL STICKY & FADE
+                // --- PORTAL STICKY & FADE ---
+                if (scrollValue >= portalFadeEnd)
+                {
+                    // Put it to sleep.
+                    if (!isPortalFullyHidden && heroPortal != null)
+                    {
+                        heroPortal.style.opacity = 0f;
+                        heroPortal.style.display = DisplayStyle.None;
+                        isPortalFullyHidden = true;
+                    }
+                }
+                else
+                {
+                    isPortalFullyHidden = false;
                     if (heroPortal != null)
                     {
-                        // CRITICAL: The portal sticks perfectly (matches scroll) UNTIL the collision distance.
-                        // After collision, it locks its offset, allowing it to naturally scroll UP and off the screen.
                         float stickyY = Mathf.Clamp(scrollValue, 0, collisionDistance);
                         heroPortal.style.translate = new Translate(0, stickyY, 0);
 
-                        // We fade the portal out slowly AFTER it starts moving up, so it doesn't pop out of existence.
-                        // Starts fading at collision, and is completely gone 400 pixels later.
-                        float portalAlpha = 1f - Mathf.InverseLerp(collisionDistance, collisionDistance + 400f, scrollValue);
-
+                        float portalAlpha = 1f - Mathf.InverseLerp(collisionDistance, portalFadeEnd, scrollValue);
                         heroPortal.style.opacity = portalAlpha;
-                        heroPortal.style.display = portalAlpha <= 0f ? DisplayStyle.None : DisplayStyle.Flex;
+                        heroPortal.style.display = DisplayStyle.Flex; // Ensure it stays visible while fading
                     }
                 }
-                // 2. THE ONE-WAY HEADER REVEAL
-                // Adjust this number based on how far down your "About" section is
-                float teleportThreshold = screenHeight * 0.5f;
 
-                if (!hasTeleported && scrollValue >= teleportThreshold)
+                // ==========================================
+                // 3. THE ONE-WAY HEADER REVEAL
+                // ==========================================
+                if (!hasTeleported && scrollValue >= (lastViewportHeight * 0.5f))
                 {
                     hasTeleported = true; // Locks it so it never fires again
 
-                    // Unhide the elements in the layout
                     if (headerName != null) headerName.style.display = DisplayStyle.Flex;
                     if (headerExploreBtn != null) headerExploreBtn.style.display = DisplayStyle.Flex;
 
-                    // Wait 20ms for the UI layout to recalculate, then remove the hidden CSS class
-                    // This triggers the smooth slide-out animation!
                     mainScroll.schedule.Execute(() =>
                     {
                         if (headerName != null) headerName.RemoveFromClassList("header-teleport-item--hidden");
@@ -270,8 +324,9 @@ public class PortfolioController : MonoBehaviour
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
         WebGLGoBack();
-#endif
+#else
         OnBrowserStateChanged("intro");
+#endif
     }
 
    /* void OnEnterPortfolioClicked()
@@ -293,15 +348,9 @@ public class PortfolioController : MonoBehaviour
 
 
         // Hide Chevron globally while in the Case Study
-        var scrollChevron = uiDocument.rootVisualElement.Q<Label>("ScrollChevron");
         if (scrollChevron != null) scrollChevron.AddToClassList("scroll-chevron--hidden");
 
-        var detailTitle = uiDocument.rootVisualElement.Q<Label>("DetailTitle");
-        var detailTagsContainer = uiDocument.rootVisualElement.Q<VisualElement>("DetailTagsContainer");
-        var detailImage = uiDocument.rootVisualElement.Q<VisualElement>("DetailImage");
 
-        // This is the empty UXML container where we will dump the JSON content
-        var dynamicContent = uiDocument.rootVisualElement.Q<VisualElement>("DetailDynamicContent");
 
         if (detailTitle != null) detailTitle.text = project.GetTitle();
 
@@ -376,7 +425,6 @@ public class PortfolioController : MonoBehaviour
                     rowContainer.Add(extraImg);
 
                     // Fetch Image Logic
-                    var loader = GetComponent<PortfolioProjectLoaderWeb>();
                     if (loader != null)
                     {
                         StartCoroutine(loader.LoadExtraImageRoutine(project.extraScreenshots[i], (tex) => {
@@ -415,14 +463,14 @@ public class PortfolioController : MonoBehaviour
     }
 
     // Called by JS OR our C# fallback methods
+    
+
     public void OnBrowserStateChanged(string view)
     {
         if (string.IsNullOrEmpty(view) || view == "undefined")
         {
             view = "intro";
         }
-
-        var mainScroll = uiDocument.rootVisualElement.Q<ScrollView>("MainScrollArea");
 
         // 1. CACHE LIST SCROLL POSITIONS ONLY
         if (mainScroll != null && !string.IsNullOrEmpty(activePageState))
@@ -436,16 +484,20 @@ public class PortfolioController : MonoBehaviour
         activePageState = view;
 
         // 2. TOGGLE VIEWS
-        if (view == "intro" || view == "home")
+        if (view == "intro")
         {
             if (introView != null) introView.style.display = DisplayStyle.Flex;
             if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.None;
             if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.None;
             if (portfolioHeaderRow != null) portfolioHeaderRow.style.display = DisplayStyle.None;
 
-            var loader = GetComponent<PortfolioProjectLoaderWeb>();
             if (loader != null) loader.OnPortfolioClosed();
-            if (scrollChevron != null) scrollChevron.AddToClassList("scroll-chevron--hidden");
+
+            if (scrollChevron != null)
+            {
+                if (!hasDismissedChevronIntro) scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
+                else scrollChevron.AddToClassList("scroll-chevron--hidden");
+            }
             if (hasTeleported && headerExploreBtn != null) headerExploreBtn.style.display = DisplayStyle.Flex;
 
             // Restore Intro scroll position
@@ -456,7 +508,7 @@ public class PortfolioController : MonoBehaviour
                 mainScroll.schedule.Execute(() => {
                     mainScroll.verticalScroller.value = pageScrollPositions.ContainsKey(view) ? pageScrollPositions[view] : 0f;
                     mainScroll.style.opacity = 1f;
-                }).StartingIn(10);
+                }).StartingIn(50);
             }
         }
         else if (view == "projects")
@@ -467,7 +519,6 @@ public class PortfolioController : MonoBehaviour
             if (portfolioHeaderRow != null) portfolioHeaderRow.style.display = DisplayStyle.Flex;
             if (headerExploreBtn != null) headerExploreBtn.style.display = DisplayStyle.None;
 
-            var loader = GetComponent<PortfolioProjectLoaderWeb>();
             if (loader != null) loader.OnPortfolioOpened();
 
             // Restore Projects list scroll position
@@ -479,12 +530,13 @@ public class PortfolioController : MonoBehaviour
                     float savedScroll = pageScrollPositions.ContainsKey(view) ? pageScrollPositions[view] : 0f;
                     mainScroll.verticalScroller.value = savedScroll;
 
-                    if (scrollChevron != null && !hasDismissedChevron && savedScroll < 50f)
+                    if (scrollChevron != null)
                     {
-                        scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
+                        if (!hasDismissedChevronProjects) scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
+                        else scrollChevron.AddToClassList("scroll-chevron--hidden");
                     }
                     mainScroll.style.opacity = 1f;
-                }).StartingIn(10);
+                }).StartingIn(50);
             }
         }
         else // DETAIL VIEW (A Specific Project)
@@ -494,26 +546,25 @@ public class PortfolioController : MonoBehaviour
             if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.Flex;
             if (portfolioHeaderRow != null) portfolioHeaderRow.style.display = DisplayStyle.None;
             if (headerExploreBtn != null) headerExploreBtn.style.display = DisplayStyle.None;
+            if (scrollChevron != null) scrollChevron.AddToClassList("scroll-chevron--hidden");
 
             // CRITICAL FIX: Hide the entire MainScrollArea so it stops pushing the detail view down!
             if (mainScroll != null) mainScroll.style.display = DisplayStyle.None;
 
-            var detailScroll = uiDocument.rootVisualElement.Q<ScrollView>("DetailScrollArea");
-
             if (detailScroll != null)
             {
+                
                 detailScroll.style.opacity = 0f;
                 detailScroll.schedule.Execute(() => {
                     detailScroll.verticalScroller.value = 0f;
                     detailScroll.style.opacity = 1f;
-                }).StartingIn(10);
+                }).StartingIn(50);
             }
         }
     }
 
-    public void PlaySwipeFeedback(string direction)
+    /*public void PlaySwipeFeedback(string direction)
     {
-        var swipeIndicator = uiDocument.rootVisualElement.Q<VisualElement>("SwipeIndicator");
         if (swipeIndicator == null) return;
 
         // Reset any ongoing animations
@@ -530,7 +581,7 @@ public class PortfolioController : MonoBehaviour
             // Triggers a USS class that slides it from Right to Center
             swipeIndicator.AddToClassList("swipe-anim--forward");
         }
-    }
+    }*/
 
     // Called dozens of times a second by JS during a drag
     public void UpdateSwipeVisual(string data)

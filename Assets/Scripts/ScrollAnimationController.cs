@@ -4,14 +4,15 @@ using System.Collections.Generic;
 
 public class ScrollAnimationController : MonoBehaviour
 {
-    [SerializeField] private UIDocument uiDocument;
-    [SerializeField] private float parallaxMultiplier = 0.05f;
-    [SerializeField] private long staggerDelayMs = 150;
+    [SerializeField] UIDocument uiDocument;
+    [SerializeField] long staggerDelayMs = 150;
 
-    private ScrollView mainScrollArea;
-    private VisualElement projectScrollView;
-    private List<VisualElement> showcaseRows = new();
-    private HashSet<VisualElement> revealedRows = new();
+    ScrollView mainScrollArea;
+    VisualElement projectScrollView;
+    List<VisualElement> showcaseRows = new();
+    HashSet<VisualElement> revealedRows = new();
+    Dictionary<VisualElement, VisualElement> rowImageCache = new();
+
 
     void OnEnable()
     {
@@ -84,6 +85,9 @@ public class ScrollAnimationController : MonoBehaviour
             if (rowTopInViewport < revealThreshold && rowBottomInViewport > 0)
             {
                 rowsToRevealThisFrame.Add(row);
+                var img = row.Q<VisualElement>("ProjectImage");
+                if (img != null) rowImageCache[row] = img;
+
             }
         }
 
@@ -104,21 +108,6 @@ public class ScrollAnimationController : MonoBehaviour
                     row.AddToClassList("showcase-row--visible");
                 }
             }).StartingIn(delay);
-        }
-
-        // Apply parallax tracking
-        foreach (var row in revealedRows)
-        {
-            if (row == null) continue;
-
-            float rowTopInViewport = row.worldBound.y - mainScrollArea.worldBound.y;
-            var projectImage = row.Q<VisualElement>("ProjectImage");
-
-            if (projectImage != null)
-            {
-                float offset = (rowTopInViewport / (scrollViewHeight > 0 ? scrollViewHeight : 1000f)) * 15f * parallaxMultiplier;
-                projectImage.style.translate = new Translate(0, offset, 0);
-            }
         }
     }
 }

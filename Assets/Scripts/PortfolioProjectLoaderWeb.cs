@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 using UnityEngine.Networking;
-using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 public class PortfolioProjectLoaderWeb : MonoBehaviour
@@ -23,7 +21,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     VisualElement loadingScreen;
     VisualElement loadingCharacter;
     VisualElement cyberSpinner;
-    VisualElement scrollChevron;
     ScrollView mainScrollArea;
     Label loadingText;
 
@@ -32,7 +29,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     bool isDataLoaded = false;
     bool isPortfolioOpen = false;
     bool hasPlayedTransition = false; // Prevents the disappearing glitch
-    bool hasUserScrolled = false;
     float spinnerRotation = 0f;
 
     [System.Serializable]
@@ -83,15 +79,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         }
 
         mainScrollArea = root.Q<ScrollView>("MainScrollArea");
-        scrollChevron = root.Q<VisualElement>("ScrollChevron");
-
-        if (mainScrollArea != null)
-        {
-            if (scrollChevron != null)
-            {
-                mainScrollArea.verticalScroller.valueChanged += (v) => CheckChevronVisibility();
-            }
-        }
     }
 
     void OnDisable()
@@ -187,7 +174,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     }
 
      void OnProjectAssetLoaded()
-    {
+     {
         projectsLoaded++;
         if (loadingCharacter != null)
         {
@@ -223,19 +210,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             loadingScreen.style.display = DisplayStyle.None;
         }
 
-        if (uiDocument != null)
-        {
-            var scrollChevron = uiDocument.rootVisualElement.Q<Label>("ScrollChevron");
-            var mainScroll = uiDocument.rootVisualElement.Q<ScrollView>("MainScrollArea");
-
-            // Only show it if they haven't somehow already scrolled down
-            if (scrollChevron != null && (mainScroll == null || mainScroll.verticalScroller.value < 50f))
-            {
-                scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
-                CheckChevronVisibility();
-            }
-        }
-
         if (scrollAnimationController != null)
         {
             scrollAnimationController.TriggerRevealAnimations();
@@ -247,6 +221,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         VisualElement rowElement = projectShowcaseRowTemplate.CloneTree();
         var rootRow = rowElement.Q<VisualElement>(className: "showcase-row") ?? rowElement.Q<VisualElement>("ShowcaseRow");
         if (index % 2 == 1 && rootRow != null) rootRow.AddToClassList("showcase-row--reverse");
+        if (rootRow != null) rootRow.AddToClassList("showcase-row--hidden");
 
         var platformBadge = rowElement.Q<Label>(className: "platform-badge") ?? rowElement.Q<Label>("ProjectPlatformTag");
         var titleLabel = rowElement.Q<Label>(className: "project-title") ?? rowElement.Q<Label>("ProjectTitle");
@@ -331,31 +306,22 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 
     void ApplyTextureToRow(VisualElement rowElement, Texture2D texture, ProjectMetadata projectData)
     {
-        if (rowElement == null || texture == null) return;
+        if (rowElement == null) return;
 
         var projectImage = rowElement.Q<VisualElement>(className: "project-image") ?? rowElement.Q<VisualElement>("ProjectImage");
         var projectTitle = rowElement.Q<Label>(className: "project-title") ?? rowElement.Q<Label>("ProjectTitle");
 
-        if (projectImage != null)
+        if (texture != null && projectImage != null)
         {
             projectImage.style.backgroundImage = new StyleBackground(texture);
             cachedTextures.Add(texture);
-
-            // 1. Image Click
-            projectImage.RegisterCallback<ClickEvent>(evt =>
-            {
-                if (portfolioController != null) portfolioController.ShowProjectDetail(projectData, texture);
-            });
         }
 
-        // 2. Title Click
+        if (projectImage != null)
+            projectImage.RegisterCallback<ClickEvent>(evt => { if (portfolioController != null) portfolioController.ShowProjectDetail(projectData, texture); });
+
         if (projectTitle != null)
-        {
-            projectTitle.RegisterCallback<ClickEvent>(evt =>
-            {
-                if (portfolioController != null) portfolioController.ShowProjectDetail(projectData, texture);
-            });
-        }
+            projectTitle.RegisterCallback<ClickEvent>(evt => { if (portfolioController != null) portfolioController.ShowProjectDetail(projectData, texture); });
     }
 
     ProjectMetadata[] GetDefaultFallbackProjects()
@@ -400,30 +366,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
                 onComplete?.Invoke(JsonUtility.FromJson<ProjectsDataWrapper>(www.downloadHandler.text));
             else
                 yield return StartCoroutine(LoadFromStreamingAssets(onComplete));
-        }
-    }
-
-    void CheckChevronVisibility()
-    {
-        if (mainScrollArea == null || scrollChevron == null) return;
-
-        // highValue is 0 if all content fits on the screen perfectly.
-        // We also hide the chevron if the user has scrolled down more than 10 pixels.
-        var detailView = uiDocument.rootVisualElement.Q<VisualElement>("ProjectDetailView");
-        bool isDetailOpen = detailView != null && detailView.style.display == DisplayStyle.Flex;
-
-        if (mainScrollArea.verticalScroller.value > 10f)
-        {
-            hasUserScrolled = true;
-        }
-
-        if (isDetailOpen || hasUserScrolled || mainScrollArea.verticalScroller.highValue <= 0)
-        {
-            scrollChevron.AddToClassList("scroll-chevron--hidden");
-        }
-        else
-        {
-            scrollChevron.RemoveFromClassList("scroll-chevron--hidden");
         }
     }
 }

@@ -68,6 +68,7 @@ public class PortfolioController : MonoBehaviour
             scrollView.verticalScrollerVisibility = ScrollerVisibility.Hidden;
             scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
             scrollView.mode = ScrollViewMode.Vertical;
+            scrollView.mouseWheelScrollSize = 30f;
         });
 
         introView = root.Q<VisualElement>("IntroView");
@@ -193,9 +194,6 @@ public class PortfolioController : MonoBehaviour
                     return; // CRITICAL OPTIMIZATION: Stop executing! The rest is only for the Intro page.
                 }
 
-                // ==========================================
-                // 2. PARALLAX & FADE MATH (ONLY runs on Intro)
-                // ==========================================
                 // Use our cached screen height from the GeometryEvent instead of querying UI Toolkit layout!
                 if (lastViewportHeight <= 0) return;
 
@@ -329,19 +327,8 @@ public class PortfolioController : MonoBehaviour
 #endif
     }
 
-   /* void OnEnterPortfolioClicked()
-    {
-        if (introView != null) introView.style.display = DisplayStyle.None;
-        if (mainPortfolioView != null) mainPortfolioView.style.display = DisplayStyle.Flex;
-        if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.None;
 
-        // Tell the loader the page was opened so it can play the transition
-        var loader = GetComponent<PortfolioProjectLoaderWeb>();
-        if (loader != null) loader.OnPortfolioOpened();
-    }*/
-
-
-    public void ShowProjectDetail(PortfolioProjectLoaderWeb.ProjectMetadata project, Texture2D heroScreenshot)
+    public void ShowProjectDetail(ProjectMetadata project, Texture2D heroScreenshot)
     {
         currentDemoUrl = project.caseStudyUrl;
         currentGithubUrl = project.githubUrl;

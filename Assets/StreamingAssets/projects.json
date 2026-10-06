@@ -1,4 +1,14 @@
 {
+  "about": {
+    "title": "HELLO THERE\nI'M SHANTANU",
+    "subtitle": "Generalist Game Programmer",
+    "profileUrl": "https://avatars.fastly.steamstatic.com/a714a0ef108d7841a64244b8d1a0712587631c42_full.jpg",
+    "paragraphs": [
+      "I have been playing video games for as long as I can remember. Eventually, just playing them wasn't enough so I wanted to know how they were made. That curiosity turned into a career, and I have been hooked on game development ever since.",
+      "I have over three years of experience working with Unity and C#, with the last two years spent professionally developing and shipping titles. As a generalist, I love getting my hands in every part of the engine. My work ranges from rapid R&D prototyping and programming core gameplay, to hooking up animations and audio, all the way to building full multiplayer architectures with custom matchmaking, leaderboards, and web APIs.",
+      "Whether I am participating in a weekend game jam to test out a weird new idea, learning a new tool, or collaborating with artists to polish a mechanic, I just genuinely love making games. I am always eager to solve interesting technical problems and help teams bring fun experiences to life."
+    ]
+  },
   "projects": [
     {
       "id": "hand-cricket",
@@ -11,7 +21,7 @@
       "platform": "Android / WebGL",
       "bodyParagraphs": [
         "Building a real-time multiplayer game that fits into a 34MB APK required strict asset management and highly optimized network traffic. I utilized Unity Netcode for GameObjects (NGO) alongside Unity Relay to bypass strict NAT punch-through issues on mobile networks.",
-        "To handle the 5v5 matchmaking, I integrated Unity Lobby. State synchronization is kept minimal—only passing enum states and compressed integers via custom RPCs, rather than heavy transform data.",
+        "To handle the 5v5 matchmaking, I integrated Unity Lobby. State synchronization is kept minimal, only passing enum states and compressed integers via custom RPCs, rather than heavy transform data.",
         "One of the biggest hurdles was ensuring WebGL and Android clients stayed perfectly synchronized despite frame-rate discrepancies, which was solved by decoupling the game logic tick rate from the rendering framerate."
       ],
       "extraScreenshots": [

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UIElements;
+using System;
 
 public class PortfolioProjectLoaderWeb : MonoBehaviour
 {
@@ -15,14 +16,11 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     VisualElement projectScrollView;
     PortfolioController portfolioController;
     ScrollAnimationController scrollAnimationController;
-    List<Texture2D> cachedTextures = new();
 
     // Loader Elements
     VisualElement loadingScreen;
-    VisualElement loadingCharacter;
     VisualElement cyberSpinner;
     ScrollView mainScrollArea;
-    Label loadingText;
 
     int totalProjectsToLoad = 0;
     int projectsLoaded = 0;
@@ -30,31 +28,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     bool isPortfolioOpen = false;
     bool hasPlayedTransition = false; // Prevents the disappearing glitch
     float spinnerRotation = 0f;
-
-    [System.Serializable]
-    public struct ProjectMetadata
-    {
-        public string title; public string Title;
-        public string tag; public string Tag;
-        public string description; public string Description;
-        public string screenshotUrl; public string ScreenshotAddress;
-        public string caseStudyUrl; public string githubUrl;
-        public string platform; public string Platform;
-
-        //JSON fields for the full Case Study page
-        public string[] bodyParagraphs; // Array of text blocks for the detail page
-        public string[] extraScreenshots; // Array of paths (e.g., "Screenshots/Game_2")
-
-        public string GetTitle() => !string.IsNullOrEmpty(title) ? title : Title;
-        public string GetTag() => !string.IsNullOrEmpty(tag) ? tag : Tag;
-        public string GetDescription() => !string.IsNullOrEmpty(description) ? description : Description;
-        public string GetScreenshot() => !string.IsNullOrEmpty(screenshotUrl) ? screenshotUrl : ScreenshotAddress;
-        public string GetPlatform() => !string.IsNullOrEmpty(platform) ? platform : (!string.IsNullOrEmpty(Platform) ? Platform : "Unity / C#");
-
-    }
-
-    [System.Serializable]
-    struct ProjectsDataWrapper { public ProjectMetadata[] projects; }
 
     void OnEnable()
     {
@@ -64,13 +37,12 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         var root = uiDocument.rootVisualElement;
 
         loadingScreen = root.Q<VisualElement>("LoadingScreen");
-        loadingCharacter = root.Q<VisualElement>("LoadingCharacter");
-        loadingText = root.Q<Label>("LoadingText");
 
         projectScrollView = root.Q<VisualElement>("ProjectScrollView");
         portfolioController = GetComponent<PortfolioController>();
         scrollAnimationController = GetComponent<ScrollAnimationController>();
         cyberSpinner = root.Q<VisualElement>("CyberSpinner");
+        mainScrollArea = root.Q<ScrollView>("MainScrollArea");
 
         if (projectScrollView != null)
         {
@@ -78,12 +50,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             StartCoroutine(LoadProjectsAsync());
         }
 
-        mainScrollArea = root.Q<ScrollView>("MainScrollArea");
-    }
-
-    void OnDisable()
-    {
-        cachedTextures.Clear();
     }
 
     void Update()
@@ -130,24 +96,45 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 
     IEnumerator LoadProjectsAsync()
     {
-        if (loadingText != null) loadingText.text = "LOADING DATA...";
-        if (loadingCharacter != null) loadingCharacter.style.left = Length.Percent(0f);
 
-        ProjectsDataWrapper projectsData = default;
+        PortfolioDataWrapper portfolioData = default;
         bool loadSuccess = false;
 
         if (loadFromStreamingAssets)
-            yield return StartCoroutine(LoadFromStreamingAssets((data) => { projectsData = data; loadSuccess = true; }));
+            yield return StartCoroutine(LoadFromStreamingAssets((data) => { portfolioData = data; loadSuccess = true; }));
         else
-            yield return StartCoroutine(LoadFromRemoteServer((data) => { projectsData = data; loadSuccess = true; }));
+            yield return StartCoroutine(LoadFromRemoteServer((data) => { portfolioData = data; loadSuccess = true; }));
 
-        ProjectMetadata[] listToLoad = (loadSuccess && projectsData.projects != null && projectsData.projects.Length > 0 && !string.IsNullOrEmpty(projectsData.projects[0].GetTitle()))
-            ? projectsData.projects : GetDefaultFallbackProjects();
+        if (loadSuccess && portfolioData.about != null)
+        {
+            var root = uiDocument.rootVisualElement;
+            if (root != null)
+            {
+                if (portfolioData.about.paragraphs != null)
+                {
+                    var p1 = root.Q<Label>("AboutParagraph1");
+                    if (p1 != null && portfolioData.about.paragraphs.Count > 0) p1.text = portfolioData.about.paragraphs[0];
+
+                    var p2 = root.Q<Label>("AboutParagraph2");
+                    if (p2 != null && portfolioData.about.paragraphs.Count > 1) p2.text = portfolioData.about.paragraphs[1];
+
+                    var p3 = root.Q<Label>("AboutParagraph3");
+                    if (p3 != null && portfolioData.about.paragraphs.Count > 2) p3.text = portfolioData.about.paragraphs[2];
+                }
+
+                VisualElement profileImgElement = root.Q<VisualElement>("ProfileImage");
+                if (profileImgElement != null && !string.IsNullOrEmpty(portfolioData.about.profileUrl))
+                {
+                    StartCoroutine(LoadProfileImageAsync(portfolioData.about.profileUrl, profileImgElement));
+                }
+            }
+        }
+
+        ProjectMetadata[] listToLoad = (loadSuccess && portfolioData.projects != null && portfolioData.projects.Length > 0 && !string.IsNullOrEmpty(portfolioData.projects[0].GetTitle()))
+            ? portfolioData.projects : GetDefaultFallbackProjects();
 
         totalProjectsToLoad = listToLoad.Length;
         projectsLoaded = 0;
-
-        if (loadingText != null) loadingText.text = "FETCHING ASSETS...";
 
         for (int i = 0; i < listToLoad.Length; i++)
         {
@@ -168,26 +155,36 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         }
     }
 
-    public IEnumerator LoadExtraImageRoutine(string path, System.Action<Texture2D> callback)
+    IEnumerator LoadProfileImageAsync(string url, VisualElement profileElement)
+    {
+        using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(url))
+        {
+            uwr.timeout = 5;
+            yield return uwr.SendWebRequest();
+
+            if (uwr.result == UnityWebRequest.Result.Success)
+            {
+                Texture2D texture = DownloadHandlerTexture.GetContent(uwr);
+                if (texture != null)
+                {
+                    profileElement.style.backgroundImage = new StyleBackground(texture);
+                }
+            }
+        }
+    }
+
+    public IEnumerator LoadExtraImageRoutine(string path, Action<Texture2D> callback)
     {
         yield return StartCoroutine(LoadProjectScreenshotAsync(null, path, callback));
     }
 
-     void OnProjectAssetLoaded()
-     {
+    void OnProjectAssetLoaded()
+    {
         projectsLoaded++;
-        if (loadingCharacter != null)
-        {
-            float progress = ((float)projectsLoaded / totalProjectsToLoad) * 100f;
-            loadingCharacter.style.left = Length.Percent(progress);
-        }
 
         if (projectsLoaded >= totalProjectsToLoad && !isDataLoaded)
         {
             isDataLoaded = true;
-            if (loadingText != null) loadingText.text = "READY";
-            if (loadingCharacter != null) loadingCharacter.style.left = Length.Percent(100f);
-
             if (isPortfolioOpen && !hasPlayedTransition)
             {
                 hasPlayedTransition = true;
@@ -198,8 +195,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 
     IEnumerator HideLoadingScreen()
     {
-        if (loadingText != null) loadingText.text = "READY";
-        if (loadingCharacter != null) loadingCharacter.style.left = Length.Percent(100f);
 
         yield return new WaitForSeconds(0.3f);
 
@@ -273,7 +268,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             yield break;
         }
 
-        if (screenshotPath.StartsWith("http://", System.StringComparison.OrdinalIgnoreCase) || screenshotPath.StartsWith("https://", System.StringComparison.OrdinalIgnoreCase))
+        if (screenshotPath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || screenshotPath.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
         {
             using (UnityWebRequest www = UnityWebRequestTexture.GetTexture(screenshotPath))
             {
@@ -290,8 +285,8 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         else
         {
             string resourceName = screenshotPath;
-            if (resourceName.StartsWith("Assets/Resources/", System.StringComparison.OrdinalIgnoreCase)) resourceName = resourceName.Substring("Assets/Resources/".Length);
-            if (resourceName.EndsWith(".png", System.StringComparison.OrdinalIgnoreCase) || resourceName.EndsWith(".jpg", System.StringComparison.OrdinalIgnoreCase)) resourceName = resourceName.Substring(0, resourceName.LastIndexOf('.'));
+            if (resourceName.StartsWith("Assets/Resources/", StringComparison.OrdinalIgnoreCase)) resourceName = resourceName.Substring("Assets/Resources/".Length);
+            if (resourceName.EndsWith(".png", StringComparison.OrdinalIgnoreCase) || resourceName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)) resourceName = resourceName.Substring(0, resourceName.LastIndexOf('.'));
 
             ResourceRequest request = Resources.LoadAsync<Texture2D>(resourceName);
             yield return request;
@@ -314,7 +309,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         if (texture != null && projectImage != null)
         {
             projectImage.style.backgroundImage = new StyleBackground(texture);
-            cachedTextures.Add(texture);
         }
 
         if (projectImage != null)
@@ -329,7 +323,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         return new ProjectMetadata[]{};
     }
 
-    IEnumerator LoadFromStreamingAssets(System.Action<ProjectsDataWrapper> onComplete)
+    IEnumerator LoadFromStreamingAssets(Action<PortfolioDataWrapper> onComplete)
     {
         string path = System.IO.Path.Combine(Application.streamingAssetsPath, projectDataUrl);
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -346,7 +340,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         if (System.IO.File.Exists(path))
         {
             string json = System.IO.File.ReadAllText(path);
-            onComplete?.Invoke(JsonUtility.FromJson<ProjectsDataWrapper>(json));
+            onComplete?.Invoke(JsonUtility.FromJson<PortfolioDataWrapper>(json));
         }
         else
         {
@@ -356,16 +350,56 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 #endif
     }
 
-    IEnumerator LoadFromRemoteServer(System.Action<ProjectsDataWrapper> onComplete)
+    IEnumerator LoadFromRemoteServer(Action<PortfolioDataWrapper> onComplete)
     {
         using (UnityWebRequest www = UnityWebRequest.Get(remoteServerUrl))
         {
             www.timeout = 3;
             yield return www.SendWebRequest();
             if (www.result == UnityWebRequest.Result.Success)
-                onComplete?.Invoke(JsonUtility.FromJson<ProjectsDataWrapper>(www.downloadHandler.text));
+                onComplete?.Invoke(JsonUtility.FromJson<PortfolioDataWrapper>(www.downloadHandler.text));
             else
                 yield return StartCoroutine(LoadFromStreamingAssets(onComplete));
         }
     }
+}
+
+[Serializable]
+public struct PortfolioDataWrapper
+{
+    public AboutData about;
+    public ProjectMetadata[] projects;
+}
+
+[Serializable]
+public struct ProjectMetadata
+{
+    public string title; public string Title;
+    public string tag; public string Tag;
+    public string description; public string Description;
+    public string screenshotUrl; public string ScreenshotAddress;
+    public string caseStudyUrl; public string githubUrl;
+    public string platform; public string Platform;
+
+    //JSON fields for the full Case Study page
+    public string[] bodyParagraphs; // Array of text blocks for the detail page
+    public string[] extraScreenshots; // Array of paths (e.g., "Screenshots/Game_2")
+
+    public string GetTitle() => !string.IsNullOrEmpty(title) ? title : Title;
+    public string GetTag() => !string.IsNullOrEmpty(tag) ? tag : Tag;
+    public string GetDescription() => !string.IsNullOrEmpty(description) ? description : Description;
+    public string GetScreenshot() => !string.IsNullOrEmpty(screenshotUrl) ? screenshotUrl : ScreenshotAddress;
+    public string GetPlatform() => !string.IsNullOrEmpty(platform) ? platform : (!string.IsNullOrEmpty(Platform) ? Platform : "Unity / C#");
+
+}
+
+
+
+[Serializable]
+public class AboutData
+{
+    public string title;
+    public string subtitle;
+    public string profileUrl;
+    public List<string> paragraphs;
 }

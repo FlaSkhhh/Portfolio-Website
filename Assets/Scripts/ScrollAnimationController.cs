@@ -13,6 +13,8 @@ public class ScrollAnimationController : MonoBehaviour
     HashSet<VisualElement> revealedRows = new();
     Dictionary<VisualElement, VisualElement> rowImageCache = new();
 
+    bool canRevealCards = false;
+
 
     void OnEnable()
     {
@@ -52,6 +54,7 @@ public class ScrollAnimationController : MonoBehaviour
 
     public void TriggerRevealAnimations()
     {
+        canRevealCards = true;
         if (mainScrollArea != null)
         {
             mainScrollArea.schedule.Execute(EvaluateRowVisibility).StartingIn(100);
@@ -65,7 +68,9 @@ public class ScrollAnimationController : MonoBehaviour
 
     void EvaluateRowVisibility()
     {
-        if (mainScrollArea == null || showcaseRows.Count == 0) return;
+        if (!canRevealCards || mainScrollArea == null || showcaseRows.Count == 0) return;
+
+        if (projectScrollView != null && projectScrollView.resolvedStyle.display == DisplayStyle.None) return;
 
         float scrollViewHeight = mainScrollArea.contentViewport.layout.height;
         if (scrollViewHeight <= 0) return;

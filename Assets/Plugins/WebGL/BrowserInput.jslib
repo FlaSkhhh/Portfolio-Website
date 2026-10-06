@@ -39,7 +39,9 @@ mergeInto(LibraryManager.library, {
             SendMessage('UIRoot', method, data);
         }
     }
-    
+
+
+
 // ==========================================
     // TRACKPAD (Decay Gravity Well)
     // ==========================================
@@ -66,6 +68,7 @@ mergeInto(LibraryManager.library, {
             }
             prevMag = currentMag; 
             slowDragAccX = 0;
+	    e.preventDefault();
             return; 
         }
         
@@ -115,7 +118,8 @@ mergeInto(LibraryManager.library, {
             if (currentDir === 'back' && !canGoBack) { prevMag = currentMag; slowDragAccX = 0; return; }
             if (currentDir === 'forward' && !canGoForward) { prevMag = currentMag; slowDragAccX = 0; return; }
 
-            isTpSwiping = true;
+            
+ 	    isTpSwiping = true;
             tpDir = currentDir;
             
             // Hand off 50% of the drag distance so the UI indicator spawns already connected to their finger
@@ -138,6 +142,7 @@ mergeInto(LibraryManager.library, {
             // --- THE COMMIT ---
             if (absX >= commitThreshold) {
                 sendVisualUpdate('EndSwipeVisual', 'success');
+
                 var finalDir = tpDir; 
                 setTimeout(function() { triggerNav(finalDir); }, 50);
 
@@ -150,7 +155,7 @@ mergeInto(LibraryManager.library, {
                 clearTimeout(trackpadLockoutTimer); 
                 trackpadLockoutTimer = setTimeout(function() { 
                     isTrackpadLocked = false; 
-                }, 350); 
+                }, 300); 
                 
                 return;
             }

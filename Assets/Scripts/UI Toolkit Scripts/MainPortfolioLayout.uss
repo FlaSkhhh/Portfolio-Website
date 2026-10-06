@@ -831,6 +831,77 @@ Button:active,
     margin-right: 0;
 }
 
+/*======================================
+INTRO STUFF
+=======================================*/
+
+/* The big "HELLO THERE, I'M SHANTANU" text */
+.hero-title {
+    font-size: 72px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+}
+
+/* The "Generalist Game Programmer" subtitle */
+.hero-subtitle {
+    font-size: 32px;
+    -unity-font-style: normal;
+    color: rgb(180, 180, 180); /* A light gray to make it less aggressive */
+    margin-top: -10px; /* Pulls it slightly closer to your name */
+}
+
+.about-section {
+    margin-top: 60px;
+}
+
+.section-title {
+    color: rgb(0, 229, 255);
+    margin-bottom: 32px;
+    font-size: 32px;
+    -unity-font-style: bold;
+}
+
+.about-content-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.about-text-container {
+    flex-grow: 1;
+    flex-basis: 60%;
+    min-width: 300px;
+    padding-right: 40px;
+}
+
+.about-paragraph {
+    color: rgb(200, 200, 200);
+    font-size: 18px;
+    white-space: normal;
+    margin-bottom: 16px;
+}
+
+.about-image-container {
+    flex-grow: 0;
+    flex-basis: 30%;
+    min-width: 250px;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 10px;
+}
+
+.about-profile-image {
+    width: 250px;
+    height: 250px;
+    border-radius: 125px; /* This creates the perfect circle */
+    background-color: rgb(30, 30, 30);
+    border-width: 2px;
+    border-color: rgba(0, 229, 255, 0.4);
+    overflow: hidden;
+    /* If you import the image to Unity, you can uncomment and set the path below */
+    /* background-image: url('project://database/Assets/Textures/VictoryMan.jpg'); */
+}
+
 
 
 

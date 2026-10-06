@@ -41,15 +41,19 @@
                     </ui:Button>
                 </ui:VisualElement>
                 <ui:VisualElement name="AboutSection" class="about-section">
-                    <ui:Label text="ABOUT ME" class="section-title" style="color: rgb(0, 229, 255); margin-bottom: 24px;"/>
-                    <ui:Label text="Systems &amp; Multiplayer Game Programmer" class="intro-summary" style="color: rgb(255, 255, 255); font-size: 24px;"/>
-                    <ui:Label text="Passionate game systems engineer with production experience in Unity. Specialized in multiplayer architecture, network gameplay, and optimized WebGL/mobile experiences." class="intro-summary"/>
-                    <ui:VisualElement style="height: 600px; width: 100%; border-width: 1px; border-color: rgba(255, 255, 255, 0.1); margin-top: 50px; align-items: center; justify-content: center; border-radius: 12px;">
-                        <ui:Label text="[ More About Content Will Go Here ]" style="color: rgb(142, 149, 165); font-size: 16px;"/>
+                    <ui:Label text="ABOUT ME" class="section-title"/>
+                    <ui:VisualElement class="about-content-container">
+                        <ui:VisualElement class="about-text-container">
+                            <ui:Label name="AboutParagraph1" text="Loading..." class="about-paragraph"/>
+                            <ui:Label name="AboutParagraph2" text="Loading..." class="about-paragraph"/>
+                            <ui:Label name="AboutParagraph3" text="Loading..." class="about-paragraph"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="about-image-container">
+                            <ui:VisualElement name="ProfileImage" class="about-profile-image"/>
+                        </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-      
 
             <ui:VisualElement name="MainPortfolioView" class="portfolio-view">
 
@@ -60,17 +64,18 @@
                 <ui:VisualElement name="LoadingScreen" class="loading-screen">
                     <ui:VisualElement class="retro-container">
                         <ui:VisualElement name="CyberSpinner" class="cyber-spinner"/>
-                        <ui:Label name="LoadingText" text="DECRYPTING ASSETS..." class="cyber-text" style="font-size: 14px; margin-top: 16px;"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="ProjectScrollView" class="project-scroll-view"/>
+                
                 <ui:VisualElement name="GamingShelfView" class="gaming-shelf">
                     <ui:Label text="Competitive Shelf" class="section-title"/>
                     <ui:VisualElement class="gaming-shelf-content">
-                        <ui:Label text="🏆 Clash Royale" class="game-card"/>
-                        <ui:Label text="⚔️ Counter-Strike 2" class="game-card"/>
+                        <ui:Label text="Clash Royale" class="game-card"/>
+                        <ui:Label text="Counter-Strike 2" class="game-card"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
+                
             </ui:VisualElement>
         </ui:ScrollView>
         <ui:Label name="ScrollChevron" picking-mode="Ignore" class="scroll-chevron"/>

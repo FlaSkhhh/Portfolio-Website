@@ -4,10 +4,14 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(MeshRenderer))]
 public class MouseShaderTracker : MonoBehaviour
 {
-    private Material backgroundMaterial;
-    private bool isMobile;
-
-    private void Start()
+    [SerializeField] Material cpMat;
+    Material backgroundMaterial;
+    bool isMobile;
+    void OnEnable()
+    {
+        GetComponent<MeshRenderer>().material = cpMat;
+    }
+    void Start()
     {
         // Automatically grab the runtime instance of the material
         backgroundMaterial = GetComponent<MeshRenderer>().material;
@@ -16,7 +20,7 @@ public class MouseShaderTracker : MonoBehaviour
         isMobile = SystemInfo.deviceType == DeviceType.Handheld;
     }
 
-    private void Update()
+    void Update()
     {
         if (backgroundMaterial == null) return;
 

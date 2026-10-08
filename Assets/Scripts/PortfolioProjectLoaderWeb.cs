@@ -110,16 +110,24 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             var root = uiDocument.rootVisualElement;
             if (root != null)
             {
-                if (portfolioData.about.paragraphs != null)
+                if (portfolioData.about.paragraphs != null && portfolioData.about.paragraphs.Count > 0)
                 {
-                    var p1 = root.Q<Label>("AboutParagraph1");
-                    if (p1 != null && portfolioData.about.paragraphs.Count > 0) p1.text = portfolioData.about.paragraphs[0];
+                    var topLabel = root.Q<Label>("AboutParagraphTop");
+                    var bottomLabel = root.Q<Label>("AboutParagraphBottom");
+                    // Put Paragraph 0 next to the image
+                    if (topLabel != null)
+                    {
+                        topLabel.text = portfolioData.about.paragraphs[0] +"\n" + portfolioData.about.paragraphs[1];
+                    }
 
-                    var p2 = root.Q<Label>("AboutParagraph2");
-                    if (p2 != null && portfolioData.about.paragraphs.Count > 1) p2.text = portfolioData.about.paragraphs[1];
+                    // Put all remaining paragraphs in the bottom label
+                    if (bottomLabel != null && portfolioData.about.paragraphs.Count > 2)
+                    {
+                        int remainingCount = portfolioData.about.paragraphs.Count - 2;
+                        var remainingParagraphs = portfolioData.about.paragraphs.GetRange(2, remainingCount);
 
-                    var p3 = root.Q<Label>("AboutParagraph3");
-                    if (p3 != null && portfolioData.about.paragraphs.Count > 2) p3.text = portfolioData.about.paragraphs[2];
+                        bottomLabel.text = string.Join("\n", remainingParagraphs);
+                    }
                 }
 
                 VisualElement profileImgElement = root.Q<VisualElement>("ProfileImage");
@@ -332,7 +340,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             www.timeout = 3;
             yield return www.SendWebRequest();
             if (www.result == UnityWebRequest.Result.Success)
-                onComplete?.Invoke(JsonUtility.FromJson<ProjectsDataWrapper>(www.downloadHandler.text));
+                onComplete?.Invoke(JsonUtility.FromJson<PortfolioDataWrapper>(www.downloadHandler.text));
             else
                 onComplete?.Invoke(default);
         }

@@ -3,7 +3,7 @@
     <ui:VisualElement class="main-container">
         <ui:VisualElement class="header-bar">
             <ui:VisualElement class="header-side header-side--left">
-                <ui:VisualElement class="portal portal--blue portal--vertical-header"/>
+                <ui:VisualElement class="portal portal--vertical-header"/>
                 <ui:Label name="HeaderName" text="SHANTANU NANDKHILE" class="header-title header-teleport-item header-teleport-item--hidden"/>
             </ui:VisualElement>
             <ui:VisualElement name="HeaderNav" class="header-side header-side--right">
@@ -33,8 +33,9 @@
             <ui:VisualElement name="IntroView" class="intro-view">
                 <ui:VisualElement picking-mode="Ignore" class="hero-portal-container">
                     <ui:VisualElement name="HeroPortal" picking-mode="Ignore" class="portal portal--horizontal-hero"/>
-                    <ui:Label text="HELLO THERE &#10; I&apos;M SHANTANU" name="Label" class="intro-headline"/>
-                    <ui:Button name="BtnEnter" class="cyber-btn primary" style="margin-top: 32px; align-self: center; flex-direction: row;">
+                        <ui:Label text="HELLO THERE &#10;I&apos;M SHANTANU" name="HeroTitle" class="hero-title"/>
+                        <ui:Label text="Generalist Game Programmer" name="HeroSubtitle" class="hero-subtitle"/>
+                        <ui:Button name="BtnEnter" class="cyber-btn primary" style="margin-top: 32px; align-self: center; flex-direction: row;">
                         <ui:VisualElement class="cyber-shadow"/>
                         <ui:VisualElement class="cyber-body"/>
                         <ui:Label text="PROJECTS" class="cyber-header"/>
@@ -43,13 +44,12 @@
                 <ui:VisualElement name="AboutSection" class="about-section">
                     <ui:Label text="ABOUT ME" class="section-title"/>
                     <ui:VisualElement class="about-content-container">
-                        <ui:VisualElement class="about-text-container">
-                            <ui:Label name="AboutParagraph1" text="Loading..." class="about-paragraph"/>
-                            <ui:Label name="AboutParagraph2" text="Loading..." class="about-paragraph"/>
-                            <ui:Label name="AboutParagraph3" text="Loading..." class="about-paragraph"/>
+                        <ui:VisualElement class="about-top-row">
+                            <ui:VisualElement name="ProfileImage" class="profile-image-circle"/>
+                            <ui:Label name="AboutParagraphTop" text="Loading..." class="about-paragraph about-paragraph--top"/>
                         </ui:VisualElement>
-                        <ui:VisualElement class="about-image-container">
-                            <ui:VisualElement name="ProfileImage" class="about-profile-image"/>
+                        <ui:VisualElement class="about-bottom-area">
+                            <ui:Label name="AboutParagraphBottom" text="Loading..." class="about-paragraph about-paragraph--bottom"/>
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
@@ -110,6 +110,29 @@
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
+
+    <ui:VisualElement name="ContactModalOverlay" class="modal-overlay modal-overlay--hidden">
+        <ui:VisualElement name="ContactModalBox" class="modal-box">
+            <ui:Button name="BtnCloseModal" text="←" class="btn-back btn-modal-back" />
+            <ui:Label text="CONTACTS" class="section-title" style="margin-bottom: 16px; font-size: 28px;" />
+            <ui:Label text="YOUR NAME HERE" class="contact-name" />
+            <ui:Label text="+1 (555) 123-4567" class="contact-phone" />
+            <ui:VisualElement class="contact-btn-row">
+                <ui:Button name="BtnContactGitHub" class="cyber-btn primary">
+                    <ui:VisualElement class="cyber-shadow"/>
+                    <ui:VisualElement class="cyber-body"/>
+                    <ui:Label text="GITHUB" class="cyber-text"/>
+                </ui:Button>
+            
+                <ui:Button name="BtnContactLinkedIn" class="cyber-btn secondary">
+                    <ui:VisualElement class="cyber-shadow"/>
+                    <ui:VisualElement class="cyber-body"/>
+                    <ui:Label text="LINKEDIN" class="cyber-text"/>
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+
     <ui:VisualElement name="SwipeIndicatorBack" class="swipe-indicator swipe-indicator--back">
         <ui:VisualElement class="chev-scaler pos-3">
             <ui:VisualElement class="chev-shape chev-left chev-outline color-cyan"/>

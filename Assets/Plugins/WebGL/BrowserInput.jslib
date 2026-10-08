@@ -5,16 +5,25 @@ mergeInto(LibraryManager.library, {
     window._historyIndex = 0;
     window._maxHistoryIndex = 0;
     window._portfolioCurrentState = 'intro';
+    window._isSwipeLocked = false;
 
     window.history.replaceState({ portfolioView: 'intro', index: 0 }, '', window.location.pathname);
 
+    window._isRepairingHistory = false;
+
     window.addEventListener('popstate', function (event) {
+      // THE RUBBERBAND CHECK
+      if (window._isRepairingHistory) {
+          window._isRepairingHistory = false;
+          return; 
+      }
+
+      window._lastKnownIndex = window._historyIndex;
+      
       var currentView = (event.state && event.state.portfolioView) ? event.state.portfolioView : 'intro';
+      window._historyIndex = (event.state && event.state.index !== undefined) ? event.state.index : 0;
       window._portfolioCurrentState = currentView;
       
-      // Update our internal index tracker based on the secret state data
-      window._historyIndex = (event.state && event.state.index !== undefined) ? event.state.index : 0;
-
       if (typeof window.unityInstance !== 'undefined') {
         window.unityInstance.SendMessage('UIRoot', 'OnBrowserStateChanged', currentView);
       } else {
@@ -71,7 +80,10 @@ mergeInto(LibraryManager.library, {
 	    e.preventDefault();
             return; 
         }
-        
+        if (window._isSwipeLocked) {
+  	    e.preventDefault(); 
+	    return;
+	}
         // 2. THE GHOST EATER
         if (isTrackpadLocked) {
             e.preventDefault(); 
@@ -190,6 +202,7 @@ mergeInto(LibraryManager.library, {
     var isTouchLocked = false;
 
     window.addEventListener('touchstart', function (e) {
+      if (window._isSwipeLocked) return;
       if (isTouchLocked) return; 
 
       touchStartX = e.changedTouches[0].screenX;
@@ -271,5 +284,20 @@ mergeInto(LibraryManager.library, {
 
   WebGLGoBack: function () {
     window.history.back();
+  },
+
+  WebGLSetSwipeLock: function (isLocked) {
+    window._isSwipeLocked = isLocked;
+  },
+
+  WebGLCancelHistoryChange: function () {
+    var delta = window._lastKnownIndex - window._historyIndex;
+    
+    if (delta !== 0) {
+        window._isRepairingHistory = true; 
+        window._historyIndex = window._lastKnownIndex; 
+        window.history.go(delta); 
+    }
   }
+
 });

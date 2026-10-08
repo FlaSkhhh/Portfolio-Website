@@ -1,7 +1,8 @@
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
-using System.Collections.Generic;
 
 public class PortfolioController : MonoBehaviour
 {
@@ -21,16 +22,22 @@ public class PortfolioController : MonoBehaviour
     VisualElement detailTagsContainer;
     VisualElement detailImage;
     VisualElement dynamicContent;
+    VisualElement modalOverlay;
+    VisualElement modalBox;
     //VisualElement swipeIndicator;
     Label headerName;
     Label scrollChevron;
     Label detailTitle;
     Button headerExploreBtn;
+    Button navContactBtn;
     Button btnEnter;
     Button btnBack;
     Button btnBackToHome;
     Button btnDetailDemo;
     Button btnDetailGitHub;
+    Button btnCloseModal;
+    Button btnContactGitHub;
+    Button btnContactLinkedIn;
     Dictionary<string, float> pageScrollPositions = new Dictionary<string, float>();
     float chevronBounceTimer = 0f;
     float dynamicScrollThreshold = 50f;     //for chebron hiding
@@ -41,12 +48,14 @@ public class PortfolioController : MonoBehaviour
     bool hasDismissedChevronProjects = false;
     bool isIntroTextFullyHidden = false;
     bool isPortalFullyHidden = false;
-
+    bool isContactModalOpen = false;
     string activePageState = "intro";
 
-    [DllImport("__Internal")] private static extern void WebGLInitHistory();
-    [DllImport("__Internal")] private static extern void WebGLPushHistoryState(string view);
-    [DllImport("__Internal")] private static extern void WebGLGoBack();
+    [DllImport("__Internal")] static extern void WebGLInitHistory();
+    [DllImport("__Internal")] static extern void WebGLPushHistoryState(string view);
+    [DllImport("__Internal")] static extern void WebGLGoBack();
+    [DllImport("__Internal")] static extern void WebGLSetSwipeLock(bool isLocked);
+    [DllImport("__Internal")] static extern void WebGLCancelHistoryChange();
 
     void Start()
     {
@@ -89,10 +98,16 @@ public class PortfolioController : MonoBehaviour
         mainScroll = root.Q<ScrollView>("MainScrollArea");
         detailScroll = root.Q<ScrollView>("DetailScrollArea");
         scrollChevron = root.Q<Label>("ScrollChevron");
-        detailTitle = uiDocument.rootVisualElement.Q<Label>("DetailTitle");
-        detailTagsContainer = uiDocument.rootVisualElement.Q<VisualElement>("DetailTagsContainer");
-        detailImage = uiDocument.rootVisualElement.Q<VisualElement>("DetailImage");
-        dynamicContent = uiDocument.rootVisualElement.Q<VisualElement>("DetailDynamicContent");
+        detailTitle = root.Q<Label>("DetailTitle");
+        detailTagsContainer = root.Q<VisualElement>("DetailTagsContainer");
+        detailImage = root.Q<VisualElement>("DetailImage");
+        dynamicContent = root.Q<VisualElement>("DetailDynamicContent");
+        modalOverlay = root.Q<VisualElement>("ContactModalOverlay");
+        modalBox = root.Q<VisualElement>("ContactModalBox");
+        btnCloseModal = root.Q<Button>("BtnCloseModal");
+        navContactBtn = root.Q<Button>("NavContact");
+        btnContactGitHub = root.Q<Button>("BtnContactGitHub");
+        btnContactLinkedIn = root.Q<Button>("BtnContactLinkedIn");
         //swipeIndicator = uiDocument.rootVisualElement.Q<VisualElement>("SwipeIndicator");
 
 
@@ -101,7 +116,15 @@ public class PortfolioController : MonoBehaviour
         if (btnBackToHome != null) btnBackToHome.clicked += OnBackToHomeClicked;
         if (btnDetailDemo != null) btnDetailDemo.clicked += () => { if (!string.IsNullOrEmpty(currentDemoUrl)) Application.OpenURL(currentDemoUrl); };
         if (btnDetailGitHub != null) btnDetailGitHub.clicked += () => { if (!string.IsNullOrEmpty(currentGithubUrl)) Application.OpenURL(currentGithubUrl); };
-        if (headerExploreBtn != null) headerExploreBtn.clicked += OnEnterPortfolioClicked;  
+        if (headerExploreBtn != null) headerExploreBtn.clicked += OnEnterPortfolioClicked;
+        if (navContactBtn != null) navContactBtn.clicked += OpenContactModal;
+        if (btnCloseModal != null) btnCloseModal.clicked += CloseContactModal;
+
+        if (modalOverlay != null) modalOverlay.RegisterCallback<ClickEvent>(evt => CloseContactModal());
+        if (modalBox != null) modalBox.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
+        if (btnContactGitHub != null) btnContactGitHub.clicked += () => Application.OpenURL("https://github.com/FlaSkhhh");
+        if (btnContactLinkedIn != null) btnContactLinkedIn.clicked += () => Application.OpenURL("https://www.linkedin.com/in/flashhhh/");
+
         var backdrop = root.Q<VisualElement>("DetailBackdrop");
         if (backdrop != null) backdrop.RegisterCallback<ClickEvent>(evt => OnBackClicked());
 
@@ -300,6 +323,10 @@ public class PortfolioController : MonoBehaviour
             float yOffset = Mathf.Sin(chevronBounceTimer) * -10f;
             scrollChevron.style.translate = new Translate(0, yOffset, 0);
         }
+        if (isContactModalOpen && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            CloseContactModal();
+        }
     }
     void OnEnterPortfolioClicked()
     {
@@ -327,6 +354,25 @@ public class PortfolioController : MonoBehaviour
 #endif
     }
 
+    private void OpenContactModal()
+    {
+        isContactModalOpen = true;
+        modalOverlay.RemoveFromClassList("modal-overlay--hidden");
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+    WebGLSetSwipeLock(true); // Disable physical swiping!
+#endif
+    }
+
+    private void CloseContactModal()
+    {
+        isContactModalOpen = false;
+        modalOverlay.AddToClassList("modal-overlay--hidden");
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+    WebGLSetSwipeLock(false); // Re-enable physical swiping!
+#endif
+    }
 
     public void ShowProjectDetail(ProjectMetadata project, Texture2D heroScreenshot)
     {
@@ -454,6 +500,16 @@ public class PortfolioController : MonoBehaviour
 
     public void OnBrowserStateChanged(string view)
     {
+        if (isContactModalOpen)
+        {
+            CloseContactModal();
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+        WebGLCancelHistoryChange(); 
+#endif
+            return;
+        }
+
         if (string.IsNullOrEmpty(view) || view == "undefined")
         {
             view = "intro";

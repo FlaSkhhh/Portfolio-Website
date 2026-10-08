@@ -8,16 +8,12 @@
 .section-title,
 .detail-title,
 .detail-meta-header,
-.intro-headline,
-.retro-text {
+.hero-title,
+.hero-subtitle {
     -unity-font-definition: url('project://database/Assets/Resources/Orbitron-Regular.ttf');
 }
 Scroller {
     display: none;
-}
-.is-mobile .intro-headline {
-    font-size: 36px; /* Reduced from 48px */
-    width: 100%;
 }
 
 .main-container {
@@ -173,7 +169,6 @@ Button {
     scale: 1.05 1.05;
 }
 
-.btn-back-home { margin-bottom: 32px; font-size: 26px; }
 .btn-detail-back { font-size: 24px; margin-right: 16px; height: 40px; }
 
 /* ==========================================
@@ -261,37 +256,6 @@ Button:active,
     padding: 0; 
 }
 
-.intro-content {
-    max-width: 760px;
-    flex-direction: column;
-    align-items: center;
-}
-
-.intro-headline {
-    font-size: 48px;
-    -unity-font-style: bold;
-    color: #FFFFFF;
-    white-space: normal;
-    -unity-text-align: middle-center;
-    margin-bottom: 24px;
-}
-
-.intro-summary {
-    font-size: 22px;
-    color: #8E95A5;
-    white-space: normal;
-    -unity-text-align: middle-center;
-    margin-bottom: 24px;
-}
-
-.about-section {
-    width: 100%;
-    max-width: 800px;
-    align-items: center;
-    padding-top: 100px;
-    padding-bottom: 200px; 
-}
-
 .portfolio-view {
     width: 100%;
     max-width: 2712px;
@@ -315,10 +279,10 @@ Button:active,
 }
 
 .section-title {
+    color: rgb(0, 229, 255);
     font-size: 36px;
     -unity-font-style: bold;
-    color: #FFFFFF;
-    margin-bottom: 8px;
+    margin-bottom: 40px;
 }
 
 .section-subtitle {
@@ -525,13 +489,6 @@ Button:active,
     align-items: center;
 }
 
-.retro-text {
-    color: #FFDE00; 
-    font-size: 16px;
-    -unity-font-style: bold;
-    letter-spacing: 3px;
-    margin-bottom: 24px;
-}
 
 .cyber-spinner {
     width: 64px;
@@ -698,27 +655,6 @@ Button:active,
     -unity-background-scale-mode: scale-to-fit;
 }
 
-/* ==========================================
-   PORTAL WRAPPER FIX
-========================================== */
-/* ==========================================
-   PORTAL WRAPPER FIX (Perfect Scaling Pivot)
-========================================== */
-.portal-wrapper {
-    position: absolute; 
-    top: 100px; 
-    
-    /* We explicitly tell the wrapper how big the rotated child is */
-    width: 300px;  
-    height: 100px; 
-    
-    align-self: center;
-    align-items: center;
-    justify-content: center;
-    
-    /* Guarantees it scales from the dead center in both directions */
-    transform-origin: center; 
-}
 
 /* Ceiling Portal (Horizontal) */
 .portal--horizontal-hero {
@@ -837,71 +773,174 @@ INTRO STUFF
 
 /* The big "HELLO THERE, I'M SHANTANU" text */
 .hero-title {
-    font-size: 72px;
+    font-size: 54px;                 /* Restored your original size */
     -unity-font-style: bold;
-    color: rgb(255, 255, 255);
+    color: #FFFFFF;                  /* Restored your hex color */
+    white-space: normal;             /* CRITICAL: Allows the &#10; line break to work */
+    -unity-text-align: middle-center;
+    /* No margin-bottom here, so the subtitle can tuck up close to it */
 }
 
-/* The "Generalist Game Programmer" subtitle */
 .hero-subtitle {
-    font-size: 32px;
+    font-size: 30px;                 /* Sized down to look good under a 48px title */
     -unity-font-style: normal;
-    color: rgb(180, 180, 180); /* A light gray to make it less aggressive */
-    margin-top: -10px; /* Pulls it slightly closer to your name */
+    color: rgb(180, 180, 180);
+    white-space: normal;
+    -unity-text-align: middle-center;
+    margin-top: 10px;                /* Pulls it slightly up toward the title */
+    margin-bottom: 24px;             /* RESTORED: Pushes the Projects button down */
 }
 
 .about-section {
-    margin-top: 60px;
+    width: 87%;
+    align-items: center;
+    margin-top: 100px;
+    margin-bottom: 80px;
 }
 
 .section-title {
     color: rgb(0, 229, 255);
-    margin-bottom: 32px;
-    font-size: 32px;
+    margin-bottom: 100px;
+    font-size: 50px;
     -unity-font-style: bold;
 }
-
 .about-content-container {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    margin-top: 100px;
+    flex-direction: column;
+    align-items: center; /* Centers the image and text horizontally */
+    width: 100%;         /* Allows the container to scale automatically */
+    height: auto;
 }
 
-.about-text-container {
-    flex-grow: 1;
-    flex-basis: 60%;
-    min-width: 300px;
-    padding-right: 40px;
+.about-top-row {
+    width: 100%;             /* Guarantee it fills the screen width */
+    flex-direction: row;
+    flex-wrap: wrap;         /* Safety net: lets text wrap if screen gets small */
+    align-items: flex-start; /* Aligns image and text to the top */
 }
+
 
 .about-paragraph {
     color: rgb(200, 200, 200);
-    font-size: 18px;
+    font-size: 30px;
     white-space: normal;
-    margin-bottom: 16px;
 }
 
-.about-image-container {
-    flex-grow: 0;
-    flex-basis: 30%;
-    min-width: 250px;
-    align-items: center;
-    justify-content: flex-start;
-    margin-top: 10px;
+.about-paragraph--top {
+    flex-grow: 1;
+    flex-shrink: 1;     /* was 0 — must be allowed to shrink below 300px on narrower desktop widths */
+    flex-basis: 300px;  /* correct here: .about-top-row is a row container, so this is WIDTH */
+}
+.about-paragraph--bottom {
+    width: 100%;         /* explicit width since .about-bottom-area is a column container */
+    /* no flex-basis here on purpose — height comes from wrapped content, not a fixed number */
+}
+.about-bottom-area {
+    width: 100%;
+    flex-direction: column; /* was relying on Unity's default — making it explicit so this exact
+                                 shared-class-different-context trap can't happen again by accident */
 }
 
-.about-profile-image {
+
+.profile-image-circle {
     width: 250px;
     height: 250px;
-    border-radius: 125px; /* This creates the perfect circle */
-    background-color: rgb(30, 30, 30);
+    border-radius: 125px;
+    background-color: rgb(20, 20, 20);
     border-width: 2px;
     border-color: rgba(0, 229, 255, 0.4);
     overflow: hidden;
-    /* If you import the image to Unity, you can uncomment and set the path below */
-    /* background-image: url('project://database/Assets/Textures/VictoryMan.jpg'); */
+    flex-shrink: 0;
+    margin-right: 40px;
+    margin-bottom: 20px; 
 }
 
+
+/* ==========================================
+   CONTACT MODAL
+========================================== */
+
+/* The dark, blurry background covering the whole screen */
+.modal-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(11, 12, 16, 0.90); /* Dark Cyberpunk BG */
+    align-items: center;
+    justify-content: center;
+    
+    opacity: 1;
+    visibility: visible;
+    transition-property: opacity, visibility;
+    transition-duration: 0.3s, 0s; 
+    transition-delay: 0s, 0s;
+}
+
+/* The actual Popup Container */
+.modal-box {
+    width: 90%;
+    max-width: 500px;
+    background-color: #14161F;
+    border-color: #00E5FF;
+    border-width: 2px;
+    border-radius: 8px;
+    padding: 40px 24px;
+    align-items: center;
+    
+    scale: 1 1;
+    transition-property: scale;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out-back;
+    overflow: hidden;
+}
+
+.btn-modal-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.btn-modal-close:hover {
+    color: #f3e600;
+    scale: 1.1 1.1;
+}
+
+.contact-name {
+    color: #00E5FF;
+    font-size: 28px;
+    -unity-font-style: bold;
+    margin-bottom: 4px;
+    -unity-text-align: middle-center;
+}
+
+.contact-phone {
+    color: #C8C8C8;
+    font-size: 22px;
+    margin-bottom: 40px;
+    -unity-text-align: middle-center;
+}
+
+/* Puts the GitHub and LinkedIn buttons side-by-side */
+.contact-btn-row {
+    flex-direction: row; 
+    justify-content: center; 
+    width: 100%;
+}
+
+.contact-btn-row .cyber-btn {
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+/* --- THE HIDDEN STATE --- */
+.modal-overlay--hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition-delay: 0s, 0.3s; /* Waits for opacity to fade before turning invisible */
+}
+
+.modal-overlay--hidden .modal-box {
+    scale: 0.8 0.8; /* Shrinks slightly when hidden */
+}
 
 
 
@@ -920,16 +959,6 @@ INTRO STUFF
 .is-mobile .header-bar {
     padding-left: 16px;
     padding-right: 16px;
-}
-
-.is-mobile .intro-headline {
-    font-size: 48px;
-    width: 100%;
-}
-
-.is-mobile .intro-summary {
-    font-size: 19px;
-    width: 100%;
 }
 
 .is-mobile .section-title {
@@ -966,23 +995,11 @@ INTRO STUFF
 
 .is-mobile .detail-meta,
 .is-mobile .detail-meta-header,
-.is-mobile .detail-description,
-.is-mobile .detail-footer {
+.is-mobile .detail-description {
     padding-left: 16px;
     padding-right: 16px;
 }
 
-.is-mobile .detail-footer {
-    flex-direction: column; 
-    padding-bottom: 60px;
-}
-
-.is-mobile .detail-footer Button {
-    margin-right: 0;
-    margin-left: 0;
-    margin-bottom: 12px;
-    width: 100%; 
-}
 
 .is-mobile .detail-dynamic-row, 
 .is-mobile .detail-dynamic-row--reverse {
@@ -1044,6 +1061,24 @@ INTRO STUFF
 /* Keeps the final button flush with the edge of the screen */
 .is-mobile #BtnDownloadCV {
     margin-right: 0;
+    margin-bottom: 24px;
+}
+.is-mobile .about-top-row {
+    flex-direction: column;
+    
+    /* THE FIX: Override the desktop 'flex-start' so things stop sticking to the left */
+    align-items: center; 
+}
+.is-mobile .profile-image-circle {
+    margin-right: 0; /* Removes the 40px margin so the image centers perfectly */
+    /* Width, height, and margin-bottom are inherited from the base class, 
+       so it stays exactly 250x250 and keeps its bottom spacing! */
+}
+.is-mobile .about-paragraph {
+    width: 100%;
+    flex-basis: auto;
+    flex-shrink: 0;
+    white-space: normal;
 }
 
 /* 	#000000	(0,0,0) black

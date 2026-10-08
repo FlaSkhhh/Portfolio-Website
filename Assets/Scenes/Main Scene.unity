@@ -270,8 +270,7 @@ MeshRenderer:
   m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 8eaf8dc43a023da47895a13325db3217, type: 2}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -315,6 +314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13674aebd48722347b6442531fd2e2d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouseShaderTracker
+  cpMat: {fileID: 2100000, guid: 7adcd0f84ee71fe439bdee1680be76d4, type: 2}
 --- !u!1 &997640887
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,7 +415,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScrollAnimationController
   uiDocument: {fileID: 997640889}
-  parallaxMultiplier: 10
   staggerDelayMs: 150
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

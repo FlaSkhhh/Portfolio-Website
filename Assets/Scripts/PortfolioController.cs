@@ -362,16 +362,120 @@ public class PortfolioController : MonoBehaviour
 #if UNITY_WEBGL && !UNITY_EDITOR
     WebGLSetSwipeLock(true); // Disable physical swiping!
 #endif
+        PlayGlitch(modalBox, openSteps, () => StartAmbientGlitch(modalBox));
     }
 
     private void CloseContactModal()
     {
         isContactModalOpen = false;
-        modalOverlay.AddToClassList("modal-overlay--hidden");
 
 #if UNITY_WEBGL && !UNITY_EDITOR
     WebGLSetSwipeLock(false); // Re-enable physical swiping!
 #endif
+        PlayGlitch(modalBox, closeSteps, () =>
+        {
+            modalOverlay.AddToClassList("modal-overlay--hidden");
+            ClearGlitchClasses(modalBox);  // removes glitch-out-final so the next open starts clean
+        });
+    }
+
+    static readonly (string cls, long at)[] openSteps =
+    {
+        ("glitch-1", 0), ("glitch-2", 60), ("glitch-3", 120),
+        ("glitch-4", 180), ("glitch-5", 250), ("glitch-6", 310),
+        (null, 380) // stable
+    };
+    static readonly (string cls, long at)[] closeSteps = { ("glitch-3", 0), ("glitch-2", 30), ("glitch-1", 60), ("glitch-out-final", 90) };
+    static readonly string[] allGlitchClasses = { "glitch-1", "glitch-2", "glitch-3", "glitch-4", "glitch-5", "glitch-6", "glitch-out-final" };
+    readonly List<IVisualElementScheduledItem> glitchPending = new List<IVisualElementScheduledItem>();
+
+
+    void PlayGlitch(VisualElement box, (string cls, long at)[] steps, System.Action onDone = null)
+    {
+        StopAmbientGlitch(box);
+        CancelGlitch();
+        long last = 0;
+
+        foreach (var (cls, at) in steps)
+        {
+            var targetClass = cls;
+            glitchPending.Add(box.schedule.Execute(() =>
+            {
+                ClearGlitchClasses(box);
+                if (targetClass != null) box.AddToClassList(targetClass);
+            }).StartingIn(at));
+
+            if (at > last) last = at;
+        }
+
+        if (onDone != null)
+            glitchPending.Add(box.schedule.Execute(onDone).StartingIn(last + 30));
+    }
+
+    void CancelGlitch()
+    {
+        foreach (var item in glitchPending) item.Pause();
+        glitchPending.Clear();
+    }
+
+    static void ClearGlitchClasses(VisualElement box)
+    {
+        foreach (var g in allGlitchClasses) box.RemoveFromClassList(g);
+    }
+    static readonly string[] ambientClasses = { "glitch-amb-1", "glitch-amb-2", "glitch-amb-3" };
+    readonly List<IVisualElementScheduledItem> ambientPending = new List<IVisualElementScheduledItem>();
+    bool ambientRunning;
+
+    void StartAmbientGlitch(VisualElement box)
+    {
+        StopAmbientGlitch(box);
+        ambientRunning = true;
+        ScheduleAmbientBurst(box);
+    }
+
+    void StopAmbientGlitch(VisualElement box)
+    {
+        ambientRunning = false;
+        foreach (var item in ambientPending) item.Pause();
+        ambientPending.Clear();
+        foreach (var c in ambientClasses) box.RemoveFromClassList(c);
+    }
+
+    void ScheduleAmbientBurst(VisualElement box)
+    {
+        ambientPending.Clear(); // the previous burst has finished by now
+
+        ambientPending.Add(box.schedule.Execute(() =>
+        {
+            if (!ambientRunning) return;
+
+            int flashes = Random.Range(1, 4);
+            long t = 0;
+
+            for (int i = 0; i < flashes; i++)
+            {
+                string cls = ambientClasses[Random.Range(0, ambientClasses.Length)];
+
+                ambientPending.Add(box.schedule.Execute(() =>
+                {
+                    foreach (var c in ambientClasses) box.RemoveFromClassList(c);
+                    box.AddToClassList(cls);
+                }).StartingIn(t));
+                t += Random.Range(50, 100);   // how long each flash holds
+
+                ambientPending.Add(box.schedule.Execute(() =>
+                {
+                    foreach (var c in ambientClasses) box.RemoveFromClassList(c);
+                }).StartingIn(t));
+                t += Random.Range(20, 50);   // gap between flashes inside a burst
+            }
+
+            ambientPending.Add(box.schedule.Execute(() =>
+            {
+                if (ambientRunning) ScheduleAmbientBurst(box);
+            }).StartingIn(t));
+
+        }).StartingIn(Random.Range(400, 1200))); // quiet gap before the next burst
     }
 
     public void ShowProjectDetail(ProjectMetadata project, Texture2D heroScreenshot)

@@ -9,7 +9,8 @@
 .detail-title,
 .detail-meta-header,
 .hero-title,
-.hero-subtitle {
+.hero-subtitle,
+.contact-name{
     -unity-font-definition: url('project://database/Assets/Resources/Orbitron-Regular.ttf');
 }
 Scroller {
@@ -877,26 +878,35 @@ INTRO STUFF
 
 /* The actual Popup Container */
 .modal-box {
-    width: 90%;
-    max-width: 500px;
+    width: 80%;
+    height: 40%;
+    max-width: 750px; /* Much Wider */
+    min-height: 480px; /* Much Taller */
+    max-height: 540px;
+
     background-color: #14161F;
     border-color: #00E5FF;
     border-width: 2px;
-    border-radius: 8px;
-    padding: 40px 24px;
-    align-items: center;
+    border-radius: 0; /* Sharp corners fit the glitch aesthetic better */
     
-    scale: 1 1;
-    transition-property: scale;
-    transition-duration: 0.3s;
-    transition-timing-function: ease-out-back;
+    padding: 60px 40px;
+    align-items: center;
+    justify-content: center; /* Spreads the Top, Middle, and Bottom elements perfectly */
     overflow: hidden;
+
+    /* Extremely fast transitions make the class-swapping look like a violent glitch */
+    transition-property: scale, translate, opacity, border-color;
+    transition-duration: 0.04s; 
+    transition-timing-function: linear;
 }
 
 .btn-modal-back {
     position: absolute;
-    top: 0;
-    left: 0;
+    height: 40px;
+    top: 40px;
+    left: 40px;
+    flex-shrink: 0;
+    font-size: 24px;
 }
 
 .btn-modal-close:hover {
@@ -904,23 +914,55 @@ INTRO STUFF
     scale: 1.1 1.1;
 }
 
+.contact-header-row {
+    position: absolute;
+    top: 25px; /* Aligns perfectly with your Back button's top margin! */
+    left: 0;
+    right: 0;
+    align-items: center; /* Centers the text horizontally */
+}
+
 .contact-name {
+    margin-top: 20px;
     color: #00E5FF;
-    font-size: 28px;
+    font-size: 36px;
     -unity-font-style: bold;
-    margin-bottom: 4px;
     -unity-text-align: middle-center;
 }
 
-.contact-phone {
-    color: #C8C8C8;
-    font-size: 22px;
-    margin-bottom: 40px;
-    -unity-text-align: middle-center;
+/* --- INVISIBLE, SELECTABLE TEXT FIELDS --- */
+.data-field {
+    /* Very tight margins to keep them close together */
+    margin-top: 50px;
+    margin-bottom: -20px;
+    width: 88%;
+}
+
+/* Target the internal box of the TextField to strip away the default styling */
+.data-field > .unity-text-field__input {
+    flex-grow: 1;
+    background-color: transparent; /* Removes the dark box */
+    border-width: 0;               /* Removes the border */
+    padding: 0;                    /* Removes default internal padding */
+    
+    color: #C8C8C8;                /* Light grey text */
+    font-size: 30px;               /* Much bigger font */
+    -unity-text-align: middle-left; /* Perfectly centers the text */
+    transition-duration: 0.1s;
+}
+/* Optional: When they click/highlight the text, make it light up Cyan so they know it worked! */
+.data-field > .unity-text-field__input:focus {
+    color: #00E5FF; 
+    background-color: transparent;
+    border-width: 0;
 }
 
 /* Puts the GitHub and LinkedIn buttons side-by-side */
 .contact-btn-row {
+    position: absolute;
+    bottom: 40px; /* Anchors it 40px from the floor */
+    left: 0;
+    right: 0;
     flex-direction: row; 
     justify-content: center; 
     width: 100%;
@@ -931,18 +973,128 @@ INTRO STUFF
     margin-right: 8px;
 }
 
-/* --- THE HIDDEN STATE --- */
+
+/* --- THE GLITCH ANIMATION STATES --- */
+
+
+.glitch-1, .glitch-2, .glitch-3, .glitch-4, .glitch-5, .glitch-6 {
+    transition-duration: 0s;
+}
+
+/* ===== BOX FRAMES ===== */
+
+.glitch-1 { /* power-on collapse, squashed to a line (no sideways shove) */
+    scale: 1 0.04;
+    opacity: 0.9;
+    border-color: #FF007C;
+}
+.glitch-2 { /* dropout */
+    opacity: 0.35;
+    border-color: #f3e600;
+}
+.glitch-3 { /* back, with a tiny nudge */
+    translate: 3px 0;
+    opacity: 1;
+    border-color: #55ead4;
+}
+.glitch-4 { /* second dropout */
+    opacity: 0.55;
+    border-color: #FF007C;
+}
+.glitch-5 { /* near-stable, one more 2px nudge */
+    translate: -2px 0;
+    opacity: 1;
+    border-color: #f3e600;
+}
+.glitch-6 { /* last blink before settling */
+    opacity: 0.75;
+    border-color: #55ead4;
+}
+/* ===== RGB-SPLIT GHOSTS (outline only) ===== */
+
+.glitch-ghost {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    border-width: 2px;
+    border-radius: 0;
+    opacity: 0;
+}
+
+.glitch-ghost--cyan { border-color: #55ead4; }
+.glitch-ghost--pink { border-color: #FF007C; }
+
+.glitch-1 .glitch-ghost--cyan { opacity: 0.9; translate: -5px 0; }
+.glitch-1 .glitch-ghost--pink { opacity: 0.9; translate: 5px 0; }
+.glitch-2 .glitch-ghost--cyan { opacity: 0.8; translate: -4px 1px; }
+.glitch-2 .glitch-ghost--pink { opacity: 0.8; translate: 4px -1px; }
+.glitch-3 .glitch-ghost--cyan { opacity: 0.7; translate: -3px 0; }
+.glitch-3 .glitch-ghost--pink { opacity: 0.7; translate: 3px 0; }
+.glitch-4 .glitch-ghost--cyan { opacity: 0.6; translate: -4px 0; }
+.glitch-4 .glitch-ghost--pink { opacity: 0.6; translate: 4px 0; }
+.glitch-5 .glitch-ghost--cyan { opacity: 0.5; translate: -2px 0; }
+.glitch-5 .glitch-ghost--pink { opacity: 0.5; translate: 2px 0; }
+
+/* ===== TEAR BARS ===== */
+
+.glitch-bar {
+    position: absolute;
+    left: 0; right: 0;
+    opacity: 0;
+}
+
+.glitch-bar--a { background-color: rgba(243, 230, 0, 0.55); }
+.glitch-bar--b { background-color: rgba(255, 0, 124, 0.45); }
+
+.glitch-1 .glitch-bar--a { opacity: 1; top: 18%; height: 6px;  translate: 40px 0; }
+.glitch-1 .glitch-bar--b { opacity: 1; top: 70%; height: 3px;  translate: -30px 0; }
+
+.glitch-2 .glitch-bar--a { opacity: 1; top: 62%; height: 4px;  translate: -48px 0; }
+.glitch-2 .glitch-bar--b { opacity: 1; top: 30%; height: 10px; translate: 36px 0; }
+
+.glitch-3 .glitch-bar--a { opacity: 1; top: 8%;  height: 3px;  translate: 28px 0; }
+.glitch-3 .glitch-bar--b { opacity: 1; top: 82%; height: 5px;  translate: -40px 0; }
+
+.glitch-4 .glitch-bar--a { opacity: 1; top: 44%; height: 8px;  translate: 24px 0; }
+.glitch-4 .glitch-bar--b { /* full-height color wash instead of a strip */
+    opacity: 0.25; top: 0; height: 100%; translate: 0 0;
+}
+.glitch-5 .glitch-bar--a { opacity: 1; top: 26%; height: 3px;  translate: -20px 0; }
+.glitch-5 .glitch-bar--b { opacity: 1; top: 90%; height: 4px;  translate: 18px 0; }
+
+.glitch-amb-1, .glitch-amb-2, .glitch-amb-3 {
+    transition-duration: 0s; /* hard snaps, same reason as the open/close frames */
+}
+
+.glitch-amb-1 { border-color: #FF007C; }
+.glitch-amb-1 .glitch-ghost--cyan { opacity: 0.7; translate: -3px 0; }
+.glitch-amb-1 .glitch-ghost--pink { opacity: 0.7; translate: 3px 0; }
+
+.glitch-amb-2 { border-color: #f3e600; }
+.glitch-amb-2 .glitch-bar--a { opacity: 1; top: 34%; height: 2px; translate: 26px 0; }
+
+.glitch-amb-3 { border-color: #55ead4; }
+.glitch-amb-3 .glitch-ghost--cyan { opacity: 0.6; translate: -2px 1px; }
+.glitch-amb-3 .glitch-ghost--pink { opacity: 0.6; translate: 2px -1px; }
+
+.glitch-out-final { /* the collapsed line shrinks to a dot and vanishes */
+    transition-duration: 0s;
+    scale: 0.02 0.04;
+    translate: 0 0;
+    opacity: 0;
+    border-color: #f3e600;
+}
+
+/* --- THE HIDDEN OVERLAY --- */
 .modal-overlay--hidden {
     opacity: 0;
     visibility: hidden;
-    transition-delay: 0s, 0.3s; /* Waits for opacity to fade before turning invisible */
+    transition-delay: 0s, 0.2s; /* Waits for opacity to fade before turning invisible */
 }
 
+/* Remove the old scale shrinking from the hidden state, our C# glitch handles it now! */
 .modal-overlay--hidden .modal-box {
-    scale: 0.8 0.8; /* Shrinks slightly when hidden */
+    opacity: 0;
 }
-
-
 
 /* ===== PORTRAIT / MOBILE OVERRIDES ===== */
 /* Apparantly the uss doesnt understand @media thing at all*/

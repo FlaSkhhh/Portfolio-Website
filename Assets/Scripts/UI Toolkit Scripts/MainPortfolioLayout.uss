@@ -5,12 +5,14 @@
 /* Cyberpunk display font for Headers, Buttons, and Retro text */
 .cyber-text,
 .header-title,
-.section-title,
+.titlesection-,
 .detail-title,
 .detail-meta-header,
 .hero-title,
 .hero-subtitle,
-.contact-name{
+.contact-name,
+.cyber-header,
+.intro-section-title{
     -unity-font-definition: url('project://database/Assets/Resources/Orbitron-Regular.ttf');
 }
 Scroller {
@@ -80,21 +82,11 @@ Button {
     color: #000000;
 }
 .cyber-header {
-    font-size: 20px;
+    font-size: 24px;
     -unity-font-style: bold;
-    letter-spacing: -5px;
+    letter-spacing: -4px;
     color: #000000;
 }
-
-.cyber-tag {
-    position: absolute;
-    bottom: -2px;
-    right: 18px; 
-    font-size: 9px;
-    -unity-font-style: bold;
-    color: #000000;
-}
-.tag-cyan { color: #55ead4; }
 
 /* ==========================================
    CYBERPUNK BUTTON COLOR PRESETS
@@ -120,7 +112,6 @@ Button {
 .cyber-btn.tertiary .cyber-body { -unity-background-image-tint-color: #c5003c; } 
 .cyber-btn.tertiary .cyber-shadow { -unity-background-image-tint-color: #f3e600; } 
 .cyber-btn.tertiary .cyber-text { color: #55ead4; } 
-.cyber-btn.tertiary .cyber-tag { color: #000000; }
 .cyber-btn.tertiary:hover .cyber-body { -unity-background-image-tint-color: #f3e600; } 
 .cyber-btn.tertiary:hover .cyber-shadow { -unity-background-image-tint-color: #55ead4; } 
 .cyber-btn.tertiary:hover .cyber-text { color: #c5003c; text-shadow: 0 0 10px rgba(197, 0, 60, 0.8); }
@@ -137,7 +128,6 @@ Button {
 .cyber-btn.ghost .cyber-body { -unity-background-image-tint-color: rgba(11, 12, 16, 0.95); } 
 .cyber-btn.ghost .cyber-shadow { -unity-background-image-tint-color: #55ead4; } 
 .cyber-btn.ghost .cyber-text { color: #f3e600; } 
-.cyber-btn.ghost .cyber-tag { color: #FF007C; }
 .cyber-btn.ghost:hover .cyber-body { -unity-background-image-tint-color: rgba(85, 234, 212, 0.2); } 
 .cyber-btn.ghost:hover .cyber-shadow { -unity-background-image-tint-color: #f3e600; } 
 .cyber-btn.ghost:hover .cyber-text { color: #55ead4; text-shadow: 0 0 10px rgba(85, 234, 212, 0.8); }
@@ -217,31 +207,6 @@ Button:active,
     color: #FFFFFF;
 }
 
-.header-nav {
-    flex-direction: row;
-    align-items: center;
-}
-
-.header-nav .nav-btn {
-    margin-right: 12px;
-}
-
-.nav-btn {
-    background-color: transparent;
-    color: #C3C7D5;
-    height: 40px;
-    min-height: 40px;
-    font-size: 15px;
-    padding-left: 18px;
-    padding-right: 18px;
-    border-radius: 6px;
-}
-
-.nav-btn:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-    color: #00E5FF;
-}
-
 /* ===== CONTENT AREA ===== */
 .content-area {
     flex-grow: 1;
@@ -287,41 +252,13 @@ Button:active,
 }
 
 .section-subtitle {
-    font-size: 17px;
+    font-size: 24px;
     color: #8E95A5;
 }
 
 .project-scroll-view {
     width: 100%;
     flex-direction: column;
-}
-
-/* ===== GAMING SHELF ===== */
-.gaming-shelf {
-    width: 100%;
-    margin-top: 48px;
-    padding-top: 32px;
-    border-top-width: 1px;
-    border-top-color: rgba(255, 255, 255, 0.08);
-}
-
-.gaming-shelf-content {
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin-top: 16px;
-}
-
-.game-card {
-    background-color: #14161F;
-    color: #00E5FF;
-    padding: 12px 20px;
-    font-size: 14px;
-    -unity-font-style: bold;
-    border-width: 1px;
-    border-color: rgba(0, 229, 255, 0.25);
-    border-radius: 6px;
-    margin-right: 12px;
-    margin-bottom: 12px;
 }
 
 /* ===== FULL PAGE CASE STUDY ===== */
@@ -391,7 +328,7 @@ Button:active,
 }
 
 .detail-meta-header {
-    font-size: 13px;
+    font-size: 20px;
     -unity-font-style: bold;
     letter-spacing: 1.5px;
     color: #00E5FF;
@@ -406,7 +343,7 @@ Button:active,
 }
 
 .detail-description {
-    font-size: 17px;
+    font-size: 24px;
     color: #C0C5D0;
     white-space: normal;
     margin-bottom: 48px; 
@@ -458,7 +395,7 @@ Button:active,
 .detail-dynamic-text {
     flex-grow: 1;
     flex-shrink: 1; /* Allows the text box to compress dynamically */
-    font-size: 17px;
+    font-size: 24px;
     color: #C0C5D0;
     white-space: normal;
     padding-left: 40px; 
@@ -543,7 +480,7 @@ Button:active,
 
 .skeleton-text {
     color: #f3e600; 
-    font-size: 14px;
+    font-size: 18px;
     letter-spacing: 2px;
     -unity-font-style: bold;
 }
@@ -760,7 +697,8 @@ Button:active,
 #HeaderExploreBtn .cyber-text,
 #NavContact .cyber-text,
 #BtnDownloadCV .cyber-text {
-    font-size: 13px; 
+    font-size: 17px; 
+    letter-spacing: -4px;
 }
 
 /* Keeps the final button completely flush with the right edge */
@@ -783,7 +721,7 @@ INTRO STUFF
 }
 
 .hero-subtitle {
-    font-size: 30px;                 /* Sized down to look good under a 48px title */
+    font-size: 34px;                 /* Sized down to look good under a 48px title */
     -unity-font-style: normal;
     color: rgb(180, 180, 180);
     white-space: normal;
@@ -792,6 +730,97 @@ INTRO STUFF
     margin-bottom: 24px;             /* RESTORED: Pushes the Projects button down */
 }
 
+/* ==========================================
+   CV / EXPERIENCE TIMELINE
+========================================== */
+.cv-section {
+    width: 87%;
+    max-width: 1200px;
+    align-items: flex-start; /* Aligns the timeline to the left */
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
+
+.cv-tag-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+
+.timeline-box {
+    width: 100%;
+    border-left-width: 2px;
+    border-left-color: #00E5FF; /* Glowing cyan laser line */
+    padding-left: 32px; /* Space between line and text */
+    margin-bottom: 40px;
+    
+    /* Adds a subtle dark gradient box behind the text */
+    background-color: rgba(11, 12, 16, 0.4);
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    padding-right: 24px;
+}
+
+.timeline-header-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.timeline-title {
+    color: #FFFFFF;
+    font-size: 24px;
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+}
+
+.timeline-date {
+    color: #f3e600; /* Yellow */
+    font-size: 18px;
+    -unity-font-style: bold;
+}
+
+.timeline-bullets {
+    flex-direction: column;
+}
+
+.timeline-text {
+    color: #C0C5D0;
+    font-size: 24px;
+    white-space: normal;
+    margin-bottom: 16px;
+}
+
+.education-text {
+    color: white; 
+    font-size: 30px; 
+    margin-bottom: 16px; 
+    -unity-font-style: bold;
+}
+
+/* ==========================================
+   RESUME SKILLS (Larger than project tags)
+========================================== */
+.skill-pill {
+    background-color: rgba(0, 229, 255, 0.12);
+    color: #00E5FF;
+    padding: 10px 20px;
+    font-size: 18px; 
+    -unity-font-style: bold;
+    border-width: 1px;
+    border-color: rgba(0, 229, 255, 0.4); /* Slightly brighter border */
+    border-radius: 6px;
+    margin-right: 12px;
+    margin-bottom: 12px;
+}
+
+
 .about-section {
     width: 87%;
     align-items: center;
@@ -799,7 +828,7 @@ INTRO STUFF
     margin-bottom: 80px;
 }
 
-.section-title {
+.intro-section-title {
     color: rgb(0, 229, 255);
     margin-bottom: 100px;
     font-size: 50px;
@@ -1207,7 +1236,7 @@ INTRO STUFF
 .is-mobile #HeaderExploreBtn .cyber-text,
 .is-mobile #NavContact .cyber-text,
 .is-mobile #BtnDownloadCV .cyber-text {
-    font-size: 12px; 
+    font-size: 14px; 
 }
 
 /* Keeps the final button flush with the edge of the screen */
@@ -1215,9 +1244,35 @@ INTRO STUFF
     margin-right: 0;
     margin-bottom: 24px;
 }
+
+/* --- MOBILE CV FIXES --- */
+.is-mobile .timeline-box {
+    padding-left: 20px;
+    padding-right: 12px;
+}
+
+.is-mobile .timeline-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.is-mobile .timeline-title {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.is-mobile .timeline-date {
+    font-size: 16px;
+}
+
+.is-mobile .timeline-text {
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
 .is-mobile .about-top-row {
     flex-direction: column;
-    
+    flex-wrap: nowrap;
     /* THE FIX: Override the desktop 'flex-start' so things stop sticking to the left */
     align-items: center; 
 }
@@ -1233,6 +1288,13 @@ INTRO STUFF
     white-space: normal;
 }
 
+/* Mobile override keeps them readable but prevents them from overflowing */
+.is-mobile .skill-pill {
+    font-size: 16px;
+    padding: 8px 16px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
 /* 	#000000	(0,0,0) black
 #c5003c	(197,0,60) bright red
 #880425	(136,4,37) dark red

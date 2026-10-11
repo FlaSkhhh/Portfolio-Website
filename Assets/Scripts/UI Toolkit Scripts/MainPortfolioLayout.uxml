@@ -33,14 +33,31 @@
                     <ui:VisualElement name="HeroPortal" picking-mode="Ignore" class="portal portal--horizontal-hero"/>
                     <ui:Label text="HELLO THERE &#10;I&apos;M SHANTANU" name="HeroTitle" class="hero-title"/>
                     <ui:Label text="Generalist Game Programmer" name="HeroSubtitle" class="hero-subtitle"/>
-                    <ui:Button name="BtnEnter" class="cyber-btn primary" style="margin-top: 32px; align-self: center; flex-direction: row;">
+                    <ui:Button name="BtnEnter" class="cyber-btn primary" style="margin-top: 32px; align-self: center; flex-direction: row; height: 64px; width: 260px;">
                         <ui:VisualElement class="cyber-shadow"/>
                         <ui:VisualElement class="cyber-body"/>
                         <ui:Label text="PROJECTS" class="cyber-header"/>
                     </ui:Button>
                 </ui:VisualElement>
+                <ui:VisualElement class="cv-section">
+                    <ui:Label text="EXPERIENCE" class="intro-section-title"/>
+                    <ui:VisualElement name="ExperienceContainer" /> 
+                </ui:VisualElement>
+               <ui:VisualElement class="cv-section" style="margin-top: 0;">
+                    <ui:Label text="TECHNICAL SKILLS" class="section-title"/>
+                    <ui:VisualElement class="timeline-box">
+                        <ui:VisualElement name="SkillsContainer" class="cv-tag-container" style="margin-top: 0; margin-bottom: 0;"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="cv-section" style="margin-top: 0;">
+                    <ui:Label text="EDUCATION" class="section-title"/>
+                    <ui:VisualElement class="timeline-box">
+                        <ui:Label name="EducationText" text="" class="education-text" style="margin-bottom: 0;"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
                 <ui:VisualElement name="AboutSection" class="about-section">
-                    <ui:Label text="ABOUT ME" class="section-title"/>
+                    <ui:Label text="ABOUT ME" class="intro-section-title"/>
                     <ui:VisualElement class="about-content-container">
                         <ui:VisualElement class="about-top-row">
                             <ui:VisualElement name="ProfileImage" class="profile-image-circle"/>
@@ -55,7 +72,7 @@
             <ui:VisualElement name="MainPortfolioView" class="portfolio-view">
                 <ui:VisualElement class="experience-section">
                     <ui:Label text="Featured Projects" class="section-title"/>
-                    <ui:Label text="A selection of core engineering work in multiplayer architecture, shaders, and AI systems." class="section-subtitle"/>
+                    <ui:Label text="A selection of core engineering work in multiplayer architecture, shaders, and AI systems." class="section-subtitle font-size: 24px"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="LoadingScreen" class="loading-screen">
                     <ui:VisualElement class="retro-container">
@@ -63,13 +80,6 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="ProjectScrollView" class="project-scroll-view"/>
-                <ui:VisualElement name="GamingShelfView" class="gaming-shelf">
-                    <ui:Label text="Competitive Shelf" class="section-title"/>
-                    <ui:VisualElement class="gaming-shelf-content">
-                        <ui:Label text="Clash Royale" class="game-card"/>
-                        <ui:Label text="Counter-Strike 2" class="game-card"/>
-                    </ui:VisualElement>
-                </ui:VisualElement>
             </ui:VisualElement>
         </ui:ScrollView>
         <ui:Label name="ScrollChevron" picking-mode="Ignore" class="scroll-chevron"/>
@@ -125,10 +135,10 @@
                     <ui:Label text="LINKEDIN" class="cyber-text"/>
                 </ui:Button>
             </ui:VisualElement>
-            <ui:VisualElement class="glitch-ghost glitch-ghost--cyan" picking-mode="Ignore"/>
-            <ui:VisualElement class="glitch-ghost glitch-ghost--pink" picking-mode="Ignore"/>
-            <ui:VisualElement class="glitch-bar glitch-bar--a" picking-mode="Ignore"/>
-            <ui:VisualElement class="glitch-bar glitch-bar--b" picking-mode="Ignore"/>
+            <ui:VisualElement picking-mode="Ignore" class="glitch-ghost glitch-ghost--cyan"/>
+            <ui:VisualElement picking-mode="Ignore" class="glitch-ghost glitch-ghost--pink"/>
+            <ui:VisualElement picking-mode="Ignore" class="glitch-bar glitch-bar--a"/>
+            <ui:VisualElement picking-mode="Ignore" class="glitch-bar glitch-bar--b"/>
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="SwipeIndicatorBack" class="swipe-indicator swipe-indicator--back">

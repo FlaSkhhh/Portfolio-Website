@@ -96,7 +96,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 
     IEnumerator LoadProjectsAsync()
     {
-
         PortfolioDataWrapper portfolioData = default;
         bool loadSuccess = false;
 
@@ -110,6 +109,62 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             var root = uiDocument.rootVisualElement;
             if (root != null)
             {
+
+                var expContainer = root.Q<VisualElement>("ExperienceContainer");
+                if (expContainer != null && portfolioData.experience != null)
+                {
+                    expContainer.Clear();
+                    foreach (var exp in portfolioData.experience)
+                    {
+                        var box = new VisualElement();
+                        box.AddToClassList("timeline-box");
+
+                        var headerRow = new VisualElement();
+                        headerRow.AddToClassList("timeline-header-row");
+
+                        var title = new Label(exp.title);
+                        title.AddToClassList("timeline-title");
+
+                        var date = new Label(exp.date);
+                        date.AddToClassList("timeline-date");
+
+                        headerRow.Add(title);
+                        headerRow.Add(date);
+                        box.Add(headerRow);
+
+                        var bulletContainer = new VisualElement();
+                        bulletContainer.AddToClassList("timeline-bullets");
+
+                        if (exp.bullets != null)
+                        {
+                            foreach (var bullet in exp.bullets)
+                            {
+                                var bLabel = new Label("> " + bullet);
+                                bLabel.AddToClassList("timeline-text");
+                                bulletContainer.Add(bLabel);
+                            }
+                        }
+                        box.Add(bulletContainer);
+                        expContainer.Add(box);
+                    }
+                }
+
+                // 2. Generate Education & Skills
+                var eduText = root.Q<Label>("EducationText");
+                if (eduText != null) eduText.text = portfolioData.education;
+
+                var skillsContainer = root.Q<VisualElement>("SkillsContainer");
+                if (skillsContainer != null && portfolioData.skills != null)
+                {
+                    skillsContainer.Clear();
+                    foreach (var skill in portfolioData.skills)
+                    {
+                        var pill = new Label(skill);
+                        pill.AddToClassList("skill-pill");
+                        skillsContainer.Add(pill);
+                    }
+                }
+
                 if (portfolioData.about.paragraphs != null && portfolioData.about.paragraphs.Count > 0)
                 {
                     var topLabel = root.Q<Label>("AboutParagraphTop");
@@ -376,6 +431,9 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 public struct PortfolioDataWrapper
 {
     public AboutData about;
+    public ExperienceData[] experience;
+    public string education;
+    public string[] skills;
     public ProjectMetadata[] projects;
 }
 
@@ -392,7 +450,10 @@ public struct ProjectMetadata
     //JSON fields for the full Case Study page
     public string[] bodyParagraphs; // Array of text blocks for the detail page
     public string[] extraScreenshots; // Array of paths (e.g., "Screenshots/Game_2")
-
+    public string role;
+    public string duration;
+    public string[] responsibilities; // Replaces bodyParagraphs
+    public string[] videoUrls;
     public string GetTitle() => !string.IsNullOrEmpty(title) ? title : Title;
     public string GetTag() => !string.IsNullOrEmpty(tag) ? tag : Tag;
     public string GetDescription() => !string.IsNullOrEmpty(description) ? description : Description;
@@ -410,4 +471,12 @@ public class AboutData
     public string subtitle;
     public string profileUrl;
     public List<string> paragraphs;
+}
+
+[Serializable]
+public struct ExperienceData
+{
+    public string title;
+    public string date;
+    public string[] bullets;
 }

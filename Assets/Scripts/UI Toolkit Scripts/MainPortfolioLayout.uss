@@ -10,7 +10,7 @@
 .detail-meta-header,
 .hero-title,
 .hero-subtitle,
-.contact-name,
+.contact-title,
 .cyber-header,
 .intro-section-title{
     -unity-font-definition: url('project://database/Assets/Resources/Orbitron-Regular.ttf');
@@ -774,14 +774,14 @@ INTRO STUFF
 }
 
 .timeline-title {
-    color: #FFFFFF;
-    font-size: 24px;
+    color: #FFFF00;
+    font-size: 30px;
     -unity-font-style: bold;
     letter-spacing: 1px;
 }
 
 .timeline-date {
-    color: #f3e600; /* Yellow */
+    color:#FFFF00; /* Yellow */
     font-size: 18px;
     -unity-font-style: bold;
 }
@@ -790,15 +790,33 @@ INTRO STUFF
     flex-direction: column;
 }
 
+/* The colored '>' symbol */
+.timeline-bullet-icon {
+    color: #f3e600; /* Authentic CP2077 Yellow */
+    font-size: 24px;
+    -unity-font-style: bold;
+    margin-right: 12px;
+}
+
+.bullet-row-container {
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    width: 100%; /* Forces it to fill the mobile screen */
+}
+
+/* The reading text */
 .timeline-text {
     color: #C0C5D0;
     font-size: 24px;
     white-space: normal;
-    margin-bottom: 16px;
+    flex-grow: 1;
+    flex-shrink: 1; /* CRITICAL: This forces the text to wrap instead of pushing off the screen */
+    margin-bottom: 0; /* We will handle spacing on the container instead */
 }
 
 .education-text {
-    color: white; 
+    color: #FFFF00; 
     font-size: 30px; 
     margin-bottom: 16px; 
     -unity-font-style: bold;
@@ -823,9 +841,10 @@ INTRO STUFF
 
 .about-section {
     width: 87%;
-    align-items: center;
-    margin-top: 100px;
-    margin-bottom: 80px;
+    max-width: 1200px;
+    align-items: flex-start; /* Aligns the timeline to the left */
+    margin-top: 60px;
+    margin-bottom: 60px;
 }
 
 .intro-section-title {
@@ -851,7 +870,7 @@ INTRO STUFF
 
 
 .about-paragraph {
-    color: rgb(200, 200, 200);
+    color: #C0C5D0;
     font-size: 30px;
     white-space: normal;
 }
@@ -894,7 +913,7 @@ INTRO STUFF
 .modal-overlay {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(11, 12, 16, 0.90); /* Dark Cyberpunk BG */
+    background-color: rgba(10, 2, 4, 0.82); /* warm; was rgba(11,12,16,0.90) */
     align-items: center;
     justify-content: center;
     
@@ -913,8 +932,8 @@ INTRO STUFF
     min-height: 480px; /* Much Taller */
     max-height: 540px;
 
-    background-color: #14161F;
-    border-color: #00E5FF;
+    background-color: #0E0608;
+    border-color: #E5283A;/* was #14161F and #00E5FF */
     border-width: 2px;
     border-radius: 0; /* Sharp corners fit the glitch aesthetic better */
     
@@ -938,11 +957,6 @@ INTRO STUFF
     font-size: 24px;
 }
 
-.btn-modal-close:hover {
-    color: #f3e600;
-    scale: 1.1 1.1;
-}
-
 .contact-header-row {
     position: absolute;
     top: 25px; /* Aligns perfectly with your Back button's top margin! */
@@ -951,19 +965,16 @@ INTRO STUFF
     align-items: center; /* Centers the text horizontally */
 }
 
-.contact-name {
-    margin-top: 20px;
+.contact-title{
     color: #00E5FF;
-    font-size: 36px;
+    font-size: 44px;
     -unity-font-style: bold;
-    -unity-text-align: middle-center;
 }
 
 /* --- INVISIBLE, SELECTABLE TEXT FIELDS --- */
 .data-field {
-    /* Very tight margins to keep them close together */
-    margin-top: 50px;
-    margin-bottom: -20px;
+    margin-top: -20px;
+    margin-bottom: 60px;
     width: 88%;
 }
 
@@ -989,7 +1000,7 @@ INTRO STUFF
 /* Puts the GitHub and LinkedIn buttons side-by-side */
 .contact-btn-row {
     position: absolute;
-    bottom: 40px; /* Anchors it 40px from the floor */
+    bottom: 80px; /* Anchors it 40px from the floor */
     left: 0;
     right: 0;
     flex-direction: row; 
@@ -998,114 +1009,86 @@ INTRO STUFF
 }
 
 .contact-btn-row .cyber-btn {
-    margin-left: 8px;
-    margin-right: 8px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 
-/* --- THE GLITCH ANIMATION STATES --- */
+/* --- GLITCH STATES (open uses 1-6; close reuses 3, 2, 1, out-final) --- */
+.glitch-1, .glitch-2, .glitch-3, .glitch-4, .glitch-5, .glitch-6 { transition-duration: 0s; }
 
+/* BOX FRAMES */
+.glitch-1 { scale: 1 0.03; opacity: 1; border-color: #FF4A2A; }                /* power-on line */
+.glitch-2 { opacity: 0.30; border-color: #f3e600; }                             /* dropout + the one yellow spark */
+.glitch-3 { translate: 3px 0; opacity: 1; border-color: #FF4A2A; }
+.glitch-4 { opacity: 0.50; border-color: #00E5FF; }                             /* cyan flash */
+.glitch-5 { translate: -2px 0; opacity: 1; border-color: #E5283A; }             /* resting red, still twitching */
+.glitch-6 { opacity: 0.80; border-color: #FF4A2A; }
 
-.glitch-1, .glitch-2, .glitch-3, .glitch-4, .glitch-5, .glitch-6 {
-    transition-duration: 0s;
-}
-
-/* ===== BOX FRAMES ===== */
-
-.glitch-1 { /* power-on collapse, squashed to a line (no sideways shove) */
-    scale: 1 0.04;
-    opacity: 0.9;
-    border-color: #FF007C;
-}
-.glitch-2 { /* dropout */
-    opacity: 0.35;
-    border-color: #f3e600;
-}
-.glitch-3 { /* back, with a tiny nudge */
-    translate: 3px 0;
-    opacity: 1;
-    border-color: #55ead4;
-}
-.glitch-4 { /* second dropout */
-    opacity: 0.55;
-    border-color: #FF007C;
-}
-.glitch-5 { /* near-stable, one more 2px nudge */
-    translate: -2px 0;
-    opacity: 1;
-    border-color: #f3e600;
-}
-.glitch-6 { /* last blink before settling */
-    opacity: 0.75;
-    border-color: #55ead4;
-}
-/* ===== RGB-SPLIT GHOSTS (outline only) ===== */
-
+/* RGB-SPLIT GHOSTS (inset so overflow:hidden can't clip them) */
 .glitch-ghost {
     position: absolute;
-    left: 0; top: 0; right: 0; bottom: 0;
-    border-width: 2px;
+    left: 5px; top: 5px; right: 5px; bottom: 5px;
+    border-width: 1px;
     border-radius: 0;
     opacity: 0;
 }
+.glitch-ghost--cyan { border-color: #00E5FF; }
+.glitch-ghost--pink { border-color: #FF4A2A; } /* name is stale: this is the hot red-orange edge now */
 
-.glitch-ghost--cyan { border-color: #55ead4; }
-.glitch-ghost--pink { border-color: #FF007C; }
+.glitch-1 .glitch-ghost--cyan { opacity: 0.9; translate: -4px 0; }
+.glitch-1 .glitch-ghost--pink { opacity: 0.9; translate: 4px 0; }
+.glitch-2 .glitch-ghost--cyan { opacity: 0.8; translate: -3px 1px; }
+.glitch-2 .glitch-ghost--pink { opacity: 0.8; translate: 3px -1px; }
+.glitch-3 .glitch-ghost--cyan { opacity: 0.7; translate: -2px 0; }
+.glitch-3 .glitch-ghost--pink { opacity: 0.7; translate: 2px 0; }
+.glitch-4 .glitch-ghost--cyan { opacity: 0.6; translate: -3px 0; }
+.glitch-4 .glitch-ghost--pink { opacity: 0.6; translate: 3px 0; }
+.glitch-5 .glitch-ghost--cyan { opacity: 0.5; translate: -1px 0; }
+.glitch-5 .glitch-ghost--pink { opacity: 0.5; translate: 1px 0; }
 
-.glitch-1 .glitch-ghost--cyan { opacity: 0.9; translate: -5px 0; }
-.glitch-1 .glitch-ghost--pink { opacity: 0.9; translate: 5px 0; }
-.glitch-2 .glitch-ghost--cyan { opacity: 0.8; translate: -4px 1px; }
-.glitch-2 .glitch-ghost--pink { opacity: 0.8; translate: 4px -1px; }
-.glitch-3 .glitch-ghost--cyan { opacity: 0.7; translate: -3px 0; }
-.glitch-3 .glitch-ghost--pink { opacity: 0.7; translate: 3px 0; }
-.glitch-4 .glitch-ghost--cyan { opacity: 0.6; translate: -4px 0; }
-.glitch-4 .glitch-ghost--pink { opacity: 0.6; translate: 4px 0; }
-.glitch-5 .glitch-ghost--cyan { opacity: 0.5; translate: -2px 0; }
-.glitch-5 .glitch-ghost--pink { opacity: 0.5; translate: 2px 0; }
+/* BARS: a = thin cyan sliver (scans down), b = red tear band */
+.glitch-bar { position: absolute; left: 0; right: 0; opacity: 0; }
+.glitch-bar--a { background-color: rgba(0, 229, 255, 0.85); }
+.glitch-bar--b { background-color: rgba(255, 74, 42, 0.30); }
 
-/* ===== TEAR BARS ===== */
+.glitch-2 .glitch-bar--a { opacity: 1; top: 12%; height: 2px; left: 18%; right: 40%; }
+.glitch-3 .glitch-bar--a { opacity: 1; top: 34%; height: 3px; left: 46%; right: 8%; }
+.glitch-4 .glitch-bar--a { opacity: 1; top: 58%; height: 2px; left: 6%;  right: 52%; }
+.glitch-5 .glitch-bar--a { opacity: 1; top: 82%; height: 2px; left: 30%; right: 25%; }
 
-.glitch-bar {
+.glitch-2 .glitch-bar--b { opacity: 1;   top: 28%; height: 12px; translate: 26px 0; }
+.glitch-3 .glitch-bar--b { opacity: 1;   top: 72%; height: 6px;  translate: -30px 0; }
+.glitch-4 .glitch-bar--b { opacity: 0.7; top: 0;   height: 100%; translate: 0 0; }  /* red wash on the dropout */
+.glitch-5 .glitch-bar--b { opacity: 1;   top: 46%; height: 4px;  translate: 20px 0; }
+.glitch-6 .glitch-bar--b { opacity: 1;   top: 14%; height: 8px;  translate: -16px 0; }
+
+/* GHOST DATA BLOCKS (the background's blocks, in miniature) */
+.glitch-block {
     position: absolute;
-    left: 0; right: 0;
     opacity: 0;
+    background-color: rgba(229, 40, 58, 0.18);
+    border-top-width: 2px;
+    border-top-color: rgba(255, 74, 42, 0.55);
 }
+.glitch-2 .glitch-block--a { opacity: 1; left: 3%;  top: 8%;  width: 16%; height: 7%; }
+.glitch-2 .glitch-block--b { opacity: 1; left: 74%; top: 80%; width: 20%; height: 9%; }
+.glitch-3 .glitch-block--a { opacity: 1; left: 76%; top: 6%;  width: 12%; height: 5%; }
+.glitch-4 .glitch-block--a { opacity: 1; left: 4%;  top: 70%; width: 18%; height: 8%; }
+.glitch-4 .glitch-block--b { opacity: 1; left: 70%; top: 14%; width: 22%; height: 6%; }
+.glitch-5 .glitch-block--b { opacity: 1; left: 8%;  top: 20%; width: 10%; height: 5%; }
 
-.glitch-bar--a { background-color: rgba(243, 230, 0, 0.55); }
-.glitch-bar--b { background-color: rgba(255, 0, 124, 0.45); }
-
-.glitch-1 .glitch-bar--a { opacity: 1; top: 18%; height: 6px;  translate: 40px 0; }
-.glitch-1 .glitch-bar--b { opacity: 1; top: 70%; height: 3px;  translate: -30px 0; }
-
-.glitch-2 .glitch-bar--a { opacity: 1; top: 62%; height: 4px;  translate: -48px 0; }
-.glitch-2 .glitch-bar--b { opacity: 1; top: 30%; height: 10px; translate: 36px 0; }
-
-.glitch-3 .glitch-bar--a { opacity: 1; top: 8%;  height: 3px;  translate: 28px 0; }
-.glitch-3 .glitch-bar--b { opacity: 1; top: 82%; height: 5px;  translate: -40px 0; }
-
-.glitch-4 .glitch-bar--a { opacity: 1; top: 44%; height: 8px;  translate: 24px 0; }
-.glitch-4 .glitch-bar--b { /* full-height color wash instead of a strip */
-    opacity: 0.25; top: 0; height: 100%; translate: 0 0;
-}
-.glitch-5 .glitch-bar--a { opacity: 1; top: 26%; height: 3px;  translate: -20px 0; }
-.glitch-5 .glitch-bar--b { opacity: 1; top: 90%; height: 4px;  translate: 18px 0; }
-
-.glitch-amb-1, .glitch-amb-2, .glitch-amb-3 {
-    transition-duration: 0s; /* hard snaps, same reason as the open/close frames */
-}
-
-.glitch-amb-1 { border-color: #FF007C; }
+/* AMBIENT BURSTS (while the popup is open) */
+.glitch-amb-1, .glitch-amb-2, .glitch-amb-3 { transition-duration: 0s; }
+.glitch-amb-1 { border-color: #FF4A2A; }
 .glitch-amb-1 .glitch-ghost--cyan { opacity: 0.7; translate: -3px 0; }
 .glitch-amb-1 .glitch-ghost--pink { opacity: 0.7; translate: 3px 0; }
+.glitch-amb-2 .glitch-bar--a { opacity: 1; top: 44%; height: 2px; left: 12%; right: 38%; }
+.glitch-amb-2 .glitch-block--a { opacity: 1; left: 4%; top: 18%; width: 14%; height: 6%; }
+.glitch-amb-3 { border-color: #00E5FF; }
+.glitch-amb-3 .glitch-bar--a { opacity: 1; top: 76%; height: 2px; left: 40%; right: 10%; }
 
-.glitch-amb-2 { border-color: #f3e600; }
-.glitch-amb-2 .glitch-bar--a { opacity: 1; top: 34%; height: 2px; translate: 26px 0; }
-
-.glitch-amb-3 { border-color: #55ead4; }
-.glitch-amb-3 .glitch-ghost--cyan { opacity: 0.6; translate: -2px 1px; }
-.glitch-amb-3 .glitch-ghost--pink { opacity: 0.6; translate: 2px -1px; }
-
-.glitch-out-final { /* the collapsed line shrinks to a dot and vanishes */
+.glitch-out-final { /* collapsed line shrinks to a dot with a last yellow spark */
     transition-duration: 0s;
     scale: 0.02 0.04;
     translate: 0 0;
@@ -1257,16 +1240,16 @@ INTRO STUFF
 }
 
 .is-mobile .timeline-title {
-    font-size: 20px;
+    font-size: 30px;
     margin-bottom: 8px;
 }
 
 .is-mobile .timeline-date {
-    font-size: 16px;
+    font-size: 20px;
 }
 
 .is-mobile .timeline-text {
-    font-size: 16px;
+    font-size: 24px;
     margin-bottom: 12px;
 }
 
@@ -1281,6 +1264,12 @@ INTRO STUFF
     /* Width, height, and margin-bottom are inherited from the base class, 
        so it stays exactly 250x250 and keeps its bottom spacing! */
 }
+
+.is-mobile .intro-section-title {
+    margin-bottom: 50px;
+    font-size: 44px;
+}
+
 .is-mobile .about-paragraph {
     width: 100%;
     flex-basis: auto;
@@ -1294,6 +1283,13 @@ INTRO STUFF
     padding: 8px 16px;
     margin-right: 10px;
     margin-bottom: 10px;
+}
+
+.is-mobile .education-text {
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 20px;
+    margin-bottom: 8px;
 }
 /* 	#000000	(0,0,0) black
 #c5003c	(197,0,60) bright red

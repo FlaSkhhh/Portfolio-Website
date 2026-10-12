@@ -44,13 +44,13 @@
                     <ui:VisualElement name="ExperienceContainer" /> 
                 </ui:VisualElement>
                <ui:VisualElement class="cv-section" style="margin-top: 0;">
-                    <ui:Label text="TECHNICAL SKILLS" class="section-title"/>
+                    <ui:Label text="TECHNICAL SKILLS" class="intro-section-title"/>
                     <ui:VisualElement class="timeline-box">
                         <ui:VisualElement name="SkillsContainer" class="cv-tag-container" style="margin-top: 0; margin-bottom: 0;"/>
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement class="cv-section" style="margin-top: 0;">
-                    <ui:Label text="EDUCATION" class="section-title"/>
+                    <ui:Label text="EDUCATION" class="intro-section-title"/>
                     <ui:VisualElement class="timeline-box">
                         <ui:Label name="EducationText" text="" class="education-text" style="margin-bottom: 0;"/>
                     </ui:VisualElement>
@@ -116,10 +116,12 @@
     </ui:VisualElement>
     <ui:VisualElement name="ContactModalOverlay" class="modal-overlay modal-overlay--hidden">
         <ui:VisualElement name="ContactModalBox" class="modal-box">
+            <ui:VisualElement picking-mode="Ignore" class="glitch-block glitch-block--a"/>
+            <ui:VisualElement picking-mode="Ignore" class="glitch-block glitch-block--b"/>
+
             <ui:Button name="BtnCloseModal" text="←" class="btn-back btn-modal-back"/>
             <ui:VisualElement picking-mode="Ignore" class="contact-header-row">
-                <ui:Label text="CONTACTS" class="section-title" style="margin-bottom: 16px; font-size: 44px;"/>
-                <ui:Label text="SHANTANU NANDKHILE" class="contact-name"/>
+                <ui:Label text="CONTACTS" class="contact-title"/>
             </ui:VisualElement>
             <ui:TextField value="shantanunandkhileoa@gmail.com" readonly="true" name="TextField" class="data-field"/>
             <ui:TextField value="+91-9518756184" readonly="true" class="data-field"/>

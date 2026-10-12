@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -32,12 +33,33 @@ public class MouseShaderTracker : MonoBehaviour
             return;
         }
 
-        // Convert pixel position to normalized screen coordinates (0 to 1)
         Vector2 mousePos = Mouse.current.position.ReadValue();
         mousePos.x /= Screen.width;
         mousePos.y /= Screen.height;
 
-        // Send it to the GPU
         backgroundMaterial.SetVector("_MousePos", new Vector4(mousePos.x, mousePos.y, 0, 0));
+    }
+
+    public void TriggerGlitch()
+    {
+        StartCoroutine(TransitionGlitchRoutine());
+    }
+
+    IEnumerator TransitionGlitchRoutine()
+    {
+        if (backgroundMaterial == null) yield break;
+
+        float intensity = 1f; // Max glitch strength
+
+        backgroundMaterial.SetFloat("_GlitchPulse", intensity);
+        while (intensity > 0f)
+        {
+            intensity -= Time.deltaTime * 2f;
+            backgroundMaterial.SetFloat("_GlitchPulse", Mathf.Max(0, intensity));
+            yield return null;
+        }
+
+        // Ensure it zeroes out completely
+        backgroundMaterial.SetFloat("_GlitchPulse", 0f);
     }
 }

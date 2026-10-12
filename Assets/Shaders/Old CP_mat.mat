@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CyberpunkGridBackground_Mat
-  m_Shader: {fileID: 4800000, guid: e5cadd1b672438d4eaf18faa812196fb, type: 3}
+  m_Name: Old CP_mat
+  m_Shader: {fileID: 4800000, guid: ae667cbb81139f84d967ff351ca41702, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -25,25 +25,25 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _GlitchChance: 1
+    - _GlitchChance: 0.08
     - _GlitchFrequency: 1.5
     - _GlitchIntensity: 0.3
-    - _GridOpacity: 0.23
-    - _GridRotation: 45
-    - _GridScale: 8
-    - _HorizonFade: 0.168
-    - _HorizonOffset: -0.5
+    - _GridOpacity: 0.15
+    - _GridRotation: 0
+    - _GridScale: 2
+    - _HorizonFade: 0.15
+    - _HorizonOffset: 0
     - _InteractionRadius: 0.2
-    - _LineThickness: 2.86
+    - _LineThickness: 1
     - _MouseGlowIntensity: 0.25
-    - _PerspectiveStrength: 0.28
+    - _PerspectiveStrength: 0.8
     - _PulseAmount: 0.15
     - _PulseSpeed: 0.5
-    - _VignetteStrength: 1.78
+    - _VignetteStrength: 2.5
     m_Colors:
-    - _BgColor: {r: 0.14716971, g: 0, b: 0.037157062, a: 1}
+    - _BgColor: {r: 0.02, g: 0.02, b: 0.025, a: 1}
     - _GridColor: {r: 1, g: 0.88, b: 0, a: 1}
-    - _MouseGlowColor: {r: 1, g: 0.96325135, b: 0.49400002, a: 1}
-    - _ScrollSpeed: {r: 0.01, g: 0.015, b: 0, a: 0}
+    - _MouseGlowColor: {r: 1, g: 0.95, b: 0.29999998, a: 1}
+    - _ScrollSpeed: {r: 0, g: -1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

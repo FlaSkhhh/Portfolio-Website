@@ -139,9 +139,22 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
                         {
                             foreach (var bullet in exp.bullets)
                             {
-                                var bLabel = new Label("> " + bullet);
+                                // 1. Create a horizontal row for each bullet point
+                                var bulletRow = new VisualElement();
+                                bulletRow.AddToClassList("bullet-row-container");
+
+                                // 2. Add the Cyan '>' icon
+                                var bulletIcon = new Label(">");
+                                bulletIcon.AddToClassList("timeline-bullet-icon");
+
+                                // 3. Add the safe white text
+                                var bLabel = new Label(bullet);
                                 bLabel.AddToClassList("timeline-text");
-                                bulletContainer.Add(bLabel);
+
+                                // 4. Assemble the row
+                                bulletRow.Add(bulletIcon);
+                                bulletRow.Add(bLabel);
+                                bulletContainer.Add(bulletRow);
                             }
                         }
                         box.Add(bulletContainer);

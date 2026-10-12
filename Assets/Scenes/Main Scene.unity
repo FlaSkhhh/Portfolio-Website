@@ -314,7 +314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13674aebd48722347b6442531fd2e2d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouseShaderTracker
-  cpMat: {fileID: 2100000, guid: 7adcd0f84ee71fe439bdee1680be76d4, type: 2}
+  cpMat: {fileID: 2100000, guid: f3049b19755cdf548ba8958bd108a403, type: 2}
 --- !u!1 &997640887
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,6 +385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8b05321135fd948a32910a345eca8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PortfolioController
+  shaderTracker: {fileID: 671847800}
 --- !u!114 &997640891
 MonoBehaviour:
   m_ObjectHideFlags: 0

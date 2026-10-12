@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 public class PortfolioController : MonoBehaviour
 {
+    [SerializeField] MouseShaderTracker shaderTracker;
     PortfolioProjectLoaderWeb loader;
     UIDocument uiDocument;
     ScrollView mainScroll;
@@ -19,6 +20,7 @@ public class PortfolioController : MonoBehaviour
     VisualElement heroPortal;
     VisualElement portfolioHeaderRow;       //for non scrolling back button
     VisualElement introHeadline;
+    VisualElement introSubtitle;
     VisualElement detailTagsContainer;
     VisualElement detailImage;
     VisualElement dynamicContent;
@@ -93,7 +95,8 @@ public class PortfolioController : MonoBehaviour
         headerExploreBtn = root.Q<Button>("HeaderExploreBtn");
         headerName = root.Q<Label>("HeaderName");
         heroPortal = root.Q<VisualElement>("HeroPortal");
-        introHeadline = root.Q<VisualElement>(className: "intro-headline");
+        introHeadline = root.Q<VisualElement>("HeroTitle");
+        introSubtitle = root.Q<VisualElement>("HeroSubtitle");
         portfolioHeaderRow = root.Q<VisualElement>("PortfolioHeaderRow");
         mainScroll = root.Q<ScrollView>("MainScrollArea");
         detailScroll = root.Q<ScrollView>("DetailScrollArea");
@@ -221,16 +224,16 @@ public class PortfolioController : MonoBehaviour
                 if (lastViewportHeight <= 0) return;
 
                 float collisionDistance = lastViewportHeight * 0.35f;
-                float textFadeStart = Mathf.Max(0, collisionDistance - 100f);
                 float portalFadeEnd = collisionDistance + 400f;
+                float textFadeEnd = collisionDistance - 80f;
+                float textFadeStart = Mathf.Max(0, textFadeEnd - 150f);
 
-                // --- TEXT FADE ---
-                if (scrollValue >= collisionDistance)
+                if (scrollValue >= textFadeEnd)
                 {
-                    // Put it to sleep. Only apply opacity = 0 ONCE.
                     if (!isIntroTextFullyHidden)
                     {
                         if (introHeadline != null) introHeadline.style.opacity = 0f;
+                        if (introSubtitle != null) introSubtitle.style.opacity = 0f;
                         if (btnEnter != null) btnEnter.style.opacity = 0f;
                         isIntroTextFullyHidden = true;
                     }
@@ -238,8 +241,9 @@ public class PortfolioController : MonoBehaviour
                 else
                 {
                     isIntroTextFullyHidden = false;
-                    float textAlpha = 1f - Mathf.InverseLerp(textFadeStart, collisionDistance, scrollValue);
+                    float textAlpha = 1f - Mathf.InverseLerp(textFadeStart, textFadeEnd, scrollValue);
                     if (introHeadline != null) introHeadline.style.opacity = textAlpha;
+                    if (introSubtitle != null) introSubtitle.style.opacity = textAlpha;
                     if (btnEnter != null) btnEnter.style.opacity = textAlpha;
                 }
 
@@ -356,6 +360,7 @@ public class PortfolioController : MonoBehaviour
 
     private void OpenContactModal()
     {
+        shaderTracker.TriggerGlitch();
         isContactModalOpen = true;
         modalOverlay.RemoveFromClassList("modal-overlay--hidden");
 
@@ -604,6 +609,8 @@ public class PortfolioController : MonoBehaviour
 
     public void OnBrowserStateChanged(string view)
     {
+        shaderTracker.TriggerGlitch();
+
         if (isContactModalOpen)
         {
             CloseContactModal();

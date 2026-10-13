@@ -1,14 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Style src="project://database/Assets/Scripts/UI Toolkit Scripts/ProjectShowcase.uss" />
 	<ui:VisualElement class="showcase-row">
-		<!-- Image Column (55%) -->
 		<ui:VisualElement class="showcase-column showcase-column--image">
 			<ui:VisualElement name="ProjectImage" class="project-image">
 				<ui:Label name="ProjectPlatformTag" class="platform-badge" text="Platform" />
 			</ui:VisualElement>
 		</ui:VisualElement>
-
-		<!-- Info Column (45%) -->
 		<ui:VisualElement class="showcase-column showcase-column--info">
 			<ui:VisualElement class="tag-container">
 				<ui:Label class="tech-pill" text="Tech 1" />
@@ -23,18 +20,18 @@
 
 			<ui:VisualElement class="button-row">
  
-				<ui:Button name="BtnCaseStudy" class="cyber-btn ghost">
+				<ui:Button name="BtnCaseStudy" class="cyber-btn ghost" style="right-margin: 20px;">
                     <ui:VisualElement class="cyber-shadow" />
                     <ui:VisualElement class="cyber-body">
                     </ui:VisualElement>
-                    <ui:Label text="OPEN" class="cyber-text" style="font-size: 13px;" /> 
+                    <ui:Label text="OPEN" class="cyber-text"/> 
                 </ui:Button>
 
-				<ui:Button name="BtnGitHub" class="cyber-btn quaternary">
+				<ui:Button name="BtnGitHub" class="cyber-btn quaternary" style="left-margin: 20px;">
                     <ui:VisualElement class="cyber-shadow" />
                     <ui:VisualElement class="cyber-body"> 
                     </ui:VisualElement> 
-                    <ui:Label text="GITHUB" class="cyber-text" style="font-size: 13px;" /> 
+                    <ui:Label text="GITHUB" class="cyber-text" /> 
                 </ui:Button>
 
 			</ui:VisualElement>

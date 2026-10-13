@@ -12,6 +12,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     [SerializeField] bool loadFromStreamingAssets = true;
     [SerializeField] string projectDataUrl = "projects.json";
     [SerializeField] string remoteServerUrl = "https://yournetlifydomain.netlify.app/api/projects.json";
+    [SerializeField] private List<Texture2D> bonfireFrames;
 
     VisualElement projectScrollView;
     PortfolioController portfolioController;
@@ -20,6 +21,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     // Loader Elements
     VisualElement loadingScreen;
     VisualElement cyberSpinner;
+    VisualElement profileImgElement;
     ScrollView mainScrollArea;
 
     int totalProjectsToLoad = 0;
@@ -28,6 +30,9 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     bool isPortfolioOpen = false;
     bool hasPlayedTransition = false; // Prevents the disappearing glitch
     float spinnerRotation = 0f;
+    float fireFrameRate = 0.3f;
+    float fireTimer;
+    int currentFireFrame;
 
     void OnEnable()
     {
@@ -43,6 +48,15 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         scrollAnimationController = GetComponent<ScrollAnimationController>();
         cyberSpinner = root.Q<VisualElement>("CyberSpinner");
         mainScrollArea = root.Q<ScrollView>("MainScrollArea");
+        profileImgElement = root.Q<VisualElement>("ProfileImage");
+
+        bonfireFrames = new List<Texture2D>
+        {
+            Resources.Load<Texture2D>("1"),
+            Resources.Load<Texture2D>("2"),
+            Resources.Load<Texture2D>("3")
+        };
+        bonfireFrames.RemoveAll(frame => frame == null);
 
         if (projectScrollView != null)
         {
@@ -59,6 +73,18 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             // Spins the ring 360 degrees per second
             spinnerRotation += Time.deltaTime * 360f;
             cyberSpinner.style.rotate = new Rotate(Angle.Degrees(spinnerRotation));
+        }
+
+        if (bonfireFrames != null && bonfireFrames.Count > 0 && profileImgElement != null && mainScrollArea != null && mainScrollArea.style.display != DisplayStyle.None)
+        {
+            fireTimer += Time.deltaTime;
+            if (fireTimer >= fireFrameRate)
+            {
+                fireTimer -= fireFrameRate;
+                currentFireFrame = (currentFireFrame + 1) % bonfireFrames.Count;
+
+                profileImgElement.style.backgroundImage = new StyleBackground(bonfireFrames[currentFireFrame]);
+            }
         }
     }
 
@@ -197,12 +223,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
                         bottomLabel.text = string.Join("\n", remainingParagraphs);
                     }
                 }
-
-                VisualElement profileImgElement = root.Q<VisualElement>("ProfileImage");
-                if (profileImgElement != null && !string.IsNullOrEmpty(portfolioData.about.profileUrl))
-                {
-                    StartCoroutine(LoadProfileImageAsync(portfolioData.about.profileUrl, profileImgElement));
-                }
             }
         }
 
@@ -227,24 +247,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             {
                 hasPlayedTransition = true;
                 StartCoroutine(HideLoadingScreen());
-            }
-        }
-    }
-
-    IEnumerator LoadProfileImageAsync(string url, VisualElement profileElement)
-    {
-        using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(url))
-        {
-            uwr.timeout = 5;
-            yield return uwr.SendWebRequest();
-
-            if (uwr.result == UnityWebRequest.Result.Success)
-            {
-                Texture2D texture = DownloadHandlerTexture.GetContent(uwr);
-                if (texture != null)
-                {
-                    profileElement.style.backgroundImage = new StyleBackground(texture);
-                }
             }
         }
     }

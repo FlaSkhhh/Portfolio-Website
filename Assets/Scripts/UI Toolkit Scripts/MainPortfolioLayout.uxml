@@ -72,7 +72,7 @@
             <ui:VisualElement name="MainPortfolioView" class="portfolio-view">
                 <ui:VisualElement class="experience-section">
                     <ui:Label text="Featured Projects" class="section-title"/>
-                    <ui:Label text="A selection of core engineering work in multiplayer architecture, shaders, and AI systems." class="section-subtitle font-size: 24px"/>
+                    <ui:Label text="A curated archive of system architecture, gameplay engineering, and technical problem solving." class="section-subtitle"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="LoadingScreen" class="loading-screen">
                     <ui:VisualElement class="retro-container">

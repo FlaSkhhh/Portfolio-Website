@@ -12,7 +12,8 @@
 .hero-subtitle,
 .contact-title,
 .cyber-header,
-.intro-section-title{
+.intro-section-title,
+.section-title{
     -unity-font-definition: url('project://database/Assets/Resources/Orbitron-Regular.ttf');
 }
 Scroller {
@@ -119,7 +120,7 @@ Button {
 /* 4. QUATERNARY: Hot Pink / Neon Green / Black Text */
 .cyber-btn.quaternary .cyber-body { -unity-background-image-tint-color: #FF007C; } 
 .cyber-btn.quaternary .cyber-shadow { -unity-background-image-tint-color: #00FF9D; } 
-.cyber-btn.quaternary .cyber-text { color: #000000; } 
+.cyber-btn.quaternary .cyber-text { color: #FFE600; } 
 .cyber-btn.quaternary:hover .cyber-body { -unity-background-image-tint-color: #00FF9D; } 
 .cyber-btn.quaternary:hover .cyber-shadow { -unity-background-image-tint-color: #f3e600; } 
 .cyber-btn.quaternary:hover .cyber-text { color: #FF007C; text-shadow: 0 0 10px rgba(255, 0, 124, 0.8); }
@@ -246,14 +247,17 @@ Button:active,
 
 .section-title {
     color: rgb(0, 229, 255);
-    font-size: 36px;
+    font-size: 44px;
     -unity-font-style: bold;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .section-subtitle {
     font-size: 24px;
     color: #8E95A5;
+    white-space: normal; /* This forces the text to wrap */
+    width: 100%; /* Ensures it fills the container before wrapping */
+    opacity: 0.7; /* Dims it slightly so it doesn't fight the main title */
 }
 
 .project-scroll-view {
@@ -261,7 +265,11 @@ Button:active,
     flex-direction: column;
 }
 
-/* ===== FULL PAGE CASE STUDY ===== */
+/* ===== FULL PAGE CASE STUDY ===== 
+   ===== DETAILS PAGE ======
+*/
+
+
 .project-detail-view {
     width: 100%;
     flex-grow: 1; 
@@ -930,7 +938,7 @@ INTRO STUFF
     height: 40%;
     max-width: 750px; /* Much Wider */
     min-height: 480px; /* Much Taller */
-    max-height: 540px;
+    max-height: 480px;
 
     background-color: #0E0608;
     border-color: #E5283A;/* was #14161F and #00E5FF */
@@ -951,7 +959,7 @@ INTRO STUFF
 .btn-modal-back {
     position: absolute;
     height: 40px;
-    top: 40px;
+    top: 60px;
     left: 40px;
     flex-shrink: 0;
     font-size: 24px;
@@ -959,7 +967,7 @@ INTRO STUFF
 
 .contact-header-row {
     position: absolute;
-    top: 25px; /* Aligns perfectly with your Back button's top margin! */
+    top: 45px; /* Aligns perfectly with your Back button's top margin! */
     left: 0;
     right: 0;
     align-items: center; /* Centers the text horizontally */
@@ -973,8 +981,7 @@ INTRO STUFF
 
 /* --- INVISIBLE, SELECTABLE TEXT FIELDS --- */
 .data-field {
-    margin-top: -20px;
-    margin-bottom: 60px;
+    margin-bottom: 40px;
     width: 88%;
 }
 
@@ -1126,7 +1133,7 @@ INTRO STUFF
 }
 
 .is-mobile .section-title {
-    font-size: 32px;
+    font-size: 44px;
 }
 
 .is-mobile .portfolio-view {

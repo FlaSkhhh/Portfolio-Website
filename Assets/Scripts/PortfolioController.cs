@@ -223,7 +223,7 @@ public class PortfolioController : MonoBehaviour
                 // Use our cached screen height from the GeometryEvent instead of querying UI Toolkit layout!
                 if (lastViewportHeight <= 0) return;
 
-                float collisionDistance = lastViewportHeight * 0.35f;
+                float collisionDistance = lastViewportHeight * 0.4f;
                 float portalFadeEnd = collisionDistance + 400f;
                 float textFadeEnd = collisionDistance - 80f;
                 float textFadeStart = Mathf.Max(0, textFadeEnd - 150f);

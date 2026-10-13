@@ -201,9 +201,14 @@ Scroller {
     transition-duration: 0.05s;
 }
 
+.cyber-btn .cyber-text{
+    font-size: 20px;
+    letter-spacing: -4px;
+}
 
 
-/* ===== RESPONSIVE PORTRAIT QUERY ===== */
+
+/* ===== MOBILE RESOLUTION CHANGES ===== */
 
 /* 1. ROW SETUP */
 .is-mobile .showcase-row,
@@ -359,16 +364,19 @@ Scroller {
     max-height: 42px; 
     
     flex-shrink: 0; 
-    margin: 0 12px 12px 0; 
+    margin-left: 24px;
+    margin-right: 24px;
     padding: 0;
 }
 
 /* Text scale adjustment to fit perfectly inside 42px */
 .is-mobile .cyber-btn .cyber-text {
-    font-size: 13px; 
+    font-size: 17px; 
+    letter-spacing: -4px;
 }
 
 .is-mobile .showcase-row--reverse .button-row Button,
 .is-mobile .showcase-row--reverse .cyber-btn {
-    margin: 0 12px 12px 0;
+    margin-left: 24px;
+    margin-right: 24px;
 }

@@ -328,6 +328,7 @@ GameObject:
   - component: {fileID: 997640890}
   - component: {fileID: 997640891}
   - component: {fileID: 997640892}
+  - component: {fileID: 997640893}
   m_Layer: 0
   m_Name: UIRoot
   m_TagString: Untagged
@@ -403,6 +404,7 @@ MonoBehaviour:
   loadFromStreamingAssets: 1
   projectDataUrl: projects.json
   remoteServerUrl: https://yournetlifydomain.netlify.app/api/projects.json
+  bonfireFrames: []
 --- !u!114 &997640892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,6 +419,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScrollAnimationController
   uiDocument: {fileID: 997640889}
   staggerDelayMs: 150
+--- !u!114 &997640893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997640887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e8ee010d26e6904ba9061f6d9030762, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  baseUrl: 
+  width: 1280
+  height: 720
+  loadTimeoutSeconds: 8
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

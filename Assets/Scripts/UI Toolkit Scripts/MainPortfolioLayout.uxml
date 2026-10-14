@@ -27,6 +27,8 @@
         <ui:VisualElement name="PortfolioHeaderRow" class="portfolio-header-row" style="display: none;">
             <ui:Button name="BtnBackToHome" text="←" class="btn-back btn-detail-back"/>
         </ui:VisualElement>
+
+
         <ui:ScrollView name="MainScrollArea" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" class="content-area">
             <ui:VisualElement name="IntroView" class="intro-view">
                 <ui:VisualElement picking-mode="Ignore" class="hero-portal-container">
@@ -43,7 +45,7 @@
                     <ui:Label text="EXPERIENCE" class="intro-section-title"/>
                     <ui:VisualElement name="ExperienceContainer" /> 
                 </ui:VisualElement>
-               <ui:VisualElement class="cv-section" style="margin-top: 0;">
+                <ui:VisualElement class="cv-section" style="margin-top: 0;">
                     <ui:Label text="TECHNICAL SKILLS" class="intro-section-title"/>
                     <ui:VisualElement class="timeline-box">
                         <ui:VisualElement name="SkillsContainer" class="cv-tag-container" style="margin-top: 0; margin-bottom: 0;"/>
@@ -69,6 +71,8 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
+
+
             <ui:VisualElement name="MainPortfolioView" class="portfolio-view">
                 <ui:VisualElement class="experience-section">
                     <ui:Label text="Featured Projects" class="section-title"/>
@@ -83,6 +87,8 @@
             </ui:VisualElement>
         </ui:ScrollView>
         <ui:Label name="ScrollChevron" picking-mode="Ignore" class="scroll-chevron"/>
+
+
         <ui:VisualElement name="ProjectDetailView" class="project-detail-view" style="display: none;">
             <ui:VisualElement class="detail-panel">
                 <ui:VisualElement class="detail-header-row">
@@ -108,12 +114,12 @@
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="DetailDynamicContent" class="detail-dynamic-content"/>
-                    <ui:Label text="OVERVIEW &amp; ARCHITECTURE" class="detail-meta-header"/>
-                    <ui:Label name="DetailDescription" text="Full breakdown..." class="detail-description"/>
                 </ui:ScrollView>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
+
+
     <ui:VisualElement name="ContactModalOverlay" class="modal-overlay modal-overlay--hidden">
         <ui:VisualElement name="ContactModalBox" class="modal-box">
             <ui:VisualElement picking-mode="Ignore" class="glitch-block glitch-block--a"/>
@@ -143,6 +149,8 @@
             <ui:VisualElement picking-mode="Ignore" class="glitch-bar glitch-bar--b"/>
         </ui:VisualElement>
     </ui:VisualElement>
+
+
     <ui:VisualElement name="SwipeIndicatorBack" class="swipe-indicator swipe-indicator--back">
         <ui:VisualElement class="chev-scaler pos-3">
             <ui:VisualElement class="chev-shape chev-left chev-outline color-cyan"/>

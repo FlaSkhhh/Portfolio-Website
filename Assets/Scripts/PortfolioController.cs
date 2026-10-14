@@ -8,6 +8,7 @@ public class PortfolioController : MonoBehaviour
 {
     [SerializeField] MouseShaderTracker shaderTracker;
     PortfolioProjectLoaderWeb loader;
+    DetailVideoController videoController;
     UIDocument uiDocument;
     ScrollView mainScroll;
     ScrollView detailScroll;
@@ -70,6 +71,7 @@ public class PortfolioController : MonoBehaviour
     {
         uiDocument = GetComponent<UIDocument>();
         loader = GetComponent<PortfolioProjectLoaderWeb>();
+        videoController = GetComponent<DetailVideoController>();
 
         if (uiDocument == null) return;
 
@@ -488,11 +490,8 @@ public class PortfolioController : MonoBehaviour
         currentDemoUrl = project.caseStudyUrl;
         currentGithubUrl = project.githubUrl;
 
-
         // Hide Chevron globally while in the Case Study
         if (scrollChevron != null) scrollChevron.AddToClassList("scroll-chevron--hidden");
-
-
 
         if (detailTitle != null) detailTitle.text = project.GetTitle();
 
@@ -522,21 +521,22 @@ public class PortfolioController : MonoBehaviour
         if (btnDetailGitHub != null) btnDetailGitHub.style.display = string.IsNullOrEmpty(currentGithubUrl) ? DisplayStyle.None : DisplayStyle.Flex;
 
         // 3. GENERATE DYNAMIC JSON CONTENT (Text & Extra Images)
-        if (dynamicContent != null)
+        BuildDetailRows(project);
+        /*if (dynamicContent != null)
         {
             dynamicContent.Clear();
 
-            string[] paragraphs = project.bodyParagraphs != null && project.bodyParagraphs.Length > 0
-                ? project.bodyParagraphs
-                : new string[] { project.GetDescription() };
+            ProjectRow[] rows = project.rows != null && project.rows.Length > 0
+                ? project.rows
+                : new ProjectRow[] { new ProjectRow { text = project.GetDescription() } };
 
-            for (int i = 0; i < paragraphs.Length; i++)
+            for (int i = 0; i < rows.Length; i++)
             {
                 // 1. Create the Row Container
                 var rowContainer = new VisualElement();
                 rowContainer.AddToClassList("detail-dynamic-row");
 
-                string imgPath = (project.extraScreenshots != null && i < project.extraScreenshots.Length) ? project.extraScreenshots[i] : "";
+                string imgPath = rows[i].media;
                 bool skipImage = string.IsNullOrEmpty(imgPath) || imgPath.Trim().ToLower() == "no" || imgPath.Trim().ToLower() == "null";
 
                 // Alternate layout: Even rows = Text Left, Odd rows = Text Right
@@ -546,7 +546,7 @@ public class PortfolioController : MonoBehaviour
                 }
 
                 // 2. Create the Text
-                var textLabel = new Label(paragraphs[i]);
+                var textLabel = new Label(rows[i].text);
                 textLabel.AddToClassList("detail-dynamic-text");
                 if (skipImage)
                 {
@@ -569,7 +569,7 @@ public class PortfolioController : MonoBehaviour
                     // Fetch Image Logic
                     if (loader != null)
                     {
-                        StartCoroutine(loader.LoadExtraImageRoutine(project.extraScreenshots[i], (tex) => {
+                        StartCoroutine(loader.LoadExtraImageRoutine(rows[i].media, (tex) => {
                             if (tex != null)
                             {
                                 extraImg.RemoveFromClassList("skeleton-loader");
@@ -593,7 +593,7 @@ public class PortfolioController : MonoBehaviour
                 // Add the finished row to the screen
                 dynamicContent.Add(rowContainer);
             }
-        }
+        }*/
         string projectNameRoute = project.GetTitle().Replace(" ", "-").ToLower();
 #if UNITY_WEBGL && !UNITY_EDITOR
         WebGLPushHistoryState(projectNameRoute);
@@ -604,9 +604,126 @@ public class PortfolioController : MonoBehaviour
         if (projectDetailView != null) projectDetailView.style.display = DisplayStyle.Flex;*/
     }
 
-    // Called by JS OR our C# fallback methods
-    
 
+    static bool IsBlank(string s)
+    {
+        if (string.IsNullOrWhiteSpace(s)) return true;
+        s = s.Trim();
+        return s.Equals("no", System.StringComparison.OrdinalIgnoreCase)
+            || s.Equals("null", System.StringComparison.OrdinalIgnoreCase);
+    }
+
+    static bool IsVideo(string s) => s.Trim().EndsWith(".mp4", System.StringComparison.OrdinalIgnoreCase);
+
+    void BuildDetailRows(ProjectMetadata project)
+    {
+        videoController.Stop();
+        dynamicContent.Clear();
+
+        int mediaIndex = 0;
+        foreach (var row in project.GetRows())
+        {
+            bool hasMedia = !IsBlank(row.media);
+
+            var rowEl = new VisualElement();
+            rowEl.AddToClassList("detail-dynamic-row");
+
+            var text = new Label(row.text);
+            text.AddToClassList("detail-dynamic-text");
+            if (!hasMedia) text.AddToClassList("detail-dynamic-text--full");
+            rowEl.Add(text);
+
+            if (hasMedia)
+            {
+                if (mediaIndex++ % 2 == 1) rowEl.AddToClassList("detail-dynamic-row--reverse");
+
+                bool isVideo = IsVideo(row.media);
+                string posterPath = isVideo ? row.poster : row.media;
+
+                var holder = new VisualElement();
+                holder.AddToClassList("detail-media-holder");
+
+                var screen = new VisualElement();
+                screen.AddToClassList("detail-dynamic-image");
+                screen.AddToClassList("skeleton-loader");
+
+                var skeleton = new Label("AWAITING ASSET...");
+                skeleton.AddToClassList("skeleton-text");
+                screen.Add(skeleton);
+
+                holder.Add(screen);
+                rowEl.Add(holder);
+
+                if (!IsBlank(posterPath) && loader != null)
+                {
+                    StartCoroutine(loader.LoadExtraImageRoutine(posterPath, tex =>
+                    {
+                        skeleton.RemoveFromHierarchy();
+                        screen.RemoveFromClassList("skeleton-loader");
+
+                        if (tex != null)
+                            screen.style.backgroundImage = new StyleBackground(tex);
+                        else if (!isVideo)
+                        {
+                            holder.style.display = DisplayStyle.None;
+                            rowEl.RemoveFromClassList("detail-dynamic-row--reverse");
+                            text.AddToClassList("detail-dynamic-text--full");
+                        }
+                    }));
+                }
+                else
+                {
+                    skeleton.RemoveFromHierarchy();
+                    screen.RemoveFromClassList("skeleton-loader");
+                }
+
+                if (isVideo) AttachVideo(holder, screen, row.media);
+            }
+
+            dynamicContent.Add(rowEl);
+        }
+    }
+
+    void AttachVideo(VisualElement holder, VisualElement screen, string mediaPath)
+    {
+        string url = videoController.ResolveUrl(mediaPath);
+
+        var overlay = new VisualElement { pickingMode = PickingMode.Ignore };
+        overlay.AddToClassList("detail-video-overlay");
+
+        var playBtn = new Button();
+        playBtn.AddToClassList("detail-video-play");
+        var icon = new VisualElement { pickingMode = PickingMode.Ignore };
+        icon.AddToClassList("detail-video-play-icon");
+        playBtn.Add(icon);
+
+        var status = new Label { pickingMode = PickingMode.Ignore };
+        status.AddToClassList("detail-video-status");
+
+        overlay.Add(playBtn);
+        overlay.Add(status);
+        screen.Add(overlay);
+
+        var fallback = new Button(() => Application.OpenURL(url)) { text = "OPEN IN NEW TAB" };
+        fallback.AddToClassList("detail-video-fallback");
+        fallback.style.display = DisplayStyle.None;
+        holder.Add(fallback);
+
+        var slot = new VideoSlot
+        {
+            screen = screen,
+            overlay = overlay,
+            playButton = playBtn,
+            status = status,
+            fallback = fallback,
+            url = url
+        };
+        playBtn.clicked += () => videoController.Play(slot);
+    }
+
+
+
+    // Called by JS OR our C# fallback methods
     public void OnBrowserStateChanged(string view)
     {
         shaderTracker.TriggerGlitch();
@@ -620,6 +737,8 @@ public class PortfolioController : MonoBehaviour
 #endif
             return;
         }
+
+        if (videoController != null) videoController.Stop();
 
         if (string.IsNullOrEmpty(view) || view == "undefined")
         {

@@ -7,7 +7,6 @@
 .header-title,
 .titlesection-,
 .detail-title,
-.detail-meta-header,
 .hero-title,
 .hero-subtitle,
 .contact-title,
@@ -387,14 +386,12 @@ Button:active,
 }
 
 .detail-dynamic-image {
-    width: 50%; /* Uses safe percentage scaling instead of hard pixels */
-    max-width: 450px; 
-    height: 300px; 
-    flex-shrink: 0; /* Prevents the image from being squished by long text */
-    
-    background-color: transparent; 
-    border-width: 0; 
-    
+    width: 100%;
+    height: 100%;
+    background-color: #0B0C10; 
+    border-width: 1px;
+    border-color: rgba(85, 234, 212, 0.2);
+    border-radius: 8px;
     -unity-background-scale-mode: scale-to-fit;
     justify-content: center;
     align-items: center;
@@ -415,6 +412,42 @@ Button:active,
     padding-left: 0;
     padding-right: 0;
 }
+
+.detail-media-holder { width: 448px; height: 252px; flex-shrink: 0; }
+
+.detail-video-overlay {
+    position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+    align-items: center; justify-content: center;
+}
+.detail-video-play {
+    width: 72px; height: 72px; border-radius: 36px; padding: 0; margin: 0;
+    background-color: rgba(10, 2, 4, 0.75);
+    border-width: 2px; border-color: #f3e600;
+    align-items: center; justify-content: center;
+    align-self: center;
+}
+.detail-video-play:hover { background-color: rgba(243, 230, 0, 0.2); }
+.detail-video-play-icon {
+    width: 0;
+    height: 0;
+    margin-left: 5px; /* Optical centering for the wider base */
+    border-left-width: 18px;
+    border-left-color: #f3e600;
+    border-top-width: 15px;
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-width: 15px;
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+.detail-video-status {
+    position: absolute; bottom: 12px;
+    color: #FFFFFF; font-size: 16px; -unity-font-style: bold;
+}
+.detail-video-fallback {
+    align-self: flex-start; margin-top: 8px; padding: 4px 0;
+    font-size: 16px; color: #00E5FF;
+    background-color: transparent; border-width: 0;
+}
+.detail-video-fallback:hover { color: #f3e600; }
 
 
 /* ===== CP LOADING SCREEN ===== */
@@ -1160,8 +1193,9 @@ INTRO STUFF
 }
 
 .is-mobile .detail-image {
-    height: 250px;
-    margin-bottom: 24px;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 10px;
 }
 
 .is-mobile .detail-meta,
@@ -1171,10 +1205,21 @@ INTRO STUFF
     padding-right: 16px;
 }
 
+/* .is-mobile .detail-dynamic-row,
+.is-mobile .detail-dynamic-row--reverse { flex-direction: column; align-items: flex-start; } */
+.is-mobile .detail-media-holder { 
+    width: 100%;
+    max-width: none;
+    height: 220px; /* Or whatever 16:9 mobile height fits your portrait view best */
+    margin-bottom: 16px; 
+}
+
 
 .is-mobile .detail-dynamic-row, 
 .is-mobile .detail-dynamic-row--reverse {
     flex-direction: column; 
+    padding-left: 0;
+    padding-right: 0;
     margin-bottom: 40px;
 }
 

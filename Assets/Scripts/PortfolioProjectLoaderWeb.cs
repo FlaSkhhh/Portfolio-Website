@@ -463,12 +463,25 @@ public struct ProjectMetadata
     public string platform; public string Platform;
 
     //JSON fields for the full Case Study page
-    public string[] bodyParagraphs; // Array of text blocks for the detail page
-    public string[] extraScreenshots; // Array of paths (e.g., "Screenshots/Game_2")
-    public string role;
-    public string duration;
-    public string[] responsibilities; // Replaces bodyParagraphs
-    public string[] videoUrls;
+    public string[] bodyParagraphs;
+    public string[] extraScreenshots;
+    public ProjectRow[] rows;
+    public List<ProjectRow> GetRows()
+    {
+        var list = new List<ProjectRow>();
+        if (rows != null && rows.Length > 0) { list.AddRange(rows); return list; }
+
+        if (bodyParagraphs != null)
+            for (int i = 0; i < bodyParagraphs.Length; i++)
+                list.Add(new ProjectRow
+                {
+                    text = bodyParagraphs[i],
+                    media = (extraScreenshots != null && i < extraScreenshots.Length) ? extraScreenshots[i] : ""
+                });
+
+        if (list.Count == 0) list.Add(new ProjectRow { text = GetDescription(), media = "" });
+        return list;
+    }
     public string GetTitle() => !string.IsNullOrEmpty(title) ? title : Title;
     public string GetTag() => !string.IsNullOrEmpty(tag) ? tag : Tag;
     public string GetDescription() => !string.IsNullOrEmpty(description) ? description : Description;
@@ -494,4 +507,12 @@ public struct ExperienceData
     public string title;
     public string date;
     public string[] bullets;
+}
+
+[System.Serializable]
+public class ProjectRow
+{
+    public string text;
+    public string media;
+    public string poster;
 }

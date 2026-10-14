@@ -42,25 +42,27 @@
       "caseStudyUrl": "https://yourportfolio.netlify.app/projects/hand-cricket",
       "githubUrl": "https://github.com/yourhandle/hand-cricket",
       "platform": "Android / WebGL",
-      "role": "Solo Programmer",
-      "duration": "8 Months",
-      "responsibilities": [
-        "Optimized game footprint to fit into a 34MB APK with strict asset management.",
-        "Utilized Unity Netcode for GameObjects (NGO) alongside Unity Relay to bypass strict NAT punch-through issues on mobile networks.",
-        "Integrated Unity Lobby to handle 5v5 matchmaking and synced states using custom RPCs and compressed integers.",
-        "Engineered deterministic simulation loops to ensure WebGL and Android clients stayed perfectly synchronized despite frame-rate discrepancies."
-      ],
-      "extraScreenshots": [
-        "Screenshots/HandCricket_Matchmaking.jpg",
-        "",
-        "Screenshots/HandCricket_Gameplay.jpg",
-        ""
-      ],
-      "videoUrls": [
-        "",
-        "https://yourdomain.com/videos/handcricket_matchmaking.mp4",
-        "",
-        "https://yourdomain.com/videos/handcricket_gameplay.mp4"
+      "rows": [
+        {
+          "text": "Optimized game footprint to fit into a 34MB APK with strict asset management.",
+          "media": "Screenshots/HandCricket_Matchmaking.jpg",
+          "poster": ""
+        },
+        {
+          "text": "Utilized Unity Netcode for GameObjects (NGO) alongside Unity Relay to bypass strict NAT punch-through issues on mobile networks.",
+          "media": "https://siennakei.github.io/ATVideos/ChronoTrigger.mp4",
+          "poster": ""
+        },
+        {
+          "text": "Integrated Unity Lobby to handle 5v5 matchmaking and synced states using custom RPCs and compressed integers.",
+          "media": "Screenshots/HandCricket_Gameplay.jpg",
+          "poster": ""
+        },
+        {
+          "text": "Engineered deterministic simulation loops to ensure WebGL and Android clients stayed perfectly synchronized despite frame-rate discrepancies.",
+          "media": "https://yourdomain.com/videos/handcricket_gameplay.mp4",
+          "poster": ""
+        }
       ]
     },
     {
@@ -72,22 +74,22 @@
       "caseStudyUrl": "https://yourportfolio.netlify.app/projects/boss-fight",
       "githubUrl": "https://github.com/yourhandle/boss-fight",
       "platform": "PC / Mac",
-      "role": "Gameplay Programmer",
-      "duration": "4 Weeks",
-      "responsibilities": [
-        "Engineered a modular Finite State Machine (FSM) architecture to manage complex boss behavior transitions without massive update loops.",
-        "Programmed distance checks and health thresholds to drive dynamic state transitions.",
-        "Tied hitbox activations directly to Animation Events, ensuring damage frames perfectly sync with the visual swing of the weapon."
-      ],
-      "extraScreenshots": [
-        "null",
-        "Screenshots/BossFight_Phase2.jpg",
-        ""
-      ],
-      "videoUrls": [
-        "https://yourdomain.com/videos/bossfight_fsm.mp4",
-        "",
-        "https://yourdomain.com/videos/bossfight_hitbox.mp4"
+      "rows": [
+        {
+          "text": "Engineered a modular Finite State Machine (FSM) architecture to manage complex boss behavior transitions without massive update loops.",
+          "media": "https://yourdomain.com/videos/bossfight_fsm.mp4",
+          "poster": ""
+        },
+        {
+          "text": "Programmed distance checks and health thresholds to drive dynamic state transitions.",
+          "media": "Screenshots/BossFight_Phase2.jpg",
+          "poster": ""
+        },
+        {
+          "text": "Tied hitbox activations directly to Animation Events, ensuring damage frames perfectly sync with the visual swing of the weapon.",
+          "media": "",
+          "poster": ""
+        }
       ]
     },
     {
@@ -99,19 +101,17 @@
       "caseStudyUrl": "https://yourportfolio.netlify.app/projects/infinite-runner",
       "githubUrl": "",
       "platform": "Mobile",
-      "role": "Programmer & Tech Art",
-      "duration": "3 Weeks",
-      "responsibilities": [
-        "Wrote a custom HLSL vertex shader that offsets the Y-axis of vertices based on Z-distance, creating world curvature while maintaining flat physics colliders.",
-        "Engineered a procedural generation system using an object pool of track segments to recycle geometry and maintain a strict 60 FPS on lower-end mobile devices."
-      ],
-      "extraScreenshots": [
-        "Screenshots/Runner_ShaderGraph.jpg",
-        "no"
-      ],
-      "videoUrls": [
-        "",
-        "https://yourdomain.com/videos/runner_procedural.mp4"
+      "rows": [
+        {
+          "text": "Wrote a custom HLSL vertex shader that offsets the Y-axis of vertices based on Z-distance, creating world curvature while maintaining flat physics colliders.",
+          "media": "Screenshots/Runner_ShaderGraph.jpg",
+          "poster": ""
+        },
+        {
+          "text": "Engineered a procedural generation system using an object pool of track segments to recycle geometry and maintain a strict 60 FPS on lower-end mobile devices.",
+          "media": "",
+          "poster": ""
+        }
       ]
     },
     {
@@ -123,22 +123,22 @@
       "caseStudyUrl": "",
       "githubUrl": "https://github.com/yourhandle/rollback-netcode",
       "platform": "PC",
-      "role": "Network Programmer",
-      "duration": "6 Weeks",
-      "responsibilities": [
-        "Wrote a custom fixed-point math library to ensure 100% deterministic physics simulations across different CPU architectures.",
-        "Engineered a system to bit-pack inputs into lightweight integers for UDP transmission.",
-        "Developed circular state history buffers to rewind the simulation, apply delayed inputs, and fast-forward back to the current frame in a single tick."
-      ],
-      "extraScreenshots": [
-        "",
-        "",
-        ""
-      ],
-      "videoUrls": [
-        "",
-        "",
-        "https://yourdomain.com/videos/rollback_test.mp4"
+      "rows": [
+        {
+          "text": "Wrote a custom fixed-point math library to ensure 100% deterministic physics simulations across different CPU architectures.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "text": "Engineered a system to bit-pack inputs into lightweight integers for UDP transmission.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "text": "Developed circular state history buffers to rewind the simulation, apply delayed inputs, and fast-forward back to the current frame in a single tick.",
+          "media": "",
+          "poster": ""
+        }
       ]
     },
     {
@@ -150,19 +150,17 @@
       "caseStudyUrl": "",
       "githubUrl": "https://github.com/yourhandle/memory-profiler",
       "platform": "Unity Editor",
-      "role": "Tools Programmer",
-      "duration": "2 Weeks",
-      "responsibilities": [
-        "Developed a lightweight in-engine memory allocation auditor.",
-        "Engineered a generic multi-tier pool manager eliminating GC spikes across scene streaming cycles."
-      ],
-      "extraScreenshots": [
-        "Screenshots/Profiler_UI.jpg",
-        ""
-      ],
-      "videoUrls": [
-        "",
-        ""
+      "rows": [
+        {
+          "text": "Developed a lightweight in-engine memory allocation auditor.",
+          "media": "Screenshots/Profiler_UI.jpg",
+          "poster": ""
+        },
+        {
+          "text": "Engineered a generic multi-tier pool manager eliminating GC spikes across scene streaming cycles.",
+          "media": "",
+          "poster": ""
+        }
       ]
     }
   ]

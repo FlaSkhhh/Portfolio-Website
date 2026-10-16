@@ -7,6 +7,7 @@
 .header-title,
 .titlesection-,
 .detail-title,
+.detail-meta-header,
 .hero-title,
 .hero-subtitle,
 .contact-title,
@@ -273,6 +274,7 @@ Button:active,
     width: 100%;
     flex-grow: 1; 
     background-color: transparent;
+    display: none;
 }
 
 .detail-panel {
@@ -322,22 +324,23 @@ Button:active,
     -unity-background-scale-mode: scale-to-fit; 
 }
 
-.detail-meta,
-.detail-meta-header,
-.detail-description,
-.detail-dynamic-content,
-.detail-footer {
+.detail-meta
+{
     width: 100%;
-    max-width: 900px;
     align-self: center; 
+}
+
+
+.detail-dynamic-content{
+    width: 100%;
     padding-left: 24px;
     padding-right: 24px;
+    align-self: center;
 }
 
 .detail-meta-header {
-    font-size: 20px;
+    font-size: 44px;
     -unity-font-style: bold;
-    letter-spacing: 1.5px;
     color: #00E5FF;
     margin-top: 16px;
     margin-bottom: 12px;
@@ -349,25 +352,13 @@ Button:active,
     margin-bottom: 32px;
 }
 
-.detail-description {
-    font-size: 24px;
-    color: #C0C5D0;
-    white-space: normal;
-    margin-bottom: 48px; 
-}
-
-.detail-footer {
+.detail-action-row{
+    margin-bottom: 120px;
     flex-direction: row;
-    justify-content: flex-start; 
-    border-top-width: 1px;
-    border-top-color: rgba(255, 255, 255, 0.08);
-    padding-top: 32px;
-    padding-bottom: 100px; 
+    flex-grow: 1;
 }
 
-.detail-footer Button {
-    margin-right: 16px;
-}
+
 /* ===== ALTERNATING ZIGZAG CASE STUDY ROWS ===== */
 .detail-dynamic-row {
     flex-direction: row;
@@ -380,17 +371,14 @@ Button:active,
 .detail-dynamic-row--reverse {
     flex-direction: row-reverse;
 }
-.detail-dynamic-row--reverse .detail-dynamic-text {
-    padding-left: 0;
-    padding-right: 40px; 
-}
+
 
 .detail-dynamic-image {
     width: 100%;
     height: 100%;
     background-color: #0B0C10; 
     border-width: 1px;
-    border-color: rgba(85, 234, 212, 0.2);
+    border-color: rgba(229, 40, 58, 0.45);
     border-radius: 8px;
     -unity-background-scale-mode: scale-to-fit;
     justify-content: center;
@@ -403,7 +391,19 @@ Button:active,
     font-size: 24px;
     color: #C0C5D0;
     white-space: normal;
-    padding-left: 40px; 
+    padding: 20px 24px;
+    border-left-width: 2px;
+    border-left-color: #E5283A;
+    border-right-width: 0;
+    margin-right: 48px; /* Gap between text and right media box */
+    margin-left: 0;
+}
+.detail-dynamic-row--reverse .detail-dynamic-text {
+    border-left-width: 0;
+    border-right-width: 2px;
+    border-right-color: #f3e600;
+    margin-right: 0;
+    margin-left: 48px; 
 }
 
 /* Kicks in dynamically via C# when there is no image on the row */
@@ -413,30 +413,38 @@ Button:active,
     padding-right: 0;
 }
 
-.detail-media-holder { width: 448px; height: 252px; flex-shrink: 0; }
+.detail-media-holder { width: 448px; max-width: none; height: 252px; flex-shrink: 0; translate: 0 0; margin-bottom: 0; align-self: center;}
+.detail-dynamic-row--reverse .detail-media-holder { translate: 0 0;}
 
 .detail-video-overlay {
     position: absolute; left: 0; top: 0; right: 0; bottom: 0;
     align-items: center; justify-content: center;
 }
 .detail-video-play {
-    width: 72px; height: 72px; border-radius: 36px; padding: 0; margin: 0;
+    width: 72px; 
+    height: 72px; 
+    border-radius: 36px; 
+    padding: 0; 
+    margin: 0;
     background-color: rgba(10, 2, 4, 0.75);
-    border-width: 2px; border-color: #f3e600;
-    align-items: center; justify-content: center;
+    border-width: 2px; 
+    border-color: #f3e600;
+    align-items: center; 
+    justify-content: center;
     align-self: center;
 }
 .detail-video-play:hover { background-color: rgba(243, 230, 0, 0.2); }
 .detail-video-play-icon {
-    width: 0;
-    height: 0;
-    margin-left: 5px; /* Optical centering for the wider base */
-    border-left-width: 18px;
+    width: 26px;
+    height: 26px;
+    margin-left: 26px; /* Optical center inside the circle */
+    border-left-width: 13px;
     border-left-color: #f3e600;
-    border-top-width: 15px;
+    border-top-width: 13px;
     border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-width: 15px;
+    border-bottom-width: 13px;
     border-bottom-color: rgba(0, 0, 0, 0);
+    scale: 1.7 1; /* Stretches the 45-degree border miter into a 60-degree play triangle */
 }
 .detail-video-status {
     position: absolute; bottom: 12px;
@@ -1183,10 +1191,6 @@ INTRO STUFF
     font-size: 20px;
 }
 
-.is-mobile .detail-description {
-    font-size: 16px;
-}
-
 .is-mobile .nav-btn {
     padding-left: 10px;
     padding-right: 10px;
@@ -1199,8 +1203,7 @@ INTRO STUFF
 }
 
 .is-mobile .detail-meta,
-.is-mobile .detail-meta-header,
-.is-mobile .detail-description {
+.is-mobile .detail-meta-header{
     padding-left: 16px;
     padding-right: 16px;
 }
@@ -1208,32 +1211,64 @@ INTRO STUFF
 /* .is-mobile .detail-dynamic-row,
 .is-mobile .detail-dynamic-row--reverse { flex-direction: column; align-items: flex-start; } */
 .is-mobile .detail-media-holder { 
-    width: 100%;
-    max-width: none;
-    height: 220px; /* Or whatever 16:9 mobile height fits your portrait view best */
-    margin-bottom: 16px; 
+    width: 52%;
+    max-width: 320px;
+    height: 170px;
+    align-self: center;
+    margin-bottom: 12px; 
+    translate: -32% 0; /* -x offset (left of center) */
+    flex-shrink: 0;
 }
 
+.is-mobile .detail-dynamic-row--reverse .detail-media-holder {
+    translate: 32% 0;  /* +x offset (right of center) */
+}
 
 .is-mobile .detail-dynamic-row, 
 .is-mobile .detail-dynamic-row--reverse {
-    flex-direction: column; 
+    flex-direction: column-reverse;
     padding-left: 0;
     padding-right: 0;
+    flex-shrink: 0;
     margin-bottom: 40px;
 }
 
-.is-mobile .detail-dynamic-text {
-    width: 100%;
-    margin-bottom: 24px;
+.is-mobile .detail-dynamic-text{
+    width: 88%;
+    font-size: 20px;
+    padding: 12px 16px;
+    margin: 0;
+    margin-bottom: 30px;
+    flex-grow: 0;   /* Stops vertical flex from collapsing the row height on boot */
+    flex-shrink: 0;
+    flex-basis: auto;
+    border-left-width: 2px;
+    border-left-color: #00E5FF;
+    border-right-width: 0;
+    align-self: flex-start;
+}
+.is-mobile .detail-dynamic-row--reverse .detail-dynamic-text{
+    align-self: flex-end;
+    border-left-width: 0;
+    border-right-width: 2px;
+    border-right-color: #f3e600;
+    -unity-text-align: upper-right;
 }
 
 .is-mobile .detail-dynamic-image {
     width: 100%;
-    height: 220px;
-    margin-bottom: 16px;
+    height: 100%;
 }
 
+.is-mobile .detail-video-play-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 20px;
+    border-left-width: 10px;
+    border-top-width: 10px;
+    border-bottom-width: 10px;
+    scale: 1.7 1;
+}
 .is-mobile .portal--horizontal-hero {
     width: 100%; 
     height: 25%; 

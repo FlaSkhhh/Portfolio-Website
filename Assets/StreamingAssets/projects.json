@@ -60,7 +60,7 @@
         },
         {
           "text": "Engineered deterministic simulation loops to ensure WebGL and Android clients stayed perfectly synchronized despite frame-rate discrepancies.",
-          "media": "https://yourdomain.com/videos/handcricket_gameplay.mp4",
+          "media": "output.mp4",
           "poster": ""
         }
       ]

@@ -83,6 +83,17 @@ public class PortfolioController : MonoBehaviour
             scrollView.mode = ScrollViewMode.Vertical;
             scrollView.mouseWheelScrollSize = 30f;
         });
+       
+        root.RegisterCallback<GeometryChangedEvent>(evt =>
+        {
+            if (evt.newRect.width == 0 || evt.newRect.height == 0) return;
+
+            if (evt.newRect.width < evt.newRect.height)
+                root.AddToClassList("is-mobile");
+            else
+                root.RemoveFromClassList("is-mobile");
+
+        });
 
         introView = root.Q<VisualElement>("IntroView");
         mainPortfolioView = root.Q<VisualElement>("MainPortfolioView");
@@ -145,12 +156,7 @@ public class PortfolioController : MonoBehaviour
             if (headerName != null) headerName.style.display = DisplayStyle.None;
             if (headerExploreBtn != null) headerExploreBtn.style.display = DisplayStyle.None;
 
-
-            float lastViewportWidth = 0f;
-            float lastViewportHeight = 0f;
-            float lastContentHeight = 0f;
-            string lastPageState = "";
-
+            float lastViewportWidth = 0; float lastViewportHeight = 0f; float lastContentHeight = 0f; string lastPageState = "";
             mainScroll.RegisterCallback<GeometryChangedEvent>(evt =>
             {
                 float contentHeight = mainScroll.contentContainer.layout.height;
@@ -171,11 +177,6 @@ public class PortfolioController : MonoBehaviour
                 lastViewportHeight = viewportHeight;
                 lastViewportWidth = viewportWidth;
                 lastPageState = activePageState;
-
-                // --- EVERYTHING BELOW HERE NOW ONLY RUNS WHEN TRULY NECESSARY ---
-
-                if (viewportWidth < viewportHeight) { root.AddToClassList("is-mobile"); }
-                else { root.RemoveFromClassList("is-mobile"); }
 
                 bool isCurrentlyDismissed = (activePageState == "projects") ? hasDismissedChevronProjects : hasDismissedChevronIntro;
 

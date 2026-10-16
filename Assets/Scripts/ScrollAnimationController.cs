@@ -28,6 +28,15 @@ public class ScrollAnimationController : MonoBehaviour
         if (mainScrollArea != null)
         {
             mainScrollArea.verticalScroller.valueChanged += OnScrollPositionChanged;
+
+            // Automatically re-checks card visibility whenever returning from Detail view
+            mainScrollArea.RegisterCallback<GeometryChangedEvent>(evt =>
+            {
+                if (canRevealCards && evt.newRect.height > 0)
+                {
+                    EvaluateRowVisibility();
+                }
+            });
         }
     }
 
@@ -49,6 +58,7 @@ public class ScrollAnimationController : MonoBehaviour
         {
             row.RemoveFromClassList("showcase-row--visible");
             row.AddToClassList("showcase-row--hidden");
+            row.SetEnabled(false);
         }
     }
 
@@ -109,6 +119,7 @@ public class ScrollAnimationController : MonoBehaviour
             {
                 if (row != null)
                 {
+                    row.SetEnabled(true);
                     row.RemoveFromClassList("showcase-row--hidden");
                     row.AddToClassList("showcase-row--visible");
                 }

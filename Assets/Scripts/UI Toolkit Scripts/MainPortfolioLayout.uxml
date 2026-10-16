@@ -89,7 +89,7 @@
         <ui:Label name="ScrollChevron" picking-mode="Ignore" class="scroll-chevron"/>
 
 
-        <ui:VisualElement name="ProjectDetailView" class="project-detail-view" style="display: none;">
+        <ui:VisualElement name="ProjectDetailView" class="project-detail-view">
             <ui:VisualElement class="detail-panel">
                 <ui:VisualElement class="detail-header-row">
                     <ui:Button name="BtnBack" text="←" class="btn-back btn-detail-back"/>
@@ -100,7 +100,7 @@
                     <ui:VisualElement class="detail-meta">
                         <ui:Label text="TECH STACK" class="detail-meta-header"/>
                         <ui:VisualElement name="DetailTagsContainer" class="detail-tag-container"/>
-                        <ui:VisualElement class="detail-action-row" style="flex-direction: row;">
+                        <ui:VisualElement class="detail-action-row">
                             <ui:Button name="BtnDetailGitHub" class="cyber-btn tertiary">
                                 <ui:VisualElement class="cyber-shadow"/>
                                 <ui:VisualElement class="cyber-body"/>

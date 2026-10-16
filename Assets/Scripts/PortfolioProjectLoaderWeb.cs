@@ -273,7 +273,6 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 
     IEnumerator HideLoadingScreen()
     {
-
         yield return new WaitForSeconds(0.3f);
 
         if (loadingScreen != null)

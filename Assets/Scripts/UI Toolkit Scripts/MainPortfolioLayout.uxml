@@ -98,7 +98,6 @@
                 <ui:ScrollView name="DetailScrollArea" class="detail-scroll-area">
                     <ui:VisualElement name="DetailImage" class="detail-image"/>
                     <ui:VisualElement class="detail-meta">
-                        <ui:Label text="TECH STACK" class="detail-meta-header"/>
                         <ui:VisualElement name="DetailTagsContainer" class="detail-tag-container"/>
                         <ui:VisualElement class="detail-action-row">
                             <ui:Button name="BtnDetailGitHub" class="cyber-btn tertiary">

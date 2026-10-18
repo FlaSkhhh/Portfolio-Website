@@ -211,7 +211,9 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
                     // Put Paragraph 0 next to the image
                     if (topLabel != null)
                     {
-                        topLabel.text = portfolioData.about.paragraphs[0] +"\n" + portfolioData.about.paragraphs[1];
+                        topLabel.text = portfolioData.about.paragraphs.Count > 1
+                                        ? portfolioData.about.paragraphs[0] + "\n\n" + portfolioData.about.paragraphs[1]
+                                        : portfolioData.about.paragraphs[0];
                     }
 
                     // Put all remaining paragraphs in the bottom label
@@ -221,6 +223,10 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
                         var remainingParagraphs = portfolioData.about.paragraphs.GetRange(2, remainingCount);
 
                         bottomLabel.text = string.Join("\n", remainingParagraphs);
+                    }
+                    else
+                    {
+                        if (bottomLabel != null) bottomLabel.text = "";
                     }
                 }
             }
@@ -288,6 +294,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         }
     }
 
+    //Creates project cards for explore page
     void CreateShowcaseRow(ProjectMetadata project, int index)
     {
         VisualElement rowElement = projectShowcaseRowTemplate.CloneTree();
@@ -309,7 +316,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         if (tagContainer != null)
         {
             tagContainer.Clear();
-            string[] tags = project.GetTag().Split(new char[] { ',', '|' }, System.StringSplitOptions.RemoveEmptyEntries);
+            string[] tags = project.GetTag().Split(new char[] { ',', '|' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var t in tags) { var pill = new Label(t.Trim()); pill.AddToClassList("tech-pill"); tagContainer.Add(pill); }
         }
 
@@ -511,6 +518,7 @@ public struct ExperienceData
 [System.Serializable]
 public class ProjectRow
 {
+    public string header;
     public string text;
     public string media;
     public string poster;

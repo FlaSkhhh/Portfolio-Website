@@ -36,7 +36,7 @@
     {
       "id": "hand-cricket",
       "title": "Real-Time Multiplayer Hand Cricket",
-      "tag": "Unity Netcode | 34MB APK",
+      "tag": "Unity Netcode , 34MB APK , Multiplayer , Cross-Platform , Optimised",
       "description": "Performance-optimized up to 5v5 team-based multiplayer game utilizing Unity Netcode, Relay, and Lobby services with custom RPCs and cross-platform Android/WebGL simulation.",
       "screenshotUrl": "Screenshots/HandCricket.jpg",
       "caseStudyUrl": "https://yourportfolio.netlify.app/projects/hand-cricket",
@@ -44,21 +44,25 @@
       "platform": "Android / WebGL",
       "rows": [
         {
+          "header": "Optmisation",
           "text": "Optimized game footprint to fit into a 34MB APK with strict asset management.",
           "media": "Screenshots/HandCricket_Matchmaking.jpg",
           "poster": ""
         },
         {
+          "header": "",
           "text": "Utilized Unity Netcode for GameObjects (NGO) alongside Unity Relay to bypass strict NAT punch-through issues on mobile networks.",
           "media": "https://siennakei.github.io/ATVideos/ChronoTrigger.mp4",
           "poster": ""
         },
         {
+          "header": "",
           "text": "Integrated Unity Lobby to handle 5v5 matchmaking and synced states using custom RPCs and compressed integers.",
           "media": "Screenshots/HandCricket_Gameplay.jpg",
           "poster": ""
         },
         {
+          "header": "",
           "text": "Engineered deterministic simulation loops to ensure WebGL and Android clients stayed perfectly synchronized despite frame-rate discrepancies.",
           "media": "output.mp4",
           "poster": ""
@@ -68,7 +72,7 @@
     {
       "id": "boss-fight",
       "title": "State-Based 2D Boss Fight",
-      "tag": "AI & FSM | Combat Systems",
+      "tag": "AI & FSM , Combat Systems",
       "description": "Modular boss AI designed using Finite State Machines to manage complex behavior transitions, attack patterns, and animation events across multiple combat phases.",
       "screenshotUrl": "Screenshots/BossFight.jpg",
       "caseStudyUrl": "https://yourportfolio.netlify.app/projects/boss-fight",
@@ -76,16 +80,19 @@
       "platform": "PC / Mac",
       "rows": [
         {
+          "header": "",
           "text": "Engineered a modular Finite State Machine (FSM) architecture to manage complex boss behavior transitions without massive update loops.",
-          "media": "https://yourdomain.com/videos/bossfight_fsm.mp4",
+          "media": "",
           "poster": ""
         },
         {
+          "header": "",
           "text": "Programmed distance checks and health thresholds to drive dynamic state transitions.",
           "media": "Screenshots/BossFight_Phase2.jpg",
           "poster": ""
         },
         {
+          "header": "",
           "text": "Tied hitbox activations directly to Animation Events, ensuring damage frames perfectly sync with the visual swing of the weapon.",
           "media": "",
           "poster": ""
@@ -103,11 +110,13 @@
       "platform": "Mobile",
       "rows": [
         {
+          "header": "",
           "text": "Wrote a custom HLSL vertex shader that offsets the Y-axis of vertices based on Z-distance, creating world curvature while maintaining flat physics colliders.",
           "media": "Screenshots/Runner_ShaderGraph.jpg",
           "poster": ""
         },
         {
+          "header": "",
           "text": "Engineered a procedural generation system using an object pool of track segments to recycle geometry and maintain a strict 60 FPS on lower-end mobile devices.",
           "media": "",
           "poster": ""
@@ -125,16 +134,19 @@
       "platform": "PC",
       "rows": [
         {
+          "header": "",
           "text": "Wrote a custom fixed-point math library to ensure 100% deterministic physics simulations across different CPU architectures.",
           "media": "",
           "poster": ""
         },
         {
+          "header": "",
           "text": "Engineered a system to bit-pack inputs into lightweight integers for UDP transmission.",
           "media": "",
           "poster": ""
         },
         {
+          "header": "",
           "text": "Developed circular state history buffers to rewind the simulation, apply delayed inputs, and fast-forward back to the current frame in a single tick.",
           "media": "",
           "poster": ""
@@ -152,11 +164,13 @@
       "platform": "Unity Editor",
       "rows": [
         {
+          "header": "",
           "text": "Developed a lightweight in-engine memory allocation auditor.",
           "media": "Screenshots/Profiler_UI.jpg",
           "poster": ""
         },
         {
+          "header": "",
           "text": "Engineered a generic multi-tier pool manager eliminating GC spikes across scene streaming cycles.",
           "media": "",
           "poster": ""

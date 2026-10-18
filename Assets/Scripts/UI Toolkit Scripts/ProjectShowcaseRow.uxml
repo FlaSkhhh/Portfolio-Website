@@ -20,14 +20,14 @@
 
 			<ui:VisualElement class="button-row">
  
-				<ui:Button name="BtnCaseStudy" class="cyber-btn ghost" style="right-margin: 20px;">
+				<ui:Button name="BtnCaseStudy" class="cyber-btn ghost">
                     <ui:VisualElement class="cyber-shadow" />
                     <ui:VisualElement class="cyber-body">
                     </ui:VisualElement>
                     <ui:Label text="OPEN" class="cyber-text"/> 
                 </ui:Button>
 
-				<ui:Button name="BtnGitHub" class="cyber-btn quaternary" style="left-margin: 20px;">
+				<ui:Button name="BtnGitHub" class="cyber-btn quaternary">
                     <ui:VisualElement class="cyber-shadow" />
                     <ui:VisualElement class="cyber-body"> 
                     </ui:VisualElement> 

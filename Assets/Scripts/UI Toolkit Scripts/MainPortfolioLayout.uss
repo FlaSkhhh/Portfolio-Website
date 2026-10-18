@@ -5,15 +5,14 @@
 /* Cyberpunk display font for Headers, Buttons, and Retro text */
 .cyber-text,
 .header-title,
-.titlesection-,
 .detail-title,
-.detail-meta-header,
 .hero-title,
 .hero-subtitle,
 .contact-title,
 .cyber-header,
 .intro-section-title,
-.section-title{
+.section-title,
+.detail-section-header{
     -unity-font-definition: url('project://database/Assets/Resources/Orbitron-Regular.ttf');
 }
 Scroller {
@@ -309,19 +308,16 @@ Button:active,
 }
 
 .detail-image {
-    width: 100%;
-    max-width: 1000px; 
-    align-self: center; 
-    height: 450px; 
-    min-height: 300px;
-    max-height: 600px;
+    width: 896px;
+    height: 504px;
+    align-self: center;
     background-color: #0B0C10;
     border-radius: 12px;
     border-width: 1px;
     border-color: rgba(255, 255, 255, 0.08);
     margin-top: 32px; 
-    margin-bottom: 40px;
-    -unity-background-scale-mode: scale-to-fit; 
+    margin-bottom: 24px;
+    -unity-background-scale-mode: scale-and-crop;
 }
 
 .detail-meta
@@ -338,40 +334,70 @@ Button:active,
     align-self: center;
 }
 
-.detail-meta-header {
-    font-size: 44px;
-    -unity-font-style: bold;
-    color: #00E5FF;
-    margin-top: 16px;
-    margin-bottom: 12px;
-}
-
 .detail-tag-container {
     flex-direction: row;
     flex-wrap: wrap;
     margin-bottom: 32px;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
 }
 
+.tech-pill {
+    background-color: rgba(0, 229, 255, 0.12);
+    color: #00E5FF;
+    padding: 6px 12px;
+    font-size: 16px;
+    -unity-font-style: bold;
+    border-width: 1px;
+    border-color: rgba(0, 229, 255, 0.25);
+    border-radius: 4px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
 .detail-action-row{
+    width: 100%;
     margin-bottom: 120px;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;    
     flex-grow: 1;
 }
 
-
+.detail-section-header {
+    width: 100%;
+    font-size: 26px;
+    color: #00E5FF;
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+    white-space: normal;
+    margin-top: 32px;
+    margin-bottom: 32px;
+    padding-bottom: 12px;
+    border-bottom-width: 4px;
+    border-bottom-color: rgba(0, 229, 255, 0.25);
+    flex-shrink: 0;
+}
+.detail-section-header--first {
+    margin-top: 0;
+}
 /* ===== ALTERNATING ZIGZAG CASE STUDY ROWS ===== */
 .detail-dynamic-row {
     flex-direction: row;
     width: 100%;
     align-items: center; /* Vertically centers the text alongside the image */
-    margin-bottom: 56px; /* Heavy breathing room between sections */
+    margin-bottom: 26px; /* Heavy breathing room between sections */
+    margin-top: 26px; /* Heavy breathing room between sections */
 }
 
 /* Instantly flips the flexbox layout so Image is Left and Text is Right */
 .detail-dynamic-row--reverse {
     flex-direction: row-reverse;
 }
-
+.detail-dynamic-row--full {
+    margin-bottom: -10px;
+    margin-top: -10px;
+}
 
 .detail-dynamic-image {
     width: 100%;
@@ -393,7 +419,7 @@ Button:active,
     white-space: normal;
     padding: 20px 24px;
     border-left-width: 2px;
-    border-left-color: #E5283A;
+    border-left-color: #FF007C;
     border-right-width: 0;
     margin-right: 48px; /* Gap between text and right media box */
     margin-left: 0;
@@ -409,8 +435,17 @@ Button:active,
 /* Kicks in dynamically via C# when there is no image on the row */
 .detail-dynamic-text--full {
     width: 100%;
-    padding-left: 0;
-    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 10px 24px;
+    
+    /* Symmetrical borders remove the "Left Row" feeling */
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-left-color: #FF007C;
+    border-right-color: #f3e600; /* Mixing cyan and yellow looks incredibly cyberpunk */
+    
+    background-color: rgba(11, 12, 16, 0.6);
 }
 
 .detail-media-holder { width: 448px; max-width: none; height: 252px; flex-shrink: 0; translate: 0 0; margin-bottom: 0; align-self: center;}
@@ -1196,14 +1231,21 @@ INTRO STUFF
     padding-right: 10px;
 }
 
-.is-mobile .detail-image {
-    width: 100%;
-    height: 100%;
-    margin-bottom: 10px;
+.is-mobile .detail-section-header {
+    font-size: 32px;
+    letter-spacing: 1.5px;
+    margin-bottom: 24px;
+    padding-bottom: 8px;
 }
 
-.is-mobile .detail-meta,
-.is-mobile .detail-meta-header{
+.is-mobile .detail-image {
+    width: 640px;
+    max-width: 92%;
+    height: 360px;
+    margin-bottom: 24px;
+}
+
+.is-mobile .detail-meta{
     padding-left: 16px;
     padding-right: 16px;
 }
@@ -1230,29 +1272,30 @@ INTRO STUFF
     padding-left: 0;
     padding-right: 0;
     flex-shrink: 0;
-    margin-bottom: 40px;
+    margin-bottom: 18px;
+    margin-top: 18px;
 }
 
-.is-mobile .detail-dynamic-text{
-    width: 88%;
-    font-size: 20px;
-    padding: 12px 16px;
+.is-mobile .detail-dynamic-text {
+    width: 100%;             /* Fills the space evenly under the image */
+    align-self: center;      /* Centers it instead of hugging left/right */
+    padding: 16px 20px;
     margin: 0;
-    margin-bottom: 30px;
-    flex-grow: 0;   /* Stops vertical flex from collapsing the row height on boot */
-    flex-shrink: 0;
-    flex-basis: auto;
+    margin-bottom: 24px;
+    
+    -unity-text-align: middle-left; /* Keeps text readable on small screens */
+    
+    /* Adds the double border to EVERY text box on mobile */
+    border-radius: 0;
     border-left-width: 2px;
-    border-left-color: #00E5FF;
-    border-right-width: 0;
-    align-self: flex-start;
-}
-.is-mobile .detail-dynamic-row--reverse .detail-dynamic-text{
-    align-self: flex-end;
-    border-left-width: 0;
     border-right-width: 2px;
+    border-left-color: #FF007C;
     border-right-color: #f3e600;
-    -unity-text-align: upper-right;
+}
+.is-mobile .detail-dynamic-row--reverse .detail-dynamic-text {
+    align-self: center;
+    -unity-text-align: middle-left;
+    /* We don't need to touch borders here anymore! */
 }
 
 .is-mobile .detail-dynamic-image {

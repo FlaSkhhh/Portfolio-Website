@@ -515,7 +515,6 @@ public class PortfolioController : MonoBehaviour
             detailImage.style.backgroundImage = new StyleBackground(heroScreenshot);
             detailImage.style.display = DisplayStyle.Flex;
         }
-        else if (detailImage != null) detailImage.style.display = DisplayStyle.None;
 
         // Toggle the Action Row Buttons
         if (btnDetailDemo != null) btnDetailDemo.style.display = string.IsNullOrEmpty(currentDemoUrl) ? DisplayStyle.None : DisplayStyle.Flex;
@@ -523,78 +522,7 @@ public class PortfolioController : MonoBehaviour
 
         // 3. GENERATE DYNAMIC JSON CONTENT (Text & Extra Images)
         BuildDetailRows(project);
-        /*if (dynamicContent != null)
-        {
-            dynamicContent.Clear();
-
-            ProjectRow[] rows = project.rows != null && project.rows.Length > 0
-                ? project.rows
-                : new ProjectRow[] { new ProjectRow { text = project.GetDescription() } };
-
-            for (int i = 0; i < rows.Length; i++)
-            {
-                // 1. Create the Row Container
-                var rowContainer = new VisualElement();
-                rowContainer.AddToClassList("detail-dynamic-row");
-
-                string imgPath = rows[i].media;
-                bool skipImage = string.IsNullOrEmpty(imgPath) || imgPath.Trim().ToLower() == "no" || imgPath.Trim().ToLower() == "null";
-
-                // Alternate layout: Even rows = Text Left, Odd rows = Text Right
-                if (!skipImage && i % 2 != 0)
-                {
-                    rowContainer.AddToClassList("detail-dynamic-row--reverse");
-                }
-
-                // 2. Create the Text
-                var textLabel = new Label(rows[i].text);
-                textLabel.AddToClassList("detail-dynamic-text");
-                if (skipImage)
-                {
-                    // If there's no image, remove the zigzag gap padding
-                    textLabel.AddToClassList("detail-dynamic-text--full");
-                }
-                rowContainer.Add(textLabel);
-                if (!skipImage)
-                {
-                    var extraImg = new VisualElement();
-                    extraImg.AddToClassList("detail-dynamic-image");
-                    extraImg.AddToClassList("skeleton-loader"); // Yellow dashed frame
-
-                    var skeletonLabel = new Label("AWAITING ASSET...");
-                    skeletonLabel.AddToClassList("skeleton-text");
-                    extraImg.Add(skeletonLabel);
-
-                    rowContainer.Add(extraImg);
-
-                    // Fetch Image Logic
-                    if (loader != null)
-                    {
-                        StartCoroutine(loader.LoadExtraImageRoutine(rows[i].media, (tex) => {
-                            if (tex != null)
-                            {
-                                extraImg.RemoveFromClassList("skeleton-loader");
-                                extraImg.Clear();
-                                extraImg.style.backgroundImage = new StyleBackground(tex);
-                            }
-                            else
-                            {
-                                extraImg.style.display = DisplayStyle.None;
-                                textLabel.style.width = new StyleLength(Length.Percent(100)); // Expand text if image fails
-                            }
-                        }));
-                    }
-                }
-                else
-                {
-                    // If the JSON explicitly skips the image, force the text to take up 100% width
-                    textLabel.style.width = new StyleLength(Length.Percent(100));
-                }
-
-                // Add the finished row to the screen
-                dynamicContent.Add(rowContainer);
-            }
-        }*/
+       
         string projectNameRoute = project.GetTitle().Replace(" ", "-").ToLower();
 #if UNITY_WEBGL && !UNITY_EDITOR
         WebGLPushHistoryState(projectNameRoute);
@@ -624,14 +552,32 @@ public class PortfolioController : MonoBehaviour
         int mediaIndex = 0;
         foreach (var row in project.GetRows())
         {
+            if (!IsBlank(row.header))
+            {
+                var headerLabel = new Label(row.header.ToUpper());
+                headerLabel.AddToClassList("detail-section-header");
+                if (dynamicContent.childCount == 0)
+                    headerLabel.AddToClassList("detail-section-header--first");
+
+                dynamicContent.Add(headerLabel);
+            }
+
             bool hasMedia = !IsBlank(row.media);
+            if (IsBlank(row.text) && !hasMedia) continue;
 
             var rowEl = new VisualElement();
             rowEl.AddToClassList("detail-dynamic-row");
 
             var text = new Label(row.text);
             text.AddToClassList("detail-dynamic-text");
-            if (!hasMedia) text.AddToClassList("detail-dynamic-text--full");
+
+            // Add the full-width class if no media is present
+            if (!hasMedia)
+            {
+                text.AddToClassList("detail-dynamic-text--full");
+                rowEl.AddToClassList("detail-dynamic-row--full");
+            }
+
             rowEl.Add(text);
 
             if (hasMedia)
@@ -683,6 +629,11 @@ public class PortfolioController : MonoBehaviour
 
             dynamicContent.Add(rowEl);
         }
+
+        var bottomSpacer = new VisualElement();
+        bottomSpacer.style.height = 120; // 120 pixels of empty space at the bottom
+        bottomSpacer.style.flexShrink = 0; // Prevents UI Toolkit from squishing it
+        dynamicContent.Add(bottomSpacer);
     }
 
     void AttachVideo(VisualElement holder, VisualElement screen, string mediaPath)

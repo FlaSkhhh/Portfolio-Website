@@ -23,48 +23,282 @@
   ],
   "education": "B.Tech in Electronics & Communication Engineering | IIIT Pune",
   "skills": [
-    "C#", 
-    "Unity 3D / 2D", 
-    "Unity Netcode (NGO)", 
-    "Firebase / PlayFab", 
-    "Matchmaking & Lobbies", 
-    "FSMs & AI", 
-    "Memory Optimization", 
-    "UI Toolkit & USS"
-  ],
+      "C# (Unity)",
+      "Multiplayer Netcode",
+      "Firebase & PlayFab",
+      "Web3 & APIs",
+      "Live-Ops",
+      "Anti-Cheat",
+      "Optimisation",
+      "UI Toolkit & UGUI"
+    ],
   "projects": [
+    {
+      "id": "cpl",
+      "title": "Caro Premier League (CPL)",
+      "tag": "Unity C# | Firebase & PlayFab | Web3 APIs | Live-Ops | Optimisation",
+      "description": "Commercial 1v1 NFT cricket game live on Google Play and the iOS App Store, featuring serverless matchmaking, Cloud Function tournaments, and an 80%+ reduction in build and bandwidth footprint.",
+      "screenshotUrl": "Screenshots/CPL.jpg",
+      "caseStudyUrl": "https://www.cplgames.io/",
+      "githubUrl": "http://play.google.com/store/apps/details?id=com.metaoryx.caro11",
+      "platform": "Android / iOS",
+      "rows": [
+        {
+          "header": "OVERVIEW",
+          "text": "Commercial 1v1 NFT cricket game, live on Google Play and the iOS App Store. Joined during the early stages and drove full stack development as the sole programmer through to a dual store release and live-ops maintenance.",
+          "media": "Screenshots/CPL_Gameplay.mp4",
+          "poster": "Screenshots/CPL.jpg"
+        },
+        {
+          "header": "WEB3 & AUTH",
+          "text": "Integrated external marketplace and wallet REST APIs for inventory management and in game token transactions.",
+          "media": "Screenshots/CPL_WalletTeam.jpg",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "Eliminated cross app password desyncs by utilizing the immutable wallet IDs to make custom JWT token for Firebase login through Firebase cloud functions.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "Architected a dynamic reward distribution algorithm that splits payouts across multiple NFTs in a single API payload according to each NFT's balance limit.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "MATCHMAKING & AI",
+          "text": "Implemented interval based matchmaking: queues trigger on fixed rounded minutes, persisting across app restarts via timestamps with team validations and push reminders.",
+          "media": "Screenshots/CPL_Matchmaking.jpg",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "Built an interactive tutorial and the AI bot from scratch inside an online-only architecture, alongside code based lobbies and online player challenges.",
+          "media": "Screenshots/CPL_BotTutorial.mp4",
+          "poster": ""
+        },
+        {
+          "header": "CHALLENGES",
+          "text": "Resolved critical network latency desyncs in the core batting loop where delayed bat swing packets caused local misses and discrepancies on the one screen by bypassing local swing timing checks on the receiving client to drive ball trajectory deterministically from authoritative hit events.",
+          "media": "Screenshots/CPL_HitSync.mp4",
+          "poster": ""
+        },
+        {
+          "header": "LIVE-OPS",
+          "text": "Rebuilt the tournament infrastructure using automated Firebase Cloud Functions running on 10 minute intervals and OneSignal push notifications to pair players and advance brackets without a dedicated server.",
+          "media": "Screenshots/CPL_Tournament.jpg",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "Developed a standalone LiveOps Admin Dashboard allowing non technical staff to manage game modes, moderate accounts, resolve support tickets, and audit token flow across custom date ranges.",
+          "media": "Screenshots/CPL_AdminPanel.jpg",
+          "poster": ""
+        },
+        {
+          "header": "ANTI-EXPLOIT",
+          "text": "Prevented NFT trade exploits by adding cooldowns to NFTs that have already collected rewards for daily tasks by storing them in hashsets inside the DB based on dates.",
+          "media": "Screenshots/CPL_GameModes.jpg",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "Hardened client side integrity using CodeStage Anti-Cheat Toolkit (ACTk) memory obfuscation, injection and speed-hack detection, and forced startup version and ban status gates.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "PRODUCTION",
+          "text": "Created a runtime character swapper: unified the player roster onto a single custom animated rig, scripting dynamic face mesh and kit swaps to cut animation workload by over 90%.",
+          "media": "Screenshots/CPL_WinAnimation.mp4",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "Built a multi language Audio Manager supporting localised commentary swapping from settings and features sequential non repeating dialogue lines.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "OPTIMISATION",
+          "text": "Cut the compiled build footprint by over 80% (from 1GB+ down to a <170MB Google Play AAB) through multi tier texture, mesh, audio, and animation keyframe compression.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "Curbed Firebase download costs caused by continuous real time node listeners, replacing them with local snapshot caching and shallow REST queries to slash daily bandwidth from multiple gigabytes to under 100MB across 30+ DAUs.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "Reduced UI rendering overhead by packing releated 2D visual assets into sprite sheets and sprite atlases and isolating frequently updating HUD elements into nested canvases, eliminating redundant draw calls and layout rebuilds.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "RELEASE & HANDOVER",
+          "text": "Navigated Apple App Store and Google Play policy guidelines to secure store certification for a tokenised external asset mobile game, integrating native gallery avatar uploads and win screen referral screenshot sharing.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "Collaborated with client side team, QA testers, and external developers, authoring the Game Design Document (GDD) and technical handover docs to transition the project.",
+          "media": "",
+          "poster": ""
+        }
+      ]
+    },
+    {
+      "id": "super-over-cricket",
+      "title": "Super Over Cricket",
+      "tag": "PlayFab Matchmaking | Facebook SDK | LiveOps Tuning | Firebase | Release Management",
+      "description": "Commercial 1v1 multiplayer cricket title on Android featuring skill-based matchmaking, Facebook cloud saves and backup, and remote liveops physics tuning with 30k+ downloads.",
+      "screenshotUrl": "Screenshots/SuperOver.jpg",
+      "caseStudyUrl": "",
+      "githubUrl": "",
+      "platform": "Android",
+      "rows": [
+        {
+          "header": "OVERVIEW",
+          "text": "Commercial 1v1 multiplayer cricket game on Android that reached 30k+ organic downloads. Took over late stage production as sole programmer, completing social systems, UI/UX changes, matchmaking, release, and maintenance.",
+          "media": "Screenshots/SuperOver_Gameplay.mp4",
+          "poster": "Screenshots/SuperOver.jpg"
+        },
+        {
+          "header": "MATCHMAKING & AI",
+          "text": "Architected PlayFab skill based matchmaking (SBMM) rules with gradual restriction falloffs that expand search parameters and route into AI bot matches when queue timers expire.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "Built an engaging tutorial to onboard new players into the timing based batting and bowling mechanics before entering live queues.",
+          "media": "Screenshots/SuperOver_Tutorial.mp4",
+          "poster": ""
+        },
+        {
+          "header": "SOCIAL & AUTH",
+          "text": "Integrated the Facebook SDK for persistent cross install cloud saves and profile syncing (displaying player names and avatars), alongside guest login fallbacks and compliant in app user data deletion pipelines.",
+          "media": "Screenshots/SuperOver_Facebook.jpg",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "Built a friend system that links Facebook friends and recent friend/private match opponents, paired with native OS clipboard scraping to auto paste room codes for instant lobby joins.",
+          "media": "Screenshots/SuperOver_Friends.jpg",
+          "poster": ""
+        },
+        {
+          "header": "CHALLENGES",
+          "text": "Eliminated batting desyncs across high latency mobile connections by decoupling receiving client swing colliders and driving ball flight directly from the authoritative hit timestamp.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "Completed 3 months of post launch maintenance over remote macOS screen share after issues with google account flags blocking the store submission.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "LIVE-OPS & DATA",
+          "text": "Developed a Firebase connected Admin Panel to ban or reset accounts, inspect recent player activity, and remotely tune live gameplay physics (ball speed, display speed, and spin values) without pushing client patches.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "Structured Firebase Security Rules and database indexing to store and query timestamp ordered ball by ball match histories, alongside Firebase Analytics and Crashlytics event tracking.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "OPTIMISATION & RELEASE",
+          "text": "Compressed 3D stadium models and textures to run on low-end Android devices within a 70 80MB download size and <200MB installed footprint, plus a background session timer that forces a clean home screen reload after prolonged inactivity.",
+          "media": "",
+          "poster": ""
+        }
+      ]
+    },
     {
       "id": "hand-cricket",
       "title": "Real-Time Multiplayer Hand Cricket",
-      "tag": "Unity Netcode , 34MB APK , Multiplayer , Cross-Platform , Optimised",
-      "description": "Performance-optimized up to 5v5 team-based multiplayer game utilizing Unity Netcode, Relay, and Lobby services with custom RPCs and cross-platform Android/WebGL simulation.",
+      "tag": "Unity Netcode | Cross-Platform | Lobby & Relay | Team Multiplayer | Highly Optimised",
+      "description": "Cross-platform up to 5v5 multiplayer adaptation of the real life hand cricket game built for Android and WebGL, featuring ultra lightweight netcode and a compact build size.",
       "screenshotUrl": "Screenshots/HandCricket.jpg",
-      "caseStudyUrl": "https://yourportfolio.netlify.app/projects/hand-cricket",
-      "githubUrl": "https://github.com/yourhandle/hand-cricket",
+      "caseStudyUrl": "https://flaskhhh.github.io/Hand-Cricket/",
+      "githubUrl": "https://github.com/FlaSkhhh/Hand-Cricket",
       "platform": "Android / WebGL",
       "rows": [
         {
-          "header": "Optmisation",
-          "text": "Optimized game footprint to fit into a 34MB APK with strict asset management.",
+          "header": "OVERVIEW",
+          "text": "An up to 5v5 real-time multiplayer adaptation of the classic childhood hand game. Kept total raw assets to just 6MB (including a 3MB OST) by keyframing 3D hand animations directly in Unity's Animator and creating all 2D UI sprites from scratch in Paint, shipping the entire project in a compact 34MB APK.",
+          "media": "Screenshots/HandCricket_Gameplay.mp4",
+          "poster": "Screenshots/HandCricket.jpg"
+        },
+        {
+          "header": "",
+          "text": "Designed a classroom-style 3D menu where players sit on a bench with a paper holding the UI, a blackboard displaying live lobby team data, and a canteen play space where character avatars dynamically swap seats.",
+          "media": "Screenshots/HandCricket_DioramaMenu.jpg",
+          "poster": ""
+        },
+        {
+          "header": "CROSS-PLAY",
+          "text": "Engineered crossplay between Android and WebGL to allow instant browser access across any device without requiring an APK install.",
           "media": "Screenshots/HandCricket_Matchmaking.jpg",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Utilized Unity Netcode for GameObjects (NGO) alongside Unity Relay to bypass strict NAT punch-through issues on mobile networks.",
-          "media": "https://siennakei.github.io/ATVideos/ChronoTrigger.mp4",
+          "text": "Script logic dynamically switches Unity Transport between DTLS on mobile and WebSockets (WSS) on WebGL at startup to route traffic through Unity Relay.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "OPTIMISED NETCODE",
+          "text": "Minimised network bandwidth by syncing only team player ID lists and team names via persistent NetworkLists and NetworkVariables, handling player names, connection statuses, game states, and team transitions via lightweight Host-authoritative RPCs.",
+          "media": "Screenshots/HandCricket_RunSelection.mp4",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Integrated Unity Lobby to handle 5v5 matchmaking and synced states using custom RPCs and compressed integers.",
-          "media": "Screenshots/HandCricket_Gameplay.jpg",
+          "text": "Because the architecture is purely event-driven, the project uses zero NetworkTransform or NetworkAnimator components. All 3D 'Hot Seat' table rotations, sideline spectator movements, and hand gestures execute deterministically on the client.",
+          "media": "Screenshots/HandCricket_TableHotSeat.jpg",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Engineered deterministic simulation loops to ensure WebGL and Android clients stayed perfectly synchronized despite frame-rate discrepancies.",
-          "media": "output.mp4",
+          "text": "Instead of pinging heartbeats to keep the Unity Lobby alive during gameplay, the host deletes the lobby on match launch and spins up a fresh one at match end, passing the new Lobby ID over the active Relay connection so players automatically rejoin.",
+          "media": "Screenshots/HandCricket_LobbyLineup.mp4",
+          "poster": ""
+        },
+        {
+          "header": "CHALLENGES",
+          "text": "Resolved WebGL single-threading silent failures of Task/async-await calls and multithreaded RPC executions, which ran fine on Android and in the Editor but failed in browsers. Refactored asynchronous network flows into Coroutines and void RPCs for stable browser cross-play.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "Handled mid-match disconnections with custom index-shifting logic that recalculates batting and bowling orders on the fly—waiting for current over animations to finish before replacing a dropped batsman—alongside a 30-second RPC load barrier and host-drop fallbacks.",
+          "media": "Screenshots/HandCricket_DisconnectPopup.jpg",
+          "poster": ""
+        },
+        {
+          "header": "CUSTOM UI & AVATARS",
+          "text": "Modeled the in-game scoreboard overlay after Cricket World Cup broadcast graphics, tracking live batsman stats on the left, total score, overs, and inning targets in the center, and bowler figures on the right.",
+          "media": "Screenshots/HandCricket_BroadcastHUD.jpg",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "Expanded a minimal asset pack (3 faces, 3 hats) into hundreds of combinations using an HSV body color slider to tint materials. First-time players generate a randomised avatar saved to PlayerPrefs and synced via a compact string ('{face}{hat}{hue}').",
+          "media": "Screenshots/HandCricket_Customiser.jpg",
           "poster": ""
         }
       ]

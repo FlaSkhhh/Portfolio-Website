@@ -1,76 +1,101 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Engineering Portfolio</title>
-    <style>
-      /* Reset default browser margins and hide scrollbars */
-      html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background-color: #121212; /* Matches your dark theme instantly */
-      }
-      /* Force the canvas to occupy the entire viewport absolute space */
-      #unity-container {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-      }
-      #unity-canvas {
-        width: 100% !important;
-        height: 100% !important;
-        display: block;
-      }
-      #unity-loading-bar {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        color: #ffffff;
-        font-family: sans-serif;
-        text-align: center;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="unity-container">
-      <canvas id="unity-canvas"></canvas>
-      <div id="unity-loading-bar">Initializing Systems...</div>
-    </div>
-    <script>
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+				<meta name="theme-color" content="#0b0204">
+					<title>Shantanu Nandkhile | Generalist Game Programmer</title>
+					<meta name="description" content="Portfolio of Shantanu Nandkhile, a generalist game programmer working in Unity and C#.">
+						<meta property="og:type" content="website">
+							<meta property="og:title" content="Shantanu Nandkhile | Generalist Game Programmer">
+								<meta property="og:description" content="Unity, C#, multiplayer and systems programming. Projects, case studies and demos.">
+									<meta property="og:url" content="https://shantanu-nandkhile.netlify.app/">
+										<meta property="og:image" content="https://YOUR-DOMAIN/preview.png">
+											<link rel="icon" href="favicon.ico">
+												<style>
+													html, body {
+													margin: 0; padding: 0; width: 100%; height: 100%;
+													overflow: hidden;
+													overscroll-behavior: none; /* no pull-to-refresh */
+													background-color: #0b0204;
+													}
+													#unity-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
+													#unity-canvas {
+													width: 100% !important; height: 100% !important; display: block;
+													touch-action: none; user-select: none; -webkit-user-select: none;
+													}
+													#unity-loading-bar {
+													position: absolute; left: 50%; top: 50%;
+													transform: translate(-50%, -50%);
+													color: #ffffff; font-family: sans-serif; font-size: 14px;
+													letter-spacing: 2px; text-align: center;
+													}
+													#unity-progress { width: 220px; height: 3px; margin-top: 14px; background: rgba(255,255,255,0.12); }
+													#unity-progress-fill { width: 0%; height: 100%; background: #f3e600; }
+													.sr-only {
+													position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+													overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+													}
+												</style>
+											</head>
+	<body>
+		<div id="unity-container">
+			<canvas id="unity-canvas"></canvas>
+			<div id="unity-loading-bar">
+				<div id="unity-loading-text">INITIALIZING SYSTEMS...</div>
+				<div id="unity-progress">
+					<div id="unity-progress-fill"></div>
+				</div>
+			</div>
+		</div>
 
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
-      var config = {
-        dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
-        frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
-        codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "{{{ COMPANY_NAME }}}",
-        productName: "{{{ PRODUCT_NAME }}}",
-        productVersion: "{{{ PRODUCT_VERSION }}}",
-      };
+		<main class="sr-only">
+			<h1>Shantanu Nandkhile</h1>
+			<p>Generalist game programmer. Projects, case studies and demos built with Unity and C#.</p>
+		</main>
+		<noscript>This portfolio runs in WebGL and needs JavaScript enabled.</noscript>
 
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          loadingBar.innerHTML = "Loading Systems: " + Math.floor(progress * 100) + "%";
-        }).then((unityInstance) => {
-          loadingBar.style.display = "none";
-        }).catch((message) => {
-          alert(message);
-        });
-      };
-      document.body.appendChild(script);
-    </script>
-  </body>
+		<script>
+			var canvas = document.querySelector("#unity-canvas");
+			var loadingBar = document.querySelector("#unity-loading-bar");
+			var loadingText = document.querySelector("#unity-loading-text");
+			var progressWrap = document.querySelector("#unity-progress");
+			var progressFill = document.querySelector("#unity-progress-fill");
+
+			var buildUrl = "Build";
+			var loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
+			var config = {
+			dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
+			frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+			codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+			streamingAssetsUrl: "StreamingAssets",
+			companyName: "{{{ COMPANY_NAME }}}",
+			productName: "{{{ PRODUCT_NAME }}}",
+			productVersion: "{{{ PRODUCT_VERSION }}}",
+			devicePixelRatio: Math.min(window.devicePixelRatio || 1, 1.5)
+			};
+
+			var script = document.createElement("script");
+			script.src = loaderUrl;
+			script.onload = () => {
+			createUnityInstance(canvas, config, (progress) => {
+			var pct = Math.floor(progress * 100);
+			loadingText.textContent = "LOADING SYSTEMS: " + pct + "%";
+			progressFill.style.width = pct + "%";
+			}).then((unityInstance) => {
+			window.unityInstance = unityInstance; // BrowserInput.jslib looks for this
+			loadingBar.style.display = "none";
+			}).catch((message) => {
+			console.error(message);
+			progressWrap.style.display = "none";
+			loadingText.textContent = "Couldn't start. This site needs a browser with WebGL 2 enabled.";
+			});
+			};
+			script.onerror = () => {
+			progressWrap.style.display = "none";
+			loadingText.textContent = "Couldn't load the build files. Please refresh.";
+			};
+			document.body.appendChild(script);
+		</script>
+	</body>
 </html>

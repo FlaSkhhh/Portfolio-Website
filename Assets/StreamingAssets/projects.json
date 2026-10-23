@@ -4,9 +4,9 @@
     "subtitle": "Generalist Game Programmer",
     "profileUrl": "https://avatars.fastly.steamstatic.com/a714a0ef108d7841a64244b8d1a0712587631c42_full.jpg",
     "paragraphs": [
-      "I have been playing video games for as long as I can remember. Eventually, just playing them wasn't enough so I wanted to know how they were made. That curiosity turned into a career, and I have been hooked on game development ever since.",
-      "I have over three years of experience working with Unity and C#, with the last two years spent professionally developing and shipping titles. As a generalist, I love getting my hands in every part of the engine. My work ranges from rapid R&D prototyping and programming core gameplay, to hooking up animations and audio, all the way to building full multiplayer architectures with custom matchmaking, leaderboards, and web APIs.",
-      "Whether I am participating in a weekend game jam to test out a weird new idea, learning a new tool, or collaborating with artists to polish a mechanic, I just genuinely love making games. I am always eager to solve interesting technical problems and help teams bring fun experiences to life."
+      "I taught myself game development from YouTube tutorials, especially Brackeys, to build my final year B.Tech project as I wanted it to be special. It combined mechanics from my 3 all time favourite games Halo, Portal, and Dark Souls.",
+      "Working professionally as a game developer has completely changed how I look at and play video games. Now, every time I see an interesting mechanic, I immediately try to break down how it was built in my head.",
+      "I like playing games from varied genres. My first ever game was DOOM 1993 and some of my recent favourites are Baldur's Gate 3, Hi Fi Rush, and TABS, all of which are very unique and entertaining."
     ]
   },
   "experience": [
@@ -15,7 +15,7 @@
       "date": "Oct 2024 - Present",
       "bullets": [
         "Independently completed and released two multiplayer titles; built robust systems around core mechanics including game modes, server-side validation, and admin panels.",
-        "Implemented secure backend pipelines using Firebase and Playfab; engineered custom matchmaking logic via User IDs and synced complete player states.",
+        "Implemented secure backend pipelines using Firebase and PlayFab; engineered custom matchmaking logic via User IDs and synced complete player states.",
         "Spearheaded R&D on Animation Rigging for procedural animations, integrating them into production builds.",
         "Collaborated with art teams to implement ragdoll physics, custom shaders, and responsive UI animations."
       ]
@@ -29,15 +29,15 @@
       "Web3 & APIs",
       "Live-Ops",
       "Anti-Cheat",
-      "Optimisation",
+      "Performance Profiling",
       "UI Toolkit & UGUI"
     ],
   "projects": [
     {
       "id": "cpl",
       "title": "Caro Premier League (CPL)",
-      "tag": "Unity C# | Firebase & PlayFab | Web3 APIs | Live-Ops | Optimisation",
-      "description": "Commercial 1v1 NFT cricket game live on Google Play and the iOS App Store, featuring serverless matchmaking, Cloud Function tournaments, and an 80%+ reduction in build and bandwidth footprint.",
+      "tag": "Multiplayer & LiveOps | Web3 & Firebase | Anti-Cheat | Low-End Optimisation",
+      "description": "Commercial multiplayer cricket title released on Android and iOS featuring serverless tournaments, custom Web3 authentication, and a LiveOps admin dashboard.",
       "screenshotUrl": "Screenshots/CPL.jpg",
       "caseStudyUrl": "https://www.cplgames.io/",
       "githubUrl": "http://play.google.com/store/apps/details?id=com.metaoryx.caro11",
@@ -45,181 +45,115 @@
       "rows": [
         {
           "header": "OVERVIEW",
-          "text": "Commercial 1v1 NFT cricket game, live on Google Play and the iOS App Store. Joined during the early stages and drove full stack development as the sole programmer through to a dual store release and live-ops maintenance.",
+          "text": "<b>Full-stack development:</b> joined in early stages as sole programmer, driving a dual-store release and LiveOps maintenance.",
           "media": "Screenshots/CPL_Gameplay.mp4",
           "poster": "Screenshots/CPL.jpg"
         },
         {
+          "header": "CHALLENGES",
+          "text": "<b>Fixed gameplay loop desyncs:</b> driven by the authoritative hit event instead of local swing timing on the receiving client.",
+          "media": "Screenshots/CPL_HitSync.mp4",
+          "poster": ""
+        },
+        {
           "header": "WEB3 & AUTH",
-          "text": "Integrated external marketplace and wallet REST APIs for inventory management and in game token transactions.",
+          "text": "<b>Integrated REST APIs</b> for marketplace inventory management and in-game token transactions and trades.",
           "media": "Screenshots/CPL_WalletTeam.jpg",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Eliminated cross app password desyncs by utilizing the immutable wallet IDs to make custom JWT token for Firebase login through Firebase cloud functions.",
+          "text": "<b>Eliminated credential desyncs:</b> created custom Firebase JWTs via Cloud Functions tied directly to immutable wallet IDs.",
           "media": "",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Architected a dynamic reward distribution algorithm that splits payouts across multiple NFTs in a single API payload according to each NFT's balance limit.",
+          "text": "<b>Dynamic reward splitting:</b> algorithm calculates balance limits and splits payouts across multiple NFTs in a single API payload.",
           "media": "",
           "poster": ""
         },
         {
           "header": "MATCHMAKING & AI",
-          "text": "Implemented interval based matchmaking: queues trigger on fixed rounded minutes, persisting across app restarts via timestamps with team validations and push reminders.",
+          "text": "<b>Scheduled matchmaking:</b> queues open at fixed minute marks and survive app restarts via timestamps, with roster validation and push reminders.",
           "media": "Screenshots/CPL_Matchmaking.jpg",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Built an interactive tutorial and the AI bot from scratch inside an online-only architecture, alongside code based lobbies and online player challenges.",
+          "text": "<b>Built tutorials and AI bots</b> inside an online-only architecture, alongside friend-code lobbies and live player challenges.",
           "media": "Screenshots/CPL_BotTutorial.mp4",
           "poster": ""
         },
         {
-          "header": "CHALLENGES",
-          "text": "Resolved critical network latency desyncs in the core batting loop where delayed bat swing packets caused local misses and discrepancies on the one screen by bypassing local swing timing checks on the receiving client to drive ball trajectory deterministically from authoritative hit events.",
-          "media": "Screenshots/CPL_HitSync.mp4",
-          "poster": ""
-        },
-        {
-          "header": "LIVE-OPS",
-          "text": "Rebuilt the tournament infrastructure using automated Firebase Cloud Functions running on 10 minute intervals and OneSignal push notifications to pair players and advance brackets without a dedicated server.",
+          "header": "LIVEOPS",
+          "text": "<b>Serverless tournaments:</b> Firebase Cloud Functions and OneSignal push alerts pair players and advance brackets without a dedicated server.",
           "media": "Screenshots/CPL_Tournament.jpg",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Developed a standalone LiveOps Admin Dashboard allowing non technical staff to manage game modes, moderate accounts, resolve support tickets, and audit token flow across custom date ranges.",
+          "text": "<b>Built LiveOps Admin Dashboard</b> allowing non-technical staff to manage game modes, moderate accounts, and audit token flows.",
           "media": "Screenshots/CPL_AdminPanel.jpg",
           "poster": ""
         },
         {
-          "header": "ANTI-EXPLOIT",
-          "text": "Prevented NFT trade exploits by adding cooldowns to NFTs that have already collected rewards for daily tasks by storing them in hashsets inside the DB based on dates.",
+          "header": "ANTI-CHEAT",
+          "text": "<b>Prevented multi-account NFT farming:</b> logged daily asset usage to database nodes, cross-referencing hashsets post-match to block traded assets from claiming twice.",
           "media": "Screenshots/CPL_GameModes.jpg",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Hardened client side integrity using CodeStage Anti-Cheat Toolkit (ACTk) memory obfuscation, injection and speed-hack detection, and forced startup version and ban status gates.",
+          "text": "<b>Hardened client integrity</b> using Anti-Cheat Toolkit (ACTk) memory obfuscation, hack detections, and forced startup version and ban-status gates.",
           "media": "",
           "poster": ""
         },
         {
           "header": "PRODUCTION",
-          "text": "Created a runtime character swapper: unified the player roster onto a single custom animated rig, scripting dynamic face mesh and kit swaps to cut animation workload by over 90%.",
+          "text": "<b>Created a runtime character swapper:</b> unified the roster onto a single animated rig, scripting face and kit swaps to cut animation workload by 90%+.",
           "media": "Screenshots/CPL_WinAnimation.mp4",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Built a multi language Audio Manager supporting localised commentary swapping from settings and features sequential non repeating dialogue lines.",
+          "text": "<b>Multi-language Audio Manager:</b> supports localised commentary swapping from settings with sequential non-repeating dialogue queues.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "<b>Integrated native OS features:</b> implemented gallery-based profile picture uploads and a referral system that caches runtime win-screen screenshots to temp storage for native OS sharing.",
           "media": "",
           "poster": ""
         },
         {
           "header": "OPTIMISATION",
-          "text": "Cut the compiled build footprint by over 80% (from 1GB+ down to a <170MB Google Play AAB) through multi tier texture, mesh, audio, and animation keyframe compression.",
+          "text": "<b>Cut build footprint by 80%+</b> (1+ GB APK to 170 MB APK) through tier-based texture, mesh, audio, and keyframe compression.",
           "media": "",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Curbed Firebase download costs caused by continuous real time node listeners, replacing them with local snapshot caching and shallow REST queries to slash daily bandwidth from multiple gigabytes to under 100MB across 30+ DAUs.",
+          "text": "<b>Cut daily bandwidth from 2+ GBs to under 100 MB</b> using local snapshot caching, shallow REST queries, and database schema restructuring.",
           "media": "",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Reduced UI rendering overhead by packing releated 2D visual assets into sprite sheets and sprite atlases and isolating frequently updating HUD elements into nested canvases, eliminating redundant draw calls and layout rebuilds.",
+          "text": "<b>Reduced UI rendering overhead</b> by packing relevant sprite sheets and isolating HUD elements in nested canvases, eliminating redundant layout rebuilds.",
           "media": "",
           "poster": ""
         },
         {
-          "header": "RELEASE & HANDOVER",
-          "text": "Navigated Apple App Store and Google Play policy guidelines to secure store certification for a tokenised external asset mobile game, integrating native gallery avatar uploads and win screen referral screenshot sharing.",
-          "media": "",
-          "poster": ""
-        },
-        {
-          "header": "",
-          "text": "Collaborated with client side team, QA testers, and external developers, authoring the Game Design Document (GDD) and technical handover docs to transition the project.",
-          "media": "",
-          "poster": ""
-        }
-      ]
-    },
-    {
-      "id": "super-over-cricket",
-      "title": "Super Over Cricket",
-      "tag": "PlayFab Matchmaking | Facebook SDK | LiveOps Tuning | Firebase | Release Management",
-      "description": "Commercial 1v1 multiplayer cricket title on Android featuring skill-based matchmaking, Facebook cloud saves and backup, and remote liveops physics tuning with 30k+ downloads.",
-      "screenshotUrl": "Screenshots/SuperOver.jpg",
-      "caseStudyUrl": "",
-      "githubUrl": "",
-      "platform": "Android",
-      "rows": [
-        {
-          "header": "OVERVIEW",
-          "text": "Commercial 1v1 multiplayer cricket game on Android that reached 30k+ organic downloads. Took over late stage production as sole programmer, completing social systems, UI/UX changes, matchmaking, release, and maintenance.",
-          "media": "Screenshots/SuperOver_Gameplay.mp4",
-          "poster": "Screenshots/SuperOver.jpg"
-        },
-        {
-          "header": "MATCHMAKING & AI",
-          "text": "Architected PlayFab skill based matchmaking (SBMM) rules with gradual restriction falloffs that expand search parameters and route into AI bot matches when queue timers expire.",
+          "header": "RELEASE",
+          "text": "<b>Secured dual-store certification:</b> navigated Apple and Google policy guidelines to publish a tokenised external asset game.",
           "media": "",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Built an engaging tutorial to onboard new players into the timing based batting and bowling mechanics before entering live queues.",
-          "media": "Screenshots/SuperOver_Tutorial.mp4",
-          "poster": ""
-        },
-        {
-          "header": "SOCIAL & AUTH",
-          "text": "Integrated the Facebook SDK for persistent cross install cloud saves and profile syncing (displaying player names and avatars), alongside guest login fallbacks and compliant in app user data deletion pipelines.",
-          "media": "Screenshots/SuperOver_Facebook.jpg",
-          "poster": ""
-        },
-        {
-          "header": "",
-          "text": "Built a friend system that links Facebook friends and recent friend/private match opponents, paired with native OS clipboard scraping to auto paste room codes for instant lobby joins.",
-          "media": "Screenshots/SuperOver_Friends.jpg",
-          "poster": ""
-        },
-        {
-          "header": "CHALLENGES",
-          "text": "Eliminated batting desyncs across high latency mobile connections by decoupling receiving client swing colliders and driving ball flight directly from the authoritative hit timestamp.",
-          "media": "",
-          "poster": ""
-        },
-        {
-          "header": "",
-          "text": "Completed 3 months of post launch maintenance over remote macOS screen share after issues with google account flags blocking the store submission.",
-          "media": "",
-          "poster": ""
-        },
-        {
-          "header": "LIVE-OPS & DATA",
-          "text": "Developed a Firebase connected Admin Panel to ban or reset accounts, inspect recent player activity, and remotely tune live gameplay physics (ball speed, display speed, and spin values) without pushing client patches.",
-          "media": "",
-          "poster": ""
-        },
-        {
-          "header": "",
-          "text": "Structured Firebase Security Rules and database indexing to store and query timestamp ordered ball by ball match histories, alongside Firebase Analytics and Crashlytics event tracking.",
-          "media": "",
-          "poster": ""
-        },
-        {
-          "header": "OPTIMISATION & RELEASE",
-          "text": "Compressed 3D stadium models and textures to run on low-end Android devices within a 70 80MB download size and <200MB installed footprint, plus a background session timer that forces a clean home screen reload after prolonged inactivity.",
+          "text": "<b>Authored technical GDD and handover docs</b> to transition the project to external developers and QA testers.",
           "media": "",
           "poster": ""
         }
@@ -227,9 +161,9 @@
     },
     {
       "id": "hand-cricket",
-      "title": "Real-Time Multiplayer Hand Cricket",
-      "tag": "Unity Netcode | Cross-Platform | Lobby & Relay | Team Multiplayer | Highly Optimised",
-      "description": "Cross-platform up to 5v5 multiplayer adaptation of the real life hand cricket game built for Android and WebGL, featuring ultra lightweight netcode and a compact build size.",
+      "title": "Team Based Multiplayer Hand Cricket",
+      "tag": "Unity Netcode | Cross Platform | Lobby & Relay | Team Multiplayer | 34 MB APK",
+      "description": "Cross-platform up to 5v5 multiplayer adaptation of the real-life hand cricket game built for Android and WebGL, featuring lightweight netcode and a compact build size.",
       "screenshotUrl": "Screenshots/HandCricket.jpg",
       "caseStudyUrl": "https://flaskhhh.github.io/Hand-Cricket/",
       "githubUrl": "https://github.com/FlaSkhhh/Hand-Cricket",
@@ -237,175 +171,325 @@
       "rows": [
         {
           "header": "OVERVIEW",
-          "text": "An up to 5v5 real-time multiplayer adaptation of the classic childhood hand game. Kept total raw assets to just 6MB (including a 3MB OST) by keyframing 3D hand animations directly in Unity's Animator and creating all 2D UI sprites from scratch in Paint, shipping the entire project in a compact 34MB APK.",
+          "text": "<b>Simultaneous reveal multiplayer:</b> an up to 5v5 adaptation of the classic childhood hand game, playable instantly in your browser (landscape) with open-source network logic.",
           "media": "Screenshots/HandCricket_Gameplay.mp4",
           "poster": "Screenshots/HandCricket.jpg"
         },
         {
           "header": "",
-          "text": "Designed a classroom-style 3D menu where players sit on a bench with a paper holding the UI, a blackboard displaying live lobby team data, and a canteen play space where character avatars dynamically swap seats.",
+          "text": "<b>34 MB APK</b> with just 11 MB of raw assets (including a 6 MB OST) built from scratch.",
           "media": "Screenshots/HandCricket_DioramaMenu.jpg",
           "poster": ""
         },
         {
-          "header": "CROSS-PLAY",
-          "text": "Engineered crossplay between Android and WebGL to allow instant browser access across any device without requiring an APK install.",
+          "header": "CHALLENGES",
+          "text": "<b>Fixed silent WebGL failures:</b> multithreaded network flows that worked in the Editor and on Android failed silently in browsers, requiring a complete refactor into Coroutines and void RPCs.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "<b>Handled mid match disconnects:</b> custom index-shifting recalculates batting and bowling orders on the fly, with host drop fallbacks.",
+          "media": "Screenshots/HandCricket_DisconnectPopup.jpg",
+          "poster": ""
+        },
+        {
+          "header": "CROSSPLAY",
+          "text": "<b>Android and WebGL crossplay</b> allows instant browser access across any device without requiring an install.",
           "media": "Screenshots/HandCricket_Matchmaking.jpg",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Script logic dynamically switches Unity Transport between DTLS on mobile and WebSockets (WSS) on WebGL at startup to route traffic through Unity Relay.",
+          "text": "<b>Dynamic transport switching</b> between DTLS on mobile and WebSockets on WebGL at startup via Unity Relay.",
           "media": "",
           "poster": ""
         },
         {
           "header": "OPTIMISED NETCODE",
-          "text": "Minimised network bandwidth by syncing only team player ID lists and team names via persistent NetworkLists and NetworkVariables, handling player names, connection statuses, game states, and team transitions via lightweight Host-authoritative RPCs.",
+          "text": "<b>Minimised network bandwidth</b> by syncing only player ID lists and team names via persistent NetworkVariables.",
           "media": "Screenshots/HandCricket_RunSelection.mp4",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Because the architecture is purely event-driven, the project uses zero NetworkTransform or NetworkAnimator components. All 3D 'Hot Seat' table rotations, sideline spectator movements, and hand gestures execute deterministically on the client.",
+          "text": "<b>Lightweight event-driven architecture</b> uses zero NetworkTransforms, executing all 3D movements and animations deterministically on the client.",
           "media": "Screenshots/HandCricket_TableHotSeat.jpg",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Instead of pinging heartbeats to keep the Unity Lobby alive during gameplay, the host deletes the lobby on match launch and spins up a fresh one at match end, passing the new Lobby ID over the active Relay connection so players automatically rejoin.",
+          "text": "<b>Zero heartbeat pings:</b> host deletes the lobby on launch, recreates a new one post-match, and distributes the new lobby code via Relay.",
           "media": "Screenshots/HandCricket_LobbyLineup.mp4",
           "poster": ""
         },
         {
-          "header": "CHALLENGES",
-          "text": "Resolved WebGL single-threading silent failures of Task/async-await calls and multithreaded RPC executions, which ran fine on Android and in the Editor but failed in browsers. Refactored asynchronous network flows into Coroutines and void RPCs for stable browser cross-play.",
-          "media": "",
-          "poster": ""
-        },
-        {
-          "header": "",
-          "text": "Handled mid-match disconnections with custom index-shifting logic that recalculates batting and bowling orders on the fly—waiting for current over animations to finish before replacing a dropped batsman—alongside a 30-second RPC load barrier and host-drop fallbacks.",
-          "media": "Screenshots/HandCricket_DisconnectPopup.jpg",
-          "poster": ""
-        },
-        {
-          "header": "CUSTOM UI & AVATARS",
-          "text": "Modeled the in-game scoreboard overlay after Cricket World Cup broadcast graphics, tracking live batsman stats on the left, total score, overs, and inning targets in the center, and bowler figures on the right.",
+          "header": "CUSTOM UI & CHARACTERS",
+          "text": "<b>TV broadcast-style match HUD:</b> built a dynamic UI overlay to display real-time team scoreboards and match states similar to recent World Cups.",
           "media": "Screenshots/HandCricket_BroadcastHUD.jpg",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Expanded a minimal asset pack (3 faces, 3 hats) into hundreds of combinations using an HSV body color slider to tint materials. First-time players generate a randomised avatar saved to PlayerPrefs and synced via a compact string ('{face}{hat}{hue}').",
+          "text": "<b>Interactive 3D menu model:</b> avatars physically sit inside a school classroom, dynamically swapping seats and positions to reflect their current match roles.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "<b>Hundreds of avatar combinations</b> generated from a minimal 3-face, 3-hat asset pack using an HSV colour slider.",
           "media": "Screenshots/HandCricket_Customiser.jpg",
           "poster": ""
         }
       ]
     },
     {
-      "id": "boss-fight",
-      "title": "State-Based 2D Boss Fight",
-      "tag": "AI & FSM , Combat Systems",
-      "description": "Modular boss AI designed using Finite State Machines to manage complex behavior transitions, attack patterns, and animation events across multiple combat phases.",
-      "screenshotUrl": "Screenshots/BossFight.jpg",
-      "caseStudyUrl": "https://yourportfolio.netlify.app/projects/boss-fight",
-      "githubUrl": "https://github.com/yourhandle/boss-fight",
-      "platform": "PC / Mac",
-      "rows": [
-        {
-          "header": "",
-          "text": "Engineered a modular Finite State Machine (FSM) architecture to manage complex boss behavior transitions without massive update loops.",
-          "media": "",
-          "poster": ""
-        },
-        {
-          "header": "",
-          "text": "Programmed distance checks and health thresholds to drive dynamic state transitions.",
-          "media": "Screenshots/BossFight_Phase2.jpg",
-          "poster": ""
-        },
-        {
-          "header": "",
-          "text": "Tied hitbox activations directly to Animation Events, ensuring damage frames perfectly sync with the visual swing of the weapon.",
-          "media": "",
-          "poster": ""
-        }
-      ]
-    },
-    {
-      "id": "infinite-runner",
-      "title": "Infinite Runner with Custom Shader",
-      "tag": "Custom HLSL | Procedural Gen",
-      "description": "Custom vertex shader simulating world curvature with procedural environment generation and multi-character selection featuring seamless restart logic.",
-      "screenshotUrl": "Screenshots/InfiniteRunner.jpg",
-      "caseStudyUrl": "https://yourportfolio.netlify.app/projects/infinite-runner",
+      "id": "super-over-cricket",
+      "title": "Super Over Cricket",
+      "tag": "PlayFab & Firebase | Facebook SDK | LiveOps Tuning | Low End Optimisation | Release Management",
+      "description": "Commercial 1v1 multiplayer cricket title on Android featuring skill-based matchmaking, Facebook cloud saves and backup, and remote LiveOps physics tuning with 30k+ downloads.",
+      "screenshotUrl": "Screenshots/SuperOver.jpg",
+      "caseStudyUrl": "https://play.google.com/store/apps/details?id=com.Hyperplay.SuperOverCricket",
       "githubUrl": "",
-      "platform": "Mobile",
+      "platform": "Android",
       "rows": [
         {
-          "header": "",
-          "text": "Wrote a custom HLSL vertex shader that offsets the Y-axis of vertices based on Z-distance, creating world curvature while maintaining flat physics colliders.",
-          "media": "Screenshots/Runner_ShaderGraph.jpg",
+          "header": "OVERVIEW",
+          "text": "<b>30k+ downloads:</b> took over late-stage production as sole programmer to complete social systems, UI/UX, matchmaking, release, and maintenance.",
+          "media": "Screenshots/SuperOver_Gameplay.mp4",
+          "poster": "Screenshots/SuperOver.jpg"
+        },
+        {
+          "header": "CHALLENGES",
+          "text": "<b>Resolved high-latency state desyncs:</b> bypassed local batting emulation on the receiving client, syncing match state strictly on authoritative delivery outcomes.",
+          "media": "",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Engineered a procedural generation system using an object pool of track segments to recycle geometry and maintain a strict 60 FPS on lower-end mobile devices.",
+          "text": "<b>Solved store submission restriction:</b> completed 3 months of post-launch maintenance over remote macOS screen share to clear Google compromised-account compliance flags.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "MATCHMAKING & AI",
+          "text": "<b>Skill-based matchmaking (PlayFab):</b> the search range widens over time, then routes to a bot match when the timer expires.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "<b>Interactive tutorial</b> onboards new players into timing-based batting and bowling mechanics before entering live queues.",
+          "media": "Screenshots/SuperOver_Tutorial.mp4",
+          "poster": ""
+        },
+        {
+          "header": "SOCIAL & AUTH",
+          "text": "<b>Facebook SDK integration</b> handles cross-install cloud saves, profile syncing, guest fallbacks, and compliant user data deletion.",
+          "media": "Screenshots/SuperOver_Facebook.jpg",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "<b>Firebase friend system</b> links Facebook friends and recent friend-battle opponents, auto-detects a copied room code, and offers to paste it.",
+          "media": "Screenshots/SuperOver_Friends.jpg",
+          "poster": ""
+        },
+        {
+          "header": "LIVEOPS & DATA",
+          "text": "<b>Remote physics tuning:</b> WebGL Firebase Admin Panel adjusts live ball speed and spin values without client patches.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "<b>Unix timestamp-ordered match histories</b> stored and queried via strict Firebase Security Rules.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "OPTIMISATION",
+          "text": "<b>70 MB download size:</b> compressed 3D stadium assets, audio files, and textures to optimise for low-end devices, maintaining around 200 MB installed footprint.",
           "media": "",
           "poster": ""
         }
       ]
     },
     {
-      "id": "rollback-netcode-proto",
-      "title": "Deterministic Rollback Netcode Prototype",
-      "tag": "C# | Custom Physics | Bit Packing",
-      "description": "Lockstep rollback networking prototype built from scratch with fixed-point arithmetic, circular state history buffers, and bit-packed input delta compression.",
-      "screenshotUrl": "Screenshots/RollbackNetcode.jpg",
+      "id": "portfolio-website",
+      "title": "Interactive Web Portfolio",
+      "tag": "UI Toolkit | WebGL | JS Bridge | 5 MB Initial Load",
+      "description": "An interactive portfolio built entirely in Unity UI Toolkit for WebGL, featuring a cyberpunk aesthetic, JSON driven case studies, and custom swipe navigation.",
+      "screenshotUrl": "Screenshots/portfolio_hero.png",
       "caseStudyUrl": "",
-      "githubUrl": "https://github.com/yourhandle/rollback-netcode",
+      "githubUrl": "",
+      "platform": "WebGL",
+      "rows": [
+        {
+          "header": "OVERVIEW",
+          "text": "<b>~5 MB first-load download:</b> a Unity UI Toolkit portfolio built and deployed solo, featuring a cyberpunk aesthetic with background shaders and UI glitch effects.",
+          "media": "Screenshots/Portfolio_Demo.mp4",
+          "poster": "Screenshots/portfolio_hero.png"
+        },
+        {
+          "header": "CHALLENGES",
+          "text": "<b>OS-level inertia filtering:</b> operating systems mask raw trackpad input with synthetic momentum. Wrote a 'Decay Gravity Well' algorithm in JavaScript to filter out lingering inertia tails and isolate deliberate swipes.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "<b>Overcame UI Toolkit limitations:</b> bypassed the lack of native CSS @media queries by writing a custom C# resize observer that evaluates viewport geometry at runtime to toggle an .is-mobile class, avoiding duplicate UI trees.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "DATA & CONTENT",
+          "text": "<b>JSON driven case studies:</b> dynamically spawns UXML project cards and media rows using local StreamingAssets JSON and remote server media, bypassing WebGL memory constraints and allowing instant content updates without rebuilding.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "<b>Single instance video streaming:</b> routed all case study media through a single recycled VideoPlayer, streaming clips dynamically on demand rather than downloading them to drastically reduce RAM overhead and user bandwidth.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "BROWSER BRIDGING",
+          "text": "<b>Unified input normalisation:</b> a custom .jslib intercepts disparate browser events (trackpad deltas, touch coordinates, and browser back-buttons), blocking default browser animations and routing them into a single deterministic Unity state machine.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "<b>History API sync:</b> appends virtual anchors to the URL via 'history.pushState', binding the custom swipe gestures and browser back/forward actions directly to Unity UI transitions.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "PERFORMANCE & BUILD",
+          "text": "<b>Custom HTML template:</b> authored a responsive WebGL wrapper that caps devicePixelRatio at 1.5x to maintain frame rates on high-DPI displays, configuring server headers for Brotli (.br) binary compression.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "<b>Cached element references</b> resolved once at startup avoid per frame visual-tree queries.",
+          "media": "",
+          "poster": ""
+        }
+      ]
+    },
+    {
+      "id": "finquest",
+      "title": "Finquest",
+      "tag": "WebGL | ScriptableObjects | JS Bridge | DOTween",
+      "description": "A gamified WebGL educational experience developed in around 2 weeks to serve as the interactive playable pitch for a financial literacy app.",
+      "screenshotUrl": "Screenshots/Finquest.jpg",
+      "caseStudyUrl": "",
+      "githubUrl": "",
+      "platform": "WebGL",
+      "rows": [
+        {
+          "header": "OVERVIEW",
+          "text": "<b>Rapid 2-week production cycle:</b> prototyped, programmed, and shipped a complete demo WebGL title in around two weeks for a group project.",
+          "media": "Screenshots/Finquest_Gameplay.mp4",
+          "poster": "Screenshots/Finquest.jpg"
+        },
+        {
+          "header": "APP INTEGRATION",
+          "text": "<b>Custom WebGL wrapper:</b> authored a responsive HTML template utilising 100dvh and dynamic meta tags to ensure consistent viewport scaling and prevent mobile URL bars from clipping the canvas.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "<b>External app integration:</b> exposed the Unity instance globally through the Web template, establishing a two-way JavaScript bridge to support embedding the game inside Flutter WebViews and web apps.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "ARCHITECTURE & SYSTEMS",
+          "text": "<b>Data-driven progression:</b> decoupled content from logic using hierarchical ScriptableObjects, allowing instant iteration of level data, UI assets, and dictionary definitions without altering the codebase.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "<b>Dynamic mini-game routing:</b> implemented bitmasking to tag question ScriptableObjects with compatible game types, randomly routing questions into one of four distinct types at runtime.",
+          "media": "Screenshots/Finquest_GameModes.jpg",
+          "poster": ""
+        },
+        {
+          "header": "UI MECHANICS",
+          "text": "<b>Math-driven input systems:</b> built Tinder-style swiping and drag-and-drop sorting by evaluating screen-space deltas and RectTransform overlaps, bypassing Unity's 2D physics engine.",
+          "media": "Screenshots/Finquest_SwipeMechanic.mp4",
+          "poster": ""
+        },
+        {
+          "header": "WEBGL OPTIMISATION",
+          "text": "<b>Single-scene architecture:</b> eliminated browser lag spikes and scene-load hitching by preloading all mini-games into cached CanvasGroups, toggling states via alpha and raycast blocking.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "<b>Pooled spawning:</b> utilised object pooling for rapidly spawning elements to minimise garbage collection (GC) stutters in the browser.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "<b>Code-driven UI animation:</b> replaced Unity Animator clips with scalable DOTween sequences for all UI animations including staggered UI spawns, drag-and-tilt mechanics, and immediate player feedback.",
+          "media": "",
+          "poster": ""
+        }
+      ]
+    },
+    {
+      "id": "boss-fight",
+      "title": "Boss Fight Prototype",
+      "tag": "Combat AI | State Machines | Physics Layers",
+      "description": "A 2D combat prototype featuring a multi-phase boss, distance-based AI behaviour, and responsive i-frame dodge mechanics.",
+      "screenshotUrl": "Screenshots/BossFight.jpg",
+      "caseStudyUrl": "",
+      "githubUrl": "",
       "platform": "PC",
       "rows": [
         {
-          "header": "",
-          "text": "Wrote a custom fixed-point math library to ensure 100% deterministic physics simulations across different CPU architectures.",
+          "header": "OVERVIEW",
+          "text": "<b>Action RPG combat loop:</b> engineered a complete 2D boss battle with dynamic phase transitions, distinct attack patterns, and a custom player controller.",
+          "media": "Screenshots/BossFight_Gameplay.mp4",
+          "poster": "Screenshots/BossFight.jpg"
+        },
+        {
+          "header": "AI & BEHAVIOUR",
+          "text": "<b>Distance-based AI:</b> a custom state machine reads player proximity and verticality to switch between ranged artillery, gap-closing leaps, grabs, and anti-air uppercuts.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "COMBAT MECHANICS",
+          "text": "<b>I-frame & collision manipulation:</b> implemented player dodge sliding and invincible boss sweeps by dynamically swapping physics layers at runtime, bypassing hitboxes without frame-by-frame collider toggling.",
           "media": "",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Engineered a system to bit-pack inputs into lightweight integers for UDP transmission.",
+          "text": "<b>Custom knockback and state locks:</b> handle directional explosions and mid-air stuns (dizzy juggling).",
           "media": "",
           "poster": ""
         },
         {
           "header": "",
-          "text": "Developed circular state history buffers to rewind the simulation, apply delayed inputs, and fast-forward back to the current frame in a single tick.",
-          "media": "",
-          "poster": ""
-        }
-      ]
-    },
-    {
-      "id": "memory-profiler-tool",
-      "title": "Runtime Memory Profiler & Object Pooler",
-      "tag": "Engine Tools | Memory Allocations",
-      "description": "Lightweight in-engine memory allocation auditor and generic multi-tier pool manager eliminating GC spikes across scene streaming cycles.",
-      "screenshotUrl": "Screenshots/MemoryProfiler.jpg",
-      "caseStudyUrl": "",
-      "githubUrl": "https://github.com/yourhandle/memory-profiler",
-      "platform": "Unity Editor",
-      "rows": [
-        {
-          "header": "",
-          "text": "Developed a lightweight in-engine memory allocation auditor.",
-          "media": "Screenshots/Profiler_UI.jpg",
+          "text": "<b>Cinematic grab attack:</b> locks the player's transform to the boss's hand.",
+          "media": "Screenshots/BossFight_GrabAttack.mp4",
           "poster": ""
         },
         {
-          "header": "",
-          "text": "Engineered a generic multi-tier pool manager eliminating GC spikes across scene streaming cycles.",
+          "header": "ANIMATION & FEEL",
+          "text": "<b>Animation driven logic:</b> utilised Unity's StateMachineBehaviours and Animation Events to synchronise melee hitboxes, sound effects, and projectile spawning with the visual frames of the attack.",
           "media": "",
           "poster": ""
         }

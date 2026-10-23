@@ -395,8 +395,8 @@ Button:active,
     flex-direction: row-reverse;
 }
 .detail-dynamic-row--full {
-    margin-bottom: -10px;
-    margin-top: -10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .detail-dynamic-image {

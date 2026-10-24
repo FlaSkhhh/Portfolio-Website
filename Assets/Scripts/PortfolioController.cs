@@ -140,7 +140,7 @@ public class PortfolioController : MonoBehaviour
         if (btnDetailGitHub != null) btnDetailGitHub.clicked += () => { if (!string.IsNullOrEmpty(currentGithubUrl)) Application.OpenURL(currentGithubUrl); };
         if (headerExploreBtn != null) headerExploreBtn.clicked += OnEnterPortfolioClicked;
         if (navContactBtn != null) navContactBtn.clicked += OpenContactModal;
-        if (cvDownloadBtn != null) cvDownloadBtn.clicked += () => Application.OpenURL("https://github.com/FlaSkhhh");
+        if (cvDownloadBtn != null) cvDownloadBtn.clicked += () => Application.OpenURL("https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Shantanu_Nandkhile.pdf");
         if (btnCloseModal != null) btnCloseModal.clicked += CloseContactModal;
 
         if (modalOverlay != null) modalOverlay.RegisterCallback<ClickEvent>(evt => CloseContactModal());

@@ -36,16 +36,18 @@
     {
       "id": "cpl",
       "title": "Caro Premier League (CPL)",
-      "tag": "Multiplayer & LiveOps | Web3 & Firebase | Anti-Cheat | Low-End Optimisation",
+      "tag": "Multiplayer & LiveOps | Low End Optimisation | Web3 & Firebase | Anti-Cheat",
       "description": "Commercial multiplayer cricket title released on Android and iOS featuring serverless tournaments, custom Web3 authentication, and a LiveOps admin dashboard.",
       "screenshotUrl": "Screenshots/CPL.jpg",
       "caseStudyUrl": "https://www.cplgames.io/",
+      "caseStudyLabel": "OFFICIAL WEBSITE",
       "githubUrl": "http://play.google.com/store/apps/details?id=com.metaoryx.caro11",
+      "githubLabel": "PLAY STORE",
       "platform": "Android / iOS",
       "rows": [
         {
           "header": "OVERVIEW",
-          "text": "<b>Full-stack development:</b> joined in early stages as sole programmer, driving a dual-store release and LiveOps maintenance.",
+          "text": "<b>Full stack development:</b> joined in early stages as sole programmer, driving a dual-store release and LiveOps maintenance.",
           "media": "Screenshots/CPL_Gameplay.mp4",
           "poster": "Screenshots/CPL.jpg"
         },
@@ -162,7 +164,7 @@
     {
       "id": "hand-cricket",
       "title": "Team Based Multiplayer Hand Cricket",
-      "tag": "Unity Netcode | Cross Platform | Lobby & Relay | Team Multiplayer | 34 MB APK",
+      "tag": "Team Multiplayer | Cross Platform | Unity Netcode | Lobby & Relay | 34 MB APK",
       "description": "Cross-platform up to 5v5 multiplayer adaptation of the real-life hand cricket game built for Android and WebGL, featuring lightweight netcode and a compact build size.",
       "screenshotUrl": "Screenshots/HandCricket.jpg",
       "caseStudyUrl": "https://flaskhhh.github.io/Hand-Cricket/",
@@ -246,11 +248,12 @@
     {
       "id": "super-over-cricket",
       "title": "Super Over Cricket",
-      "tag": "PlayFab & Firebase | Facebook SDK | LiveOps Tuning | Low End Optimisation | Release Management",
+      "tag": "PlayFab & Firebase | Low End Optimisation | Release Management | LiveOps Tuning | Facebook SDK",
       "description": "Commercial 1v1 multiplayer cricket title on Android featuring skill-based matchmaking, Facebook cloud saves and backup, and remote LiveOps physics tuning with 30k+ downloads.",
       "screenshotUrl": "Screenshots/SuperOver.jpg",
-      "caseStudyUrl": "https://play.google.com/store/apps/details?id=com.Hyperplay.SuperOverCricket",
-      "githubUrl": "",
+      "caseStudyUrl": "",
+      "githubUrl": "https://play.google.com/store/apps/details?id=com.Hyperplay.SuperOverCricket",
+      "githubLabel": "PLAY STORE",
       "platform": "Android",
       "rows": [
         {
@@ -318,16 +321,16 @@
     {
       "id": "portfolio-website",
       "title": "Interactive Web Portfolio",
-      "tag": "UI Toolkit | WebGL | JS Bridge | 5 MB Initial Load",
+      "tag": "5 MB Initial Load | Data Driven UI | UI Toolkit | JS Bridge",
       "description": "An interactive portfolio built entirely in Unity UI Toolkit for WebGL, featuring a cyberpunk aesthetic, JSON driven case studies, and custom swipe navigation.",
       "screenshotUrl": "Screenshots/portfolio_hero.png",
-      "caseStudyUrl": "",
-      "githubUrl": "",
+      "caseStudyUrl": "https://shantanu-nandkhile.netlify.app/",
+      "githubUrl": "https://github.com/FlaSkhhh/Portfolio-Website",
       "platform": "WebGL",
       "rows": [
         {
           "header": "OVERVIEW",
-          "text": "<b>~5 MB first-load download:</b> a Unity UI Toolkit portfolio built and deployed solo, featuring a cyberpunk aesthetic with background shaders and UI glitch effects.",
+          "text": "<b>Around 5 MB first-load download:</b> a Unity UI Toolkit portfolio built and deployed solo, featuring a cyberpunk aesthetic with background shaders and UI glitch effects.",
           "media": "Screenshots/Portfolio_Demo.mp4",
           "poster": "Screenshots/portfolio_hero.png"
         },
@@ -384,16 +387,16 @@
     {
       "id": "finquest",
       "title": "Finquest",
-      "tag": "WebGL | ScriptableObjects | JS Bridge | DOTween",
-      "description": "A gamified WebGL educational experience developed in around 2 weeks to serve as the interactive playable pitch for a financial literacy app.",
+      "tag": "7.5 MB Initial Load | ScriptableObject | Educational | JS Bridge | DOTween",
+      "description": "A gamified WebGL educational experience developed in around 2 weeks to serve as the interactive playable pitch for a finance learning kids app.",
       "screenshotUrl": "Screenshots/Finquest.jpg",
-      "caseStudyUrl": "",
-      "githubUrl": "",
+      "caseStudyUrl": "https://finquest-the-game.netlify.app/",
+      "githubUrl": "https://github.com/FlaSkhhh/Finquest-Game",
       "platform": "WebGL",
       "rows": [
         {
           "header": "OVERVIEW",
-          "text": "<b>Rapid 2-week production cycle:</b> prototyped, programmed, and shipped a complete demo WebGL title in around two weeks for a group project.",
+          "text": "<b>Rapid 2 week production cycle:</b> prototyped, programmed, and shipped a complete demo WebGL title in around two weeks for a group project.",
           "media": "Screenshots/Finquest_Gameplay.mp4",
           "poster": "Screenshots/Finquest.jpg"
         },
@@ -405,7 +408,7 @@
         },
         {
           "header": "",
-          "text": "<b>External app integration:</b> exposed the Unity instance globally through the Web template, establishing a two-way JavaScript bridge to support embedding the game inside Flutter WebViews and web apps.",
+          "text": "<b>External app integration:</b> exposed the Unity instance globally through the Web template, establishing a two way JavaScript bridge to support embedding the game inside Flutter WebViews and web apps.",
           "media": "",
           "poster": ""
         },
@@ -423,13 +426,19 @@
         },
         {
           "header": "UI MECHANICS",
-          "text": "<b>Math-driven input systems:</b> built Tinder-style swiping and drag-and-drop sorting by evaluating screen-space deltas and RectTransform overlaps, bypassing Unity's 2D physics engine.",
+          "text": "<b>Math driven input systems:</b> built Tinder style swiping and drag and drop sorting by evaluating screen-space deltas and RectTransform overlaps, bypassing Unity's 2D physics engine.",
           "media": "Screenshots/Finquest_SwipeMechanic.mp4",
           "poster": ""
         },
         {
           "header": "WEBGL OPTIMISATION",
-          "text": "<b>Single-scene architecture:</b> eliminated browser lag spikes and scene-load hitching by preloading all mini-games into cached CanvasGroups, toggling states via alpha and raycast blocking.",
+          "text": "<b>Single-scene architecture:</b> eliminated browser lag spikes and scene load hitching by preloading all mini games into cached CanvasGroups, toggling states via alpha and raycast blocking.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "",
+          "text": "<b>7.5 MB initial load:</b> achieved a highly compact WebGL footprint by aggressively stripping unused engine code and compressing all project assets down to around 2 MB.",
           "media": "",
           "poster": ""
         },
@@ -441,7 +450,7 @@
         },
         {
           "header": "",
-          "text": "<b>Code-driven UI animation:</b> replaced Unity Animator clips with scalable DOTween sequences for all UI animations including staggered UI spawns, drag-and-tilt mechanics, and immediate player feedback.",
+          "text": "<b>Code driven UI animation:</b> replaced Unity Animator clips with scalable DOTween sequences for all UI animations including staggered UI spawns, drag-and-tilt mechanics, and immediate player feedback.",
           "media": "",
           "poster": ""
         }
@@ -450,11 +459,11 @@
     {
       "id": "boss-fight",
       "title": "Boss Fight Prototype",
-      "tag": "Combat AI | State Machines | Physics Layers",
+      "tag": "State Machines | Physics Layers | Combat AI",
       "description": "A 2D combat prototype featuring a multi-phase boss, distance-based AI behaviour, and responsive i-frame dodge mechanics.",
       "screenshotUrl": "Screenshots/BossFight.jpg",
       "caseStudyUrl": "",
-      "githubUrl": "",
+      "githubUrl": "https://github.com/FlaSkhhh/2D-platform-boss-battle",
       "platform": "PC",
       "rows": [
         {

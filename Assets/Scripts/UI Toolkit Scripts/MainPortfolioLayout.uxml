@@ -75,8 +75,8 @@
 
             <ui:VisualElement name="MainPortfolioView" class="portfolio-view">
                 <ui:VisualElement class="experience-section">
-                    <ui:Label text="Featured Projects" class="section-title"/>
-                    <ui:Label text="A curated archive of system architecture, gameplay engineering, and technical problem solving." class="section-subtitle"/>
+                    <ui:Label text="Featured Unity Projects" class="section-title"/>
+                    <ui:Label text="A curated archive of system architecture and technical problem solving, engineered as the sole programmer." class="section-subtitle"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="LoadingScreen" class="loading-screen">
                     <ui:VisualElement class="retro-container">
@@ -126,7 +126,7 @@
 
             <ui:Button name="BtnCloseModal" text="←" class="btn-back btn-modal-back"/>
             <ui:VisualElement picking-mode="Ignore" class="contact-header-row">
-                <ui:Label text="CONTACTS" class="contact-title"/>
+                <ui:Label text="CONTACT" class="contact-title"/>
             </ui:VisualElement>
             <ui:TextField value="shantanunandkhileoa@gmail.com" readonly="true" name="TextField" class="data-field"/>
             <ui:TextField value="+91-9518756184" readonly="true" class="data-field"/>

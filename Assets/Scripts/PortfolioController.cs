@@ -31,8 +31,11 @@ public class PortfolioController : MonoBehaviour
     Label headerName;
     Label scrollChevron;
     Label detailTitle;
+    Label detailGithubLabel;
+    Label detailCaseStudyLabel;
     Button headerExploreBtn;
     Button navContactBtn;
+    Button cvDownloadBtn;
     Button btnEnter;
     Button btnBack;
     Button btnBackToHome;
@@ -104,7 +107,9 @@ public class PortfolioController : MonoBehaviour
         swipeIndicatorForward = root.Q<VisualElement>("SwipeIndicatorForward");
         btnBackToHome = root.Q<Button>("BtnBackToHome");
         btnDetailDemo = root.Q<Button>("BtnDetailDemo");
+        detailCaseStudyLabel = btnDetailDemo.Q<Label>();
         btnDetailGitHub = root.Q<Button>("BtnDetailGitHub");
+        detailGithubLabel = btnDetailGitHub.Q<Label>();
         headerExploreBtn = root.Q<Button>("HeaderExploreBtn");
         headerName = root.Q<Label>("HeaderName");
         heroPortal = root.Q<VisualElement>("HeroPortal");
@@ -122,6 +127,7 @@ public class PortfolioController : MonoBehaviour
         modalBox = root.Q<VisualElement>("ContactModalBox");
         btnCloseModal = root.Q<Button>("BtnCloseModal");
         navContactBtn = root.Q<Button>("NavContact");
+        cvDownloadBtn = root.Q<Button>("BtnDownloadCV");
         btnContactGitHub = root.Q<Button>("BtnContactGitHub");
         btnContactLinkedIn = root.Q<Button>("BtnContactLinkedIn");
         //swipeIndicator = uiDocument.rootVisualElement.Q<VisualElement>("SwipeIndicator");
@@ -134,6 +140,7 @@ public class PortfolioController : MonoBehaviour
         if (btnDetailGitHub != null) btnDetailGitHub.clicked += () => { if (!string.IsNullOrEmpty(currentGithubUrl)) Application.OpenURL(currentGithubUrl); };
         if (headerExploreBtn != null) headerExploreBtn.clicked += OnEnterPortfolioClicked;
         if (navContactBtn != null) navContactBtn.clicked += OpenContactModal;
+        if (cvDownloadBtn != null) cvDownloadBtn.clicked += () => Application.OpenURL("https://github.com/FlaSkhhh");
         if (btnCloseModal != null) btnCloseModal.clicked += CloseContactModal;
 
         if (modalOverlay != null) modalOverlay.RegisterCallback<ClickEvent>(evt => CloseContactModal());
@@ -489,7 +496,12 @@ public class PortfolioController : MonoBehaviour
     public void ShowProjectDetail(ProjectMetadata project, Texture2D heroScreenshot)
     {
         currentDemoUrl = project.caseStudyUrl;
+        if (project.caseStudyLabel != null) detailCaseStudyLabel.text = project.caseStudyLabel;
+        else detailCaseStudyLabel.text = "LIVE DEMO";
         currentGithubUrl = project.githubUrl;
+        if (project.githubLabel != null) detailGithubLabel.text = project.githubLabel;
+        else detailGithubLabel.text = "GITHUB";
+
 
         // Hide Chevron globally while in the Case Study
         if (scrollChevron != null) scrollChevron.AddToClassList("scroll-chevron--hidden");

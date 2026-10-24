@@ -11,7 +11,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     [SerializeField] VisualTreeAsset projectShowcaseRowTemplate;
     [SerializeField] bool loadFromStreamingAssets = true;
     [SerializeField] string projectDataUrl = "projects.json";
-    [SerializeField] string remoteServerUrl = "https://yournetlifydomain.netlify.app/api/projects.json";
+    [SerializeField] string remoteServerUrl = "https://shantanu-nandkhile.netlify.app/StreamingAssets/projects.json";
     [SerializeField] private List<Texture2D> bonfireFrames;
 
     VisualElement projectScrollView;
@@ -23,6 +23,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     VisualElement cyberSpinner;
     VisualElement profileImgElement;
     ScrollView mainScrollArea;
+    ScrollView detailScrollArea;
 
     int totalProjectsToLoad = 0;
     int projectsLoaded = 0;
@@ -48,6 +49,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         scrollAnimationController = GetComponent<ScrollAnimationController>();
         cyberSpinner = root.Q<VisualElement>("CyberSpinner");
         mainScrollArea = root.Q<ScrollView>("MainScrollArea");
+        detailScrollArea = root.Q<ScrollView>("DetailScrollArea");
         profileImgElement = root.Q<VisualElement>("ProfileImage");
 
         bonfireFrames = new List<Texture2D>
@@ -63,7 +65,28 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             projectScrollView.Clear();
             StartCoroutine(LoadProjectsAsync());
         }
+        if (mainScrollArea != null)
+        {
+            mainScrollArea.RegisterCallback<WheelEvent>(OnTrackpadScroll, TrickleDown.TrickleDown);
+        }
+        if (detailScrollArea != null)
+        {
+            detailScrollArea.RegisterCallback<WheelEvent>(OnTrackpadScroll, TrickleDown.TrickleDown);
+        }
+    }
+    void OnTrackpadScroll(WheelEvent evt)
+    {
+        ScrollView activeScrollView = evt.currentTarget as ScrollView;
+        if (activeScrollView == null) return;
 
+        evt.StopImmediatePropagation();
+
+        float scrollSpeedMultiplier = 0.5f;
+
+        Vector2 currentOffset = activeScrollView.scrollOffset;
+        currentOffset.y += (evt.delta.y * scrollSpeedMultiplier);
+
+        activeScrollView.scrollOffset = currentOffset;
     }
 
     void Update()
@@ -330,6 +353,9 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         if (githubButton != null)
         {
             string url = !string.IsNullOrEmpty(project.githubUrl) ? project.githubUrl : project.caseStudyUrl;
+            if (project.githubLabel != null) githubButton.Q<Label>().text = project.githubLabel;
+            else githubButton.Q<Label>().text = "GITHUB";
+
             if (!string.IsNullOrEmpty(url)) githubButton.clicked += () => Application.OpenURL(url);
             else githubButton.style.display = DisplayStyle.None;
         }
@@ -465,7 +491,8 @@ public struct ProjectMetadata
     public string tag; public string Tag;
     public string description; public string Description;
     public string screenshotUrl; public string ScreenshotAddress;
-    public string caseStudyUrl; public string githubUrl;
+    public string caseStudyUrl; public string caseStudyLabel;
+    public string githubUrl; public string githubLabel;
     public string platform; public string Platform;
 
     //JSON fields for the full Case Study page

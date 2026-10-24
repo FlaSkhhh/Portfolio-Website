@@ -160,7 +160,17 @@ Button {
     scale: 1.05 1.05;
 }
 
-.btn-detail-back { font-size: 24px; margin-right: 16px; height: 40px; }
+.btn-detail-back { 
+    width: 120px;
+    height: 60px;
+    font-size: 32px; 
+    margin: 0; /* Reset margins */
+    margin-right: 20px; /* Gap between arrow and the Project Title */
+    padding: 0;
+    justify-content: center; 
+    align-self: center;
+    -unity-text-align: middle-center;
+}
 
 /* ==========================================
    TOUCH / CLICK FEEDBACK (The "Push" Effect)
@@ -189,7 +199,7 @@ Button:active,
 
 /* ===== HEADER ===== */
 .header-bar {
-    height: 64px;
+    height: 80px;
     background-color: #14161F;
     border-bottom-width: 1px;
     border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -202,7 +212,7 @@ Button:active,
 }
 
 .header-title {
-    font-size: 18px;
+    font-size: 28px;
     -unity-font-style: bold;
     color: #FFFFFF;
 }
@@ -236,7 +246,10 @@ Button:active,
     align-items: center;
     background-color: transparent;
     border-bottom-width: 0px;
-    padding: 12px 32px;
+    padding-left: 32px;
+    padding-right: 32px;
+    /* Replaced top/bottom padding with fixed height */
+    height: 80px; 
     flex-shrink: 0;
 }
 
@@ -292,7 +305,10 @@ Button:active,
     background-color: #14161F;
     border-bottom-width: 1px;
     border-bottom-color: rgba(255, 255, 255, 0.08);
-    padding: 12px 32px;
+    padding-left: 32px;
+    padding-right: 32px;
+    /* Replaced top/bottom padding with fixed height */
+    height: 80px;
 }
 
 .detail-title {
@@ -768,8 +784,8 @@ Button:active,
 #HeaderExploreBtn,
 #NavContact,
 #BtnDownloadCV {
-    min-width: 140px;
-    height: 40px;
+    min-width: 200px;
+    height: 64px;
     margin-top: 0;
     margin-bottom: 0;
     margin-left: 0;
@@ -781,8 +797,8 @@ Button:active,
 #HeaderExploreBtn .cyber-text,
 #NavContact .cyber-text,
 #BtnDownloadCV .cyber-text {
-    font-size: 17px; 
-    letter-spacing: -4px;
+    font-size: 22px; 
+    letter-spacing: -3px;
 }
 
 /* Keeps the final button completely flush with the right edge */
@@ -1206,6 +1222,7 @@ INTRO STUFF
 .is-mobile .header-bar {
     padding-left: 16px;
     padding-right: 16px;
+    height: 96px;
 }
 
 .is-mobile .section-title {
@@ -1214,6 +1231,21 @@ INTRO STUFF
 
 .is-mobile .portfolio-view {
     padding: 24px 16px;
+}
+
+.is-mobile .portfolio-header-row,
+.is-mobile .detail-header-row {
+    height: 85px; /* Matches the new mobile main header */
+    padding-left: 20px; /* Tighter padding for narrow phone screens */
+    padding-right: 20px;
+}
+
+.is-mobile .btn-detail-back {
+    width: 100px;
+    height: 50px; /* Massive thumb target */
+    font-size: 46px; /* Scales the arrow icon up */
+    margin-right: 12px; /* Keeps the arrow closer to the title on phones */
+    align-self: center; /* Bulletproof centering */
 }
 
 .is-mobile .detail-panel {
@@ -1328,7 +1360,7 @@ INTRO STUFF
 }
 
 .is-mobile .header-title {
-    font-size: 15px; /* Scaled down for mobile */
+    font-size: 20px; /* Scaled down for mobile */
     flex-shrink: 1;  /* Allows the text to wrap/shrink if necessary */
     white-space: nowrap;
 }
@@ -1336,26 +1368,41 @@ INTRO STUFF
 .is-mobile #HeaderExploreBtn,
 .is-mobile #NavContact,
 .is-mobile #BtnDownloadCV {
-    min-width: 120px;  
-    height: 35px;     
-    margin-top: 2.5px;
+    min-width: 170px;  
+    height: 60px;     
+    margin-top: 0;
     margin-bottom: 0;
     margin-left: 0;
     margin-right: 18px; /* Tighter gap between buttons */
     padding: 0;
+    align-self: center; 
+    
+    /* FIX 2: Ensures the smaller 15px text stays vertically centered inside the 64px button */
+    justify-content: center;
 }
 
 /* Scales the text down to fit the smaller button height */
 .is-mobile #HeaderExploreBtn .cyber-text,
 .is-mobile #NavContact .cyber-text,
 .is-mobile #BtnDownloadCV .cyber-text {
-    font-size: 14px; 
+    font-size: 20px; 
 }
 
+.is-mobile #HeaderExploreBtn,
+.is-mobile #HeaderExploreBtn.header-teleport-item--popped,
+.is-mobile #HeaderExploreBtn.header-teleport-item--hidden {
+    display: none;
+    min-width: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    scale: 0 0; /* Kills the animation scale */
+}
 /* Keeps the final button flush with the edge of the screen */
 .is-mobile #BtnDownloadCV {
     margin-right: 0;
-    margin-bottom: 24px;
 }
 
 /* --- MOBILE CV FIXES --- */

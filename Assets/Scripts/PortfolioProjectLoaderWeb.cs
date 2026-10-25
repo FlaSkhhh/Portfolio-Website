@@ -81,7 +81,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
 
         evt.StopImmediatePropagation();
 
-        float scrollSpeedMultiplier = 0.5f;
+        float scrollSpeedMultiplier = 2f;
 
         Vector2 currentOffset = activeScrollView.scrollOffset;
         currentOffset.y += (evt.delta.y * scrollSpeedMultiplier);

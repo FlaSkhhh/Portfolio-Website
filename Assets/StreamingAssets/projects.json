@@ -36,9 +36,9 @@
     {
       "id": "cpl",
       "title": "Caro Premier League (CPL)",
-      "tag": "Multiplayer & LiveOps | Low End Optimisation | Web3 & Firebase | Anti-Cheat",
+      "tag": "Multiplayer & LiveOps | Low End Optimisation | Web3 & Firebase | Anti-Cheat | OneSignal",
       "description": "Commercial multiplayer cricket title released on Android and iOS featuring serverless tournaments, custom Web3 authentication, and a LiveOps admin dashboard.",
-      "screenshotUrl": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/test.png",
+      "screenshotUrl": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/CPL/CPLHero.jpg",
       "caseStudyUrl": "https://www.cplgames.io/",
       "caseStudyLabel": "OFFICIAL WEBSITE",
       "githubUrl": "http://play.google.com/store/apps/details?id=com.metaoryx.caro11",
@@ -47,20 +47,20 @@
       "rows": [
         {
           "header": "OVERVIEW",
-          "text": "<b>Full stack development:</b> joined in early stages as sole programmer, driving a dual-store release and LiveOps maintenance.",
-          "media": "Screenshots/CPL_Gameplay.mp4",
-          "poster": "Screenshots/CPL.jpg"
+          "text": "<b>Full stack development:</b> joined in early stages as sole programmer, driving a dual store release and LiveOps maintenance.",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/CPL/CPLOverview.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/CPL/CPLOverview_Poster.jpg"
         },
         {
           "header": "CHALLENGES",
           "text": "<b>Fixed gameplay loop desyncs:</b> driven by the authoritative hit event instead of local swing timing on the receiving client.",
-          "media": "Screenshots/CPL_HitSync.mp4",
-          "poster": ""
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/CPL/Row1_HitSync.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/CPL/Row1_HitSync_Poster.jpg"
         },
         {
           "header": "WEB3 & AUTH",
-          "text": "<b>Integrated REST APIs</b> for marketplace inventory management and in-game token transactions and trades.",
-          "media": "Screenshots/CPL_WalletTeam.jpg",
+          "text": "<b>Integrated REST APIs</b> for marketplace inventory management and in game token transactions and trades.",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/CPL/NFTStore.jpg",
           "poster": ""
         },
         {
@@ -77,32 +77,32 @@
         },
         {
           "header": "MATCHMAKING & AI",
-          "text": "<b>Scheduled matchmaking:</b> queues open at fixed minute marks and survive app restarts via timestamps, with roster validation and push reminders.",
-          "media": "Screenshots/CPL_Matchmaking.jpg",
+          "text": "<b>Scheduled matchmaking:</b> queues open at fixed minute marks and survive app restarts via timestamps, with roster validation and local push reminders.",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/CPL/ScheduledMatchmaking.jpg",
           "poster": ""
         },
         {
           "header": "",
           "text": "<b>Built tutorials and AI bots</b> inside an online-only architecture, alongside friend-code lobbies and live player challenges.",
-          "media": "Screenshots/CPL_BotTutorial.mp4",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/CPL/Tutorial.jpg",
           "poster": ""
         },
         {
           "header": "LIVEOPS",
           "text": "<b>Serverless tournaments:</b> Firebase Cloud Functions and OneSignal push alerts pair players and advance brackets without a dedicated server.",
-          "media": "Screenshots/CPL_Tournament.jpg",
+          "media": "",
           "poster": ""
         },
         {
           "header": "",
-          "text": "<b>Built LiveOps Admin Dashboard</b> allowing non-technical staff to manage game modes, moderate accounts, and audit token flows.",
-          "media": "Screenshots/CPL_AdminPanel.jpg",
+          "text": "<b>Built LiveOps Admin Dashboard</b> allowing the team to manage game modes, moderate accounts, audit token flows, and send OneSignal API push notifications.",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/CPL/AdminPanel.jpg",
           "poster": ""
         },
         {
           "header": "ANTI-CHEAT",
-          "text": "<b>Prevented multi-account NFT farming:</b> logged daily asset usage to database nodes, cross-referencing hashsets post-match to block traded assets from claiming twice.",
-          "media": "Screenshots/CPL_GameModes.jpg",
+          "text": "<b>Prevented multi account NFT farming:</b> logged daily asset usage to database nodes, cross referencing hashsets post match to block traded assets from claiming twice.",
+          "media": "",
           "poster": ""
         },
         {
@@ -114,30 +114,30 @@
         {
           "header": "PRODUCTION",
           "text": "<b>Created a runtime character swapper:</b> unified the roster onto a single animated rig, scripting face and kit swaps to cut animation workload by 90%+.",
-          "media": "Screenshots/CPL_WinAnimation.mp4",
-          "poster": ""
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/CPL/CharacterSwap.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/CPL/CharacterSwap_Poster.jpg"
         },
         {
           "header": "",
-          "text": "<b>Multi-language Audio Manager:</b> supports localised commentary swapping from settings with sequential non-repeating dialogue queues.",
+          "text": "<b>Multi language Audio Manager:</b> supports localised commentary swapping from settings with sequential non repeating dialogue queues.",
           "media": "",
           "poster": ""
         },
         {
           "header": "",
-          "text": "<b>Integrated native OS features:</b> implemented gallery-based profile picture uploads and a referral system that caches runtime win-screen screenshots to temp storage for native OS sharing.",
-          "media": "",
+          "text": "<b>Integrated native OS features:</b> implemented gallery based profile picture uploads and a referral system that caches runtime win screen screenshots to temp storage for native OS sharing.",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/CPL/Language.jpg",
           "poster": ""
         },
         {
           "header": "OPTIMISATION",
-          "text": "<b>Cut build footprint by 80%+</b> (1+ GB APK to 170 MB APK) through tier-based texture, mesh, audio, and keyframe compression.",
+          "text": "<b>Cut build footprint by 80%+</b> (1+ GB APK to 170 MB APK) through tier based texture, mesh, audio, and keyframe compression.",
           "media": "",
           "poster": ""
         },
         {
           "header": "",
-          "text": "<b>Cut daily bandwidth from 2+ GBs to under 100 MB</b> using local snapshot caching, shallow REST queries, and database schema restructuring.",
+          "text": "<b>Cut daily bandwidth from 2+ GBs to under 100 MB</b> for around 30 daily users using local snapshot caching, shallow REST queries, and database schema restructuring.",
           "media": "",
           "poster": ""
         },
@@ -149,8 +149,8 @@
         },
         {
           "header": "RELEASE",
-          "text": "<b>Secured dual-store certification:</b> navigated Apple and Google policy guidelines to publish a tokenised external asset game.",
-          "media": "",
+          "text": "<b>Secured dual store certification:</b> navigated Apple and Google policy guidelines to publish a tokenised external asset game.",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/CPL/Release_PlayStore.jpg",
           "poster": ""
         },
         {
@@ -166,7 +166,7 @@
       "title": "Team Based Multiplayer Hand Cricket",
       "tag": "Team Multiplayer | Cross Platform | Unity Netcode | Lobby & Relay | 34 MB APK",
       "description": "Cross-platform up to 5v5 multiplayer adaptation of the real-life hand cricket game built for Android and WebGL, featuring lightweight netcode and a compact build size.",
-      "screenshotUrl": "Screenshots/HandCricket.jpg",
+      "screenshotUrl": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/Hero_HandCricket.jpg",
       "caseStudyUrl": "https://flaskhhh.github.io/Hand-Cricket/",
       "githubUrl": "https://github.com/FlaSkhhh/Hand-Cricket",
       "platform": "Android / WebGL",
@@ -174,13 +174,13 @@
         {
           "header": "OVERVIEW",
           "text": "<b>Simultaneous reveal multiplayer:</b> an up to 5v5 adaptation of the classic childhood hand game, playable instantly in your browser (landscape) with open-source network logic.",
-          "media": "Screenshots/HandCricket_Gameplay.mp4",
-          "poster": "Screenshots/HandCricket.jpg"
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/HandCricket_Overview.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/HandCricket_Overview_Poster.jpg"
         },
         {
           "header": "",
           "text": "<b>34 MB APK</b> with just 11 MB of raw assets (including a 6 MB OST) built from scratch.",
-          "media": "Screenshots/HandCricket_DioramaMenu.jpg",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/HandCricket_Home.jpg",
           "poster": ""
         },
         {
@@ -192,13 +192,13 @@
         {
           "header": "",
           "text": "<b>Handled mid match disconnects:</b> custom index-shifting recalculates batting and bowling orders on the fly, with host drop fallbacks.",
-          "media": "Screenshots/HandCricket_DisconnectPopup.jpg",
-          "poster": ""
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/HandCricket_Disconnect.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/HandCricket_Disconnect_Poster.jpg"
         },
         {
           "header": "CROSSPLAY",
           "text": "<b>Android and WebGL crossplay</b> allows instant browser access across any device without requiring an install.",
-          "media": "Screenshots/HandCricket_Matchmaking.jpg",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/HandCricket_Lobby.jpg",
           "poster": ""
         },
         {
@@ -210,25 +210,25 @@
         {
           "header": "OPTIMISED NETCODE",
           "text": "<b>Minimised network bandwidth</b> by syncing only player ID lists and team names via persistent NetworkVariables.",
-          "media": "Screenshots/HandCricket_RunSelection.mp4",
-          "poster": ""
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/HandCricket_LobbyVideo.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/HandCricket_LobbyVideo_Poster.jpg"
         },
         {
           "header": "",
-          "text": "<b>Lightweight event-driven architecture</b> uses zero NetworkTransforms, executing all 3D movements and animations deterministically on the client.",
-          "media": "Screenshots/HandCricket_TableHotSeat.jpg",
-          "poster": ""
+          "text": "<b>Lightweight event driven architecture</b> uses zero NetworkTransforms, executing all 3D movements and animations deterministically on the client.",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/HandCricket_End.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/HandCricket_End_Poster.jpg"
         },
         {
           "header": "",
           "text": "<b>Zero heartbeat pings:</b> host deletes the lobby on launch, recreates a new one post-match, and distributes the new lobby code via Relay.",
-          "media": "Screenshots/HandCricket_LobbyLineup.mp4",
+          "media": "",
           "poster": ""
         },
         {
           "header": "CUSTOM UI & CHARACTERS",
-          "text": "<b>TV broadcast-style match HUD:</b> built a dynamic UI overlay to display real-time team scoreboards and match states similar to recent World Cups.",
-          "media": "Screenshots/HandCricket_BroadcastHUD.jpg",
+          "text": "<b>TV broadcast-style match HUD:</b> built a dynamic UI overlay to display real time team scoreboards and match states similar to recent World Cups.",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/Overlay.jpg",
           "poster": ""
         },
         {
@@ -240,8 +240,8 @@
         {
           "header": "",
           "text": "<b>Hundreds of avatar combinations</b> generated from a minimal 3-face, 3-hat asset pack using an HSV colour slider.",
-          "media": "Screenshots/HandCricket_Customiser.jpg",
-          "poster": ""
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/CharCustomisation.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/CharCustomisation_Poster.jpg"
         }
       ]
     },
@@ -250,7 +250,7 @@
       "title": "Super Over Cricket",
       "tag": "PlayFab & Firebase | Low End Optimisation | Release Management | LiveOps Tuning | Facebook SDK",
       "description": "Commercial 1v1 multiplayer cricket title on Android featuring skill-based matchmaking, Facebook cloud saves and backup, and remote LiveOps physics tuning with 30k+ downloads.",
-      "screenshotUrl": "Screenshots/SuperOver.jpg",
+      "screenshotUrl": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/SOC/SocHero.jpg",
       "caseStudyUrl": "",
       "githubUrl": "https://play.google.com/store/apps/details?id=com.Hyperplay.SuperOverCricket",
       "githubLabel": "PLAY STORE",
@@ -258,7 +258,7 @@
       "rows": [
         {
           "header": "OVERVIEW",
-          "text": "<b>30k+ downloads:</b> took over late-stage production as sole programmer to complete social systems, UI/UX, matchmaking, release, and maintenance.",
+          "text": "<b>30k+ downloads:</b> took over late stage production as sole programmer to complete social systems, UI/UX, matchmaking, release, and maintenance.",
           "media": "Screenshots/SuperOver_Gameplay.mp4",
           "poster": "Screenshots/SuperOver.jpg"
         },
@@ -276,7 +276,7 @@
         },
         {
           "header": "MATCHMAKING & AI",
-          "text": "<b>Skill-based matchmaking (PlayFab):</b> the search range widens over time, then routes to a bot match when the timer expires.",
+          "text": "<b>Skill based matchmaking (PlayFab):</b> the search range widens over time, then routes to a bot match when the timer expires.",
           "media": "",
           "poster": ""
         },

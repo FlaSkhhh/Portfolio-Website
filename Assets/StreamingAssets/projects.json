@@ -283,7 +283,7 @@
         {
           "header": "",
           "text": "<b>Interactive tutorial</b> onboards new players into timing-based batting and bowling mechanics before entering live queues.",
-          "media": "Screenshots/SuperOver_Tutorial.mp4",
+          "media": "",
           "poster": ""
         },
         {
@@ -475,8 +475,8 @@
         {
           "header": "AI & BEHAVIOUR",
           "text": "<b>Distance based AI:</b> a custom state machine reads player proximity and verticality to switch between ranged artillery, gap closing leaps, grabs, and anti-air uppercuts.",
-          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/BossFight/RangedAttacks.mp4",
-          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/BossFight/RangedAttacks_Poster.jpg"
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/BossFight/RangedAttack.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/BossFight/RangedAttack_Poster.jpg"
         },
         {
           "header": "COMBAT MECHANICS",

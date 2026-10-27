@@ -120,13 +120,13 @@
         {
           "header": "",
           "text": "<b>Multi language Audio Manager:</b> supports localised commentary swapping from settings with sequential non repeating dialogue queues.",
-          "media": "",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/CPL/Language.jpg",
           "poster": ""
         },
         {
           "header": "",
           "text": "<b>Integrated native OS features:</b> implemented gallery based profile picture uploads and a referral system that caches runtime win screen screenshots to temp storage for native OS sharing.",
-          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/CPL/Language.jpg",
+          "media": "",
           "poster": ""
         },
         {
@@ -250,7 +250,7 @@
       "title": "Super Over Cricket",
       "tag": "PlayFab & Firebase | Low End Optimisation | Release Management | LiveOps Tuning | Facebook SDK",
       "description": "Commercial 1v1 multiplayer cricket title on Android featuring skill-based matchmaking, Facebook cloud saves and backup, and remote LiveOps physics tuning with 30k+ downloads.",
-      "screenshotUrl": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/SOC/SocHero.jpg",
+      "screenshotUrl": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/SOC/SoCHero.jpg",
       "caseStudyUrl": "",
       "githubUrl": "https://play.google.com/store/apps/details?id=com.Hyperplay.SuperOverCricket",
       "githubLabel": "PLAY STORE",
@@ -259,25 +259,25 @@
         {
           "header": "OVERVIEW",
           "text": "<b>30k+ downloads:</b> took over late stage production as sole programmer to complete social systems, UI/UX, matchmaking, release, and maintenance.",
-          "media": "Screenshots/SuperOver_Gameplay.mp4",
-          "poster": "Screenshots/SuperOver.jpg"
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/SOC/SoCOverview.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/SOC/SoCOverview_Poster.jpg"
         },
         {
           "header": "CHALLENGES",
-          "text": "<b>Resolved high-latency state desyncs:</b> bypassed local batting emulation on the receiving client, syncing match state strictly on authoritative delivery outcomes.",
+          "text": "<b>Resolved high latency state desyncs:</b> bypassed local batting emulation on the receiving client, syncing match state strictly on authoritative delivery outcomes.",
           "media": "",
           "poster": ""
         },
         {
           "header": "",
-          "text": "<b>Solved store submission restriction:</b> completed 3 months of post-launch maintenance over remote macOS screen share to clear Google compromised-account compliance flags.",
+          "text": "<b>Solved store submission restriction:</b> completed 3 months of post launch maintenance over remote macOS screen share to clear alleged Google compromised account compliance flags.",
           "media": "",
           "poster": ""
         },
         {
           "header": "MATCHMAKING & AI",
           "text": "<b>Skill based matchmaking (PlayFab):</b> the search range widens over time, then routes to a bot match when the timer expires.",
-          "media": "",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/SOC/SoCMatchmaking.jpg",
           "poster": ""
         },
         {
@@ -289,13 +289,13 @@
         {
           "header": "SOCIAL & AUTH",
           "text": "<b>Facebook SDK integration</b> handles cross-install cloud saves, profile syncing, guest fallbacks, and compliant user data deletion.",
-          "media": "Screenshots/SuperOver_Facebook.jpg",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/SOC/SoCLogin.jpg",
           "poster": ""
         },
         {
           "header": "",
-          "text": "<b>Firebase friend system</b> links Facebook friends and recent friend-battle opponents, auto-detects a copied room code, and offers to paste it.",
-          "media": "Screenshots/SuperOver_Friends.jpg",
+          "text": "<b>Firebase friend system</b> links Facebook friends and recent friend battle opponents, auto detects a copied room code, and offers to paste it.",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/SOC/SoCFriendScreen.jpg",
           "poster": ""
         },
         {
@@ -306,14 +306,14 @@
         },
         {
           "header": "",
-          "text": "<b>Unix timestamp-ordered match histories</b> stored and queried via strict Firebase Security Rules.",
+          "text": "<b>Unix timestamp ordered match histories</b> stored and queried via strict Firebase Security Rules.",
           "media": "",
           "poster": ""
         },
         {
           "header": "OPTIMISATION",
-          "text": "<b>70 MB download size:</b> compressed 3D stadium assets, audio files, and textures to optimise for low-end devices, maintaining around 200 MB installed footprint.",
-          "media": "",
+          "text": "<b>70 MB download size:</b> compressed 3D stadium assets, audio files, and textures to optimise for low end devices, maintaining around 200 MB installed footprint.",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/SOC/SoC3D.jpg",
           "poster": ""
         }
       ]
@@ -323,7 +323,7 @@
       "title": "Interactive Web Portfolio",
       "tag": "5 MB Initial Load | Data Driven UI | UI Toolkit | JS Bridge",
       "description": "An interactive portfolio built entirely in Unity UI Toolkit for WebGL, featuring a cyberpunk aesthetic, JSON driven case studies, and custom swipe navigation.",
-      "screenshotUrl": "Screenshots/portfolio_hero.png",
+      "screenshotUrl": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Portfolio/Hero.jpg",
       "caseStudyUrl": "https://shantanu-nandkhile.netlify.app/",
       "githubUrl": "https://github.com/FlaSkhhh/Portfolio-Website",
       "platform": "WebGL",
@@ -331,8 +331,8 @@
         {
           "header": "OVERVIEW",
           "text": "<b>Around 5 MB first-load download:</b> a Unity UI Toolkit portfolio built and deployed solo, featuring a cyberpunk aesthetic with background shaders and UI glitch effects.",
-          "media": "Screenshots/Portfolio_Demo.mp4",
-          "poster": "Screenshots/portfolio_hero.png"
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Portfolio/Overview.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Portfolio/Overview_Poster.jpg"
         },
         {
           "header": "CHALLENGES",
@@ -343,13 +343,13 @@
         {
           "header": "",
           "text": "<b>Overcame UI Toolkit limitations:</b> bypassed the lack of native CSS @media queries by writing a custom C# resize observer that evaluates viewport geometry at runtime to toggle an .is-mobile class, avoiding duplicate UI trees.",
-          "media": "",
-          "poster": ""
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Portfolio/LayoutChange.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Portfolio/LayoutChange_Poster.jpg"
         },
         {
           "header": "DATA & CONTENT",
           "text": "<b>JSON driven case studies:</b> dynamically spawns UXML project cards and media rows using local StreamingAssets JSON and remote server media, bypassing WebGL memory constraints and allowing instant content updates without rebuilding.",
-          "media": "",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Portfolio/DataDriven.jpg",
           "poster": ""
         },
         {
@@ -367,8 +367,8 @@
         {
           "header": "",
           "text": "<b>History API sync:</b> appends virtual anchors to the URL via 'history.pushState', binding the custom swipe gestures and browser back/forward actions directly to Unity UI transitions.",
-          "media": "",
-          "poster": ""
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Portfolio/BrowserApi.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Portfolio/BrowserApi_Poster.mp4"
         },
         {
           "header": "PERFORMANCE & BUILD",
@@ -389,7 +389,7 @@
       "title": "Finquest",
       "tag": "7.5 MB Initial Load | ScriptableObject | Educational | JS Bridge | DOTween",
       "description": "A gamified WebGL educational experience developed in around 2 weeks to serve as the interactive playable pitch for a finance learning kids app.",
-      "screenshotUrl": "Screenshots/Finquest.jpg",
+      "screenshotUrl": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Finquest/FinHero.jpg",
       "caseStudyUrl": "https://finquest-the-game.netlify.app/",
       "githubUrl": "https://github.com/FlaSkhhh/Finquest-Game",
       "platform": "WebGL",
@@ -397,12 +397,12 @@
         {
           "header": "OVERVIEW",
           "text": "<b>Rapid 2 week production cycle:</b> prototyped, programmed, and shipped a complete demo WebGL title in around two weeks for a group project.",
-          "media": "Screenshots/Finquest_Gameplay.mp4",
-          "poster": "Screenshots/Finquest.jpg"
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Finquest/FinOverview.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Finquest/FinOverview_Poster.jpg"
         },
         {
           "header": "APP INTEGRATION",
-          "text": "<b>Custom WebGL wrapper:</b> authored a responsive HTML template utilising 100dvh and dynamic meta tags to ensure consistent viewport scaling and prevent mobile URL bars from clipping the canvas.",
+          "text": "<b>Custom WebGL wrapper:</b> made an HTML template utilising 100dvh to prevent mobile URL bar clipping, and also leveraging UGUI anchoring to keep core gameplay playable on all orientations.",
           "media": "",
           "poster": ""
         },
@@ -414,31 +414,31 @@
         },
         {
           "header": "ARCHITECTURE & SYSTEMS",
-          "text": "<b>Data-driven progression:</b> decoupled content from logic using hierarchical ScriptableObjects, allowing instant iteration of level data, UI assets, and dictionary definitions without altering the codebase.",
-          "media": "",
+          "text": "<b>Data driven progression:</b> decoupled content from logic using hierarchical ScriptableObjects, allowing instant iteration of level data, UI assets, and dictionary definitions without altering the codebase.",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Finquest/ScriptableObject.jpg",
           "poster": ""
         },
         {
           "header": "",
-          "text": "<b>Dynamic mini-game routing:</b> implemented bitmasking to tag question ScriptableObjects with compatible game types, randomly routing questions into one of four distinct types at runtime.",
-          "media": "Screenshots/Finquest_GameModes.jpg",
+          "text": "<b>Dynamic mini game routing:</b> implemented bitmasking to tag question ScriptableObjects with compatible game types, randomly routing questions into one of four distinct types at runtime.",
+          "media": "",
           "poster": ""
         },
         {
           "header": "UI MECHANICS",
           "text": "<b>Math driven input systems:</b> built Tinder style swiping and drag and drop sorting by evaluating screen-space deltas and RectTransform overlaps, bypassing Unity's 2D physics engine.",
-          "media": "Screenshots/Finquest_SwipeMechanic.mp4",
-          "poster": ""
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Finquest/SwipeGame.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Finquest/SwipeGame_Poster.jpg"
         },
         {
           "header": "WEBGL OPTIMISATION",
-          "text": "<b>Single-scene architecture:</b> eliminated browser lag spikes and scene load hitching by preloading all mini games into cached CanvasGroups, toggling states via alpha and raycast blocking.",
-          "media": "",
+          "text": "<b>Single scene architecture:</b> eliminated browser lag spikes and scene load hitching by preloading all mini games into cached CanvasGroups, toggling states via alpha and raycast blocking.",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Finquest/HierarchyGames.jpg",
           "poster": ""
         },
         {
           "header": "",
-          "text": "<b>7.5 MB initial load:</b> achieved a highly compact WebGL footprint by aggressively stripping unused engine code and compressing all project assets down to around 2 MB.",
+          "text": "<b>Around 7.5 MB initial load:</b> achieved a highly compact WebGL footprint by aggressively stripping unused engine code and compressing all project assets down to around 2 MB.",
           "media": "",
           "poster": ""
         },
@@ -450,9 +450,9 @@
         },
         {
           "header": "",
-          "text": "<b>Code driven UI animation:</b> replaced Unity Animator clips with scalable DOTween sequences for all UI animations including staggered UI spawns, drag-and-tilt mechanics, and immediate player feedback.",
-          "media": "",
-          "poster": ""
+          "text": "<b>Code driven UI animation:</b> replaced Unity Animator clips with scalable DOTween sequences for all UI animations including staggered UI spawns, drag and tilt mechanics, and immediate player feedback.",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Finquest/DOTween.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Finquest/DOTween_Poster.jpg"
         }
       ]
     },
@@ -461,7 +461,7 @@
       "title": "Boss Fight Prototype",
       "tag": "State Machines | Physics Layers | Combat AI",
       "description": "A 2D combat prototype featuring a multi-phase boss, distance-based AI behaviour, and responsive i-frame dodge mechanics.",
-      "screenshotUrl": "Screenshots/BossFight.jpg",
+      "screenshotUrl": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/BossFight/Hero.jpg",
       "caseStudyUrl": "",
       "githubUrl": "https://github.com/FlaSkhhh/2D-platform-boss-battle",
       "platform": "PC",
@@ -469,32 +469,32 @@
         {
           "header": "OVERVIEW",
           "text": "<b>Action RPG combat loop:</b> engineered a complete 2D boss battle with dynamic phase transitions, distinct attack patterns, and a custom player controller.",
-          "media": "Screenshots/BossFight_Gameplay.mp4",
-          "poster": "Screenshots/BossFight.jpg"
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/BossFight/Overview.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/BossFight/Overview_Poster.jpg"
         },
         {
           "header": "AI & BEHAVIOUR",
-          "text": "<b>Distance-based AI:</b> a custom state machine reads player proximity and verticality to switch between ranged artillery, gap-closing leaps, grabs, and anti-air uppercuts.",
-          "media": "",
-          "poster": ""
+          "text": "<b>Distance based AI:</b> a custom state machine reads player proximity and verticality to switch between ranged artillery, gap closing leaps, grabs, and anti-air uppercuts.",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/BossFight/RangedAttacks.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/BossFight/RangedAttacks_Poster.jpg"
         },
         {
           "header": "COMBAT MECHANICS",
-          "text": "<b>I-frame & collision manipulation:</b> implemented player dodge sliding and invincible boss sweeps by dynamically swapping physics layers at runtime, bypassing hitboxes without frame-by-frame collider toggling.",
+          "text": "<b>I-frame & collision manipulation:</b> implemented player dodge and invincibile sliding by dynamically swapping physics layers at runtime, bypassing hitboxes without frame by frame collider toggling.",
           "media": "",
           "poster": ""
         },
         {
           "header": "",
-          "text": "<b>Custom knockback and state locks:</b> handle directional explosions and mid-air stuns (dizzy juggling).",
-          "media": "",
-          "poster": ""
+          "text": "<b>Knockbacks and state locks:</b> added directional knockbacks to player when hit by strong attacks and mid air stuns (dizzy juggling).",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/BossFight/Knockback.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/BossFight/Knockback_Poster.jpg"
         },
         {
           "header": "",
-          "text": "<b>Cinematic grab attack:</b> locks the player's transform to the boss's hand.",
-          "media": "Screenshots/BossFight_GrabAttack.mp4",
-          "poster": ""
+          "text": "<b>Transform manipulation:</b> created a cinematic grab attack that temporarily overrides player controls and locks their transform to the boss's hand during the animation sequence.",
+          "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/BossFight/Grab.mp4",
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/BossFight/Grab_Poster.jpg"
         },
         {
           "header": "ANIMATION & FEEL",

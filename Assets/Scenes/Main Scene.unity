@@ -403,7 +403,7 @@ MonoBehaviour:
   projectShowcaseRowTemplate: {fileID: 9197481963319205126, guid: 8c050293760a6334eb5d335b99df42a8, type: 3}
   loadFromStreamingAssets: 1
   projectDataUrl: projects.json
-  remoteServerUrl: https://yournetlifydomain.netlify.app/api/projects.json
+  remoteServerUrl: https://shantanu-nandkhile.netlify.app/StreamingAssets/projects.json
   bonfireFrames: []
 --- !u!114 &997640892
 MonoBehaviour:

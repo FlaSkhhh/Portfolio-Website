@@ -12,7 +12,7 @@
   "experience": [
     {
       "title": "Game Programmer | Parody Studios",
-      "date": "Oct 2024 - Present",
+      "date": "Oct 2024 - Sept 2026",
       "bullets": [
         "Independently completed and released two multiplayer titles; built robust systems around core mechanics including game modes, server-side validation, and admin panels.",
         "Implemented secure backend pipelines using Firebase and PlayFab; engineered custom matchmaking logic via User IDs and synced complete player states.",
@@ -368,7 +368,7 @@
           "header": "",
           "text": "<b>History API sync:</b> appends virtual anchors to the URL via 'history.pushState', binding the custom swipe gestures and browser back/forward actions directly to Unity UI transitions.",
           "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Portfolio/BrowserApi.mp4",
-          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Portfolio/BrowserApi_Poster.mp4"
+          "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Portfolio/BrowserApi_Poster.jpg"
         },
         {
           "header": "PERFORMANCE & BUILD",

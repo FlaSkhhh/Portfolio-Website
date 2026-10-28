@@ -289,6 +289,20 @@ mergeInto(LibraryManager.library, {
         window._historyIndex = window._lastKnownIndex; 
         window.history.go(delta); 
     }
-  }
+  },
+
+  OpenCV: function(urlPtr) {
+        var url = UTF8ToString(urlPtr);
+        
+        // Create a native HTML link on the fly
+        var link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank'; // Opens in a new tab
+        
+        // Append, click natively, and remove immediately
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 
 });

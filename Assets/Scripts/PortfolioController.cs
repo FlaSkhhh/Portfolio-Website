@@ -62,6 +62,7 @@ public class PortfolioController : MonoBehaviour
     [DllImport("__Internal")] static extern void WebGLGoBack();
     [DllImport("__Internal")] static extern void WebGLSetSwipeLock(bool isLocked);
     [DllImport("__Internal")] static extern void WebGLCancelHistoryChange();
+    [DllImport("__Internal")] static extern void OpenCV(string url);
 
     void Start()
     {
@@ -140,7 +141,7 @@ public class PortfolioController : MonoBehaviour
         if (btnDetailGitHub != null) btnDetailGitHub.clicked += () => { if (!string.IsNullOrEmpty(currentGithubUrl)) Application.OpenURL(currentGithubUrl); };
         if (headerExploreBtn != null) headerExploreBtn.clicked += OnEnterPortfolioClicked;
         if (navContactBtn != null) navContactBtn.clicked += OpenContactModal;
-        if (cvDownloadBtn != null) cvDownloadBtn.clicked += () => Application.OpenURL("https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Shantanu_Nandkhile.pdf");
+        if (cvDownloadBtn != null) cvDownloadBtn.clicked += CVDownloadClicked;
         if (btnCloseModal != null) btnCloseModal.clicked += CloseContactModal;
 
         if (modalOverlay != null) modalOverlay.RegisterCallback<ClickEvent>(evt => CloseContactModal());
@@ -368,7 +369,18 @@ public class PortfolioController : MonoBehaviour
 #endif
     }
 
-    private void OpenContactModal()
+    void CVDownloadClicked()
+    {
+        string link = "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Shantanu_Nandkhile.pdf";
+#if UNITY_WEBGL && !UNITY_EDITOR
+        // Use the Safari-safe HTML anchor trick in WebGL
+        OpenCV(link);
+#else
+        Application.OpenURL(link);
+#endif
+
+    }
+    void OpenContactModal()
     {
         shaderTracker.TriggerGlitch();
         isContactModalOpen = true;
@@ -380,7 +392,7 @@ public class PortfolioController : MonoBehaviour
         PlayGlitch(modalBox, openSteps, () => StartAmbientGlitch(modalBox));
     }
 
-    private void CloseContactModal()
+    void CloseContactModal()
     {
         isContactModalOpen = false;
 

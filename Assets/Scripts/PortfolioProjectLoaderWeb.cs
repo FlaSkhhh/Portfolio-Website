@@ -78,14 +78,30 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
     {
         ScrollView activeScrollView = evt.currentTarget as ScrollView;
         if (activeScrollView == null) return;
-
         evt.StopImmediatePropagation();
 
-        float scrollSpeedMultiplier = 8f;
+        float rawDelta = evt.delta.y;
+        float absDelta = Mathf.Abs(rawDelta);
+        float finalScrollDelta = 0f;
+
+        if (absDelta <= 5f)
+        {
+            // TIER 1: The mouse (3) and slow trackpad swipes get the 10x boost
+            finalScrollDelta = rawDelta * 10f;
+        }
+        else
+        {
+            // TIER 2: Fast trackpad swipes (> 5)
+            // Keep the 50 pixels of momentum from Tier 1 (5 units * 10x), 
+            // then apply the slower 4x multiplier ONLY to the extra speed.
+            float baseMomentum = 50f;
+            float extraSpeed = (absDelta - 5f) * 4f;
+
+            finalScrollDelta = Mathf.Sign(rawDelta) * (baseMomentum + extraSpeed);
+        }
 
         Vector2 currentOffset = activeScrollView.scrollOffset;
-        currentOffset.y += (evt.delta.y * scrollSpeedMultiplier);
-
+        currentOffset.y += finalScrollDelta;
         activeScrollView.scrollOffset = currentOffset;
     }
 

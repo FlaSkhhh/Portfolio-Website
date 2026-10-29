@@ -84,18 +84,18 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         float absDelta = Mathf.Abs(rawDelta);
         float finalScrollDelta = 0f;
 
-        if (absDelta <= 5f)
+        if (absDelta <= 8f)
         {
             // TIER 1: The mouse (3) and slow trackpad swipes get the 10x boost
-            finalScrollDelta = rawDelta * 10f;
+            finalScrollDelta = rawDelta * 8f;
         }
         else
         {
             // TIER 2: Fast trackpad swipes (> 5)
             // Keep the 50 pixels of momentum from Tier 1 (5 units * 10x), 
             // then apply the slower 4x multiplier ONLY to the extra speed.
-            float baseMomentum = 50f;
-            float extraSpeed = (absDelta - 5f) * 4f;
+            float baseMomentum = 64f;
+            float extraSpeed = (absDelta - 8f) * 3f;
 
             finalScrollDelta = Mathf.Sign(rawDelta) * (baseMomentum + extraSpeed);
         }
@@ -372,7 +372,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
             if (project.githubLabel != null) githubButton.Q<Label>().text = project.githubLabel;
             else githubButton.Q<Label>().text = "GITHUB";
 
-            if (!string.IsNullOrEmpty(url)) githubButton.clicked += () => Application.OpenURL(url);
+            if (!string.IsNullOrEmpty(url)) portfolioController.ButtonClickLink(githubButton, url);
             else githubButton.style.display = DisplayStyle.None;
         }
 

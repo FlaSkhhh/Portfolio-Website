@@ -62,7 +62,11 @@ public class PortfolioController : MonoBehaviour
     [DllImport("__Internal")] static extern void WebGLGoBack();
     [DllImport("__Internal")] static extern void WebGLSetSwipeLock(bool isLocked);
     [DllImport("__Internal")] static extern void WebGLCancelHistoryChange();
-    [DllImport("__Internal")] static extern void OpenCV(string url);
+    [DllImport("__Internal")] static extern void WebGLArmOpen(string url);
+    [DllImport("__Internal")] static extern void WebGLDisarmOpen();
+    [DllImport("__Internal")] static extern int IsSafari();
+
+    public static bool isSafariBrower;
 
     void Start()
     {
@@ -73,6 +77,9 @@ public class PortfolioController : MonoBehaviour
 
     void OnEnable()
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        isSafariBrower = IsSafari() == 1;
+#endif
         uiDocument = GetComponent<UIDocument>();
         loader = GetComponent<PortfolioProjectLoaderWeb>();
         videoController = GetComponent<DetailVideoController>();
@@ -137,17 +144,20 @@ public class PortfolioController : MonoBehaviour
         if (btnEnter != null) btnEnter.clicked += OnEnterPortfolioClicked;
         if (btnBack != null) btnBack.clicked += OnBackClicked;
         if (btnBackToHome != null) btnBackToHome.clicked += OnBackToHomeClicked;
-        if (btnDetailDemo != null) btnDetailDemo.clicked += () => { if (!string.IsNullOrEmpty(currentDemoUrl)) Application.OpenURL(currentDemoUrl); };
-        if (btnDetailGitHub != null) btnDetailGitHub.clicked += () => { if (!string.IsNullOrEmpty(currentGithubUrl)) Application.OpenURL(currentGithubUrl); };
+        if (btnDetailDemo != null) ButtonClickLink(btnDetailDemo, currentDemoUrl);
+        if (btnDetailGitHub != null) ButtonClickLink(btnDetailGitHub, currentGithubUrl);
         if (headerExploreBtn != null) headerExploreBtn.clicked += OnEnterPortfolioClicked;
         if (navContactBtn != null) navContactBtn.clicked += OpenContactModal;
-        if (cvDownloadBtn != null) cvDownloadBtn.clicked += CVDownloadClicked;
         if (btnCloseModal != null) btnCloseModal.clicked += CloseContactModal;
+
+        if (cvDownloadBtn != null) ButtonClickLink(cvDownloadBtn, "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Shantanu_Nandkhile.pdf");
 
         if (modalOverlay != null) modalOverlay.RegisterCallback<ClickEvent>(evt => CloseContactModal());
         if (modalBox != null) modalBox.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
-        if (btnContactGitHub != null) btnContactGitHub.clicked += () => Application.OpenURL("https://github.com/FlaSkhhh");
-        if (btnContactLinkedIn != null) btnContactLinkedIn.clicked += () => Application.OpenURL("https://www.linkedin.com/in/flashhhh/");
+
+        if (btnContactGitHub != null) ButtonClickLink(btnContactGitHub, "https://github.com/FlaSkhhh");
+        if (btnContactLinkedIn != null) ButtonClickLink(btnContactLinkedIn, "https://www.linkedin.com/in/flashhhh/");
+      
 
         var backdrop = root.Q<VisualElement>("DetailBackdrop");
         if (backdrop != null) backdrop.RegisterCallback<ClickEvent>(evt => OnBackClicked());
@@ -369,17 +379,26 @@ public class PortfolioController : MonoBehaviour
 #endif
     }
 
-    void CVDownloadClicked()
+    public void ButtonClickLink(Button btn, string url)
     {
-        string link = "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Shantanu_Nandkhile.pdf";
-#if UNITY_WEBGL && !UNITY_EDITOR
-        // Use the Safari-safe HTML anchor trick in WebGL
-        OpenCV(link);
-#else
-        Application.OpenURL(link);
-#endif
+        if (btn == null || string.IsNullOrEmpty(url)) return;
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+    if (isSafariBrower)
+    {
+        btn.RegisterCallback<PointerDownEvent>(evt => WebGLArmOpen(url), TrickleDown.TrickleDown);
+        btn.RegisterCallback<PointerLeaveEvent>(evt => WebGLDisarmOpen(), TrickleDown.TrickleDown);
     }
+    else
+    {
+         btn.clicked += () => Application.OpenURL(url);
+    }
+#else
+        // UNITY EDITOR / DESKTOP APP: Bind the normal click ONCE
+        btn.clicked += () => Application.OpenURL(url);
+#endif
+    }
+
     void OpenContactModal()
     {
         shaderTracker.TriggerGlitch();

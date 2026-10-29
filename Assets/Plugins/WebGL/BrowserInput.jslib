@@ -290,19 +290,16 @@ mergeInto(LibraryManager.library, {
         window.history.go(delta); 
     }
   },
-
-  OpenCV: function(urlPtr) {
-        var url = UTF8ToString(urlPtr);
-        
-        // Create a native HTML link on the fly
-        var link = document.createElement('a');
-        link.href = url;
-        link.target = '_blank'; // Opens in a new tab
-        
-        // Append, click natively, and remove immediately
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
+	
+IsSafari: function() {
+    var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    return isSafari ? 1 : 0;
+  },
+  WebGLArmOpen: function (urlPtr) {
+    if (window.PortfolioOpen) window.PortfolioOpen.arm(UTF8ToString(urlPtr));
+  },
+  WebGLDisarmOpen: function () {
+    if (window.PortfolioOpen) window.PortfolioOpen.disarm();
+  }
 
 });

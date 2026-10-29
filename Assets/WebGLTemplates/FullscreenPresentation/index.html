@@ -37,6 +37,45 @@
 													overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 													}
 												</style>
+		
+<script>
+ window.PortfolioOpen = (function () {
+    var down = false, armedUrl = null, timer = null, sx = 0, sy = 0;
+
+    function openTab(url) {
+      var w = window.open(url, '_blank');
+      if (w) { try { w.opener = null; } catch (e) {} }
+      else if (window.unityInstance) { window.unityInstance.SendMessage('UIRoot', 'OnOpenBlocked', url); }
+    }
+    function disarm() { armedUrl = null; clearTimeout(timer); }
+
+    window.addEventListener('pointerdown', function (e) { 
+      down = true; sx = e.clientX; sy = e.clientY; 
+    }, true);
+    
+    window.addEventListener('pointermove', function (e) {
+      // If they move their finger more than 12 pixels, it's a scroll. Disarm!
+      if (armedUrl && Math.abs(e.clientX - sx) + Math.abs(e.clientY - sy) > 12) disarm();
+    }, true);
+
+    window.addEventListener('pointerup', function () {
+      down = false;
+      if (armedUrl) { var u = armedUrl; disarm(); openTab(u); }
+    }, true);
+    
+    window.addEventListener('pointercancel', function () { down = false; disarm(); }, true);
+
+    return {
+      arm: function (url) {
+        if (!down) { openTab(url); return; } // tap was too quick: best effort
+        armedUrl = url;
+        clearTimeout(timer);
+        timer = setTimeout(disarm, 1500);
+      },
+      disarm: disarm
+    };
+  })();
+</script>
 </head>
 	<body>
 		<div id="unity-container">

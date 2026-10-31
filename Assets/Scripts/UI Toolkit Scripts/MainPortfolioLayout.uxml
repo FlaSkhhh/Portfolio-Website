@@ -114,10 +114,14 @@
                     </ui:VisualElement>
                     <ui:VisualElement name="DetailDynamicContent" class="detail-dynamic-content"/>
                 </ui:ScrollView>
+
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
-
+    <ui:VisualElement name="LightboxOverlay" class="lightbox-overlay lightbox-overlay--hidden">
+        <!-- <ui:Button name="BtnCloseLightbox" text="<-" class="btn-back btn-close-lightbox"/> -->
+        <ui:VisualElement name="LightboxMedia" class="lightbox-media"/>
+    </ui:VisualElement>
 
     <ui:VisualElement name="ContactModalOverlay" class="modal-overlay modal-overlay--hidden">
         <ui:VisualElement name="ContactModalBox" class="modal-box">
@@ -128,8 +132,8 @@
             <ui:VisualElement picking-mode="Ignore" class="contact-header-row">
                 <ui:Label text="CONTACT" class="contact-title"/>
             </ui:VisualElement>
-            <ui:TextField value="shantanunandkhileoa@gmail.com" readonly="true" name="TextField" class="data-field"/>
-            <ui:TextField value="+91-9518756184" readonly="true" class="data-field"/>
+            <ui:Button name="EmailField" text="shantanunandkhileoa@gmail.com" class="data-field"/>
+            <ui:Button name="PhoneField" text="+91-9518756184" class="data-field"/>
             <ui:VisualElement class="contact-btn-row">
                 <ui:Button name="BtnContactGitHub" class="cyber-btn primary">
                     <ui:VisualElement class="cyber-shadow"/>

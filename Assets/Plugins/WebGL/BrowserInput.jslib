@@ -300,6 +300,26 @@ IsSafari: function() {
   },
   WebGLDisarmOpen: function () {
     if (window.PortfolioOpen) window.PortfolioOpen.disarm();
-  }
+  },
+WebGLCopyToClipboard: function(text) {
+      navigator.clipboard.writeText(UTF8ToString(text));
+  },
+
+WebGLSendTelemetry: function (eventNamePtr, eventDataPtr) {
+        var eventName = UTF8ToString(eventNamePtr);
+        var eventData = UTF8ToString(eventDataPtr);
+
+        try {
+            // Checks if the GA4 script loaded successfully
+            if (typeof gtag === 'function') {
+                gtag('event', eventName, {
+                    'portfolio_target': eventData 
+                });
+            }
+        } catch (error) {
+            // If they have uBlock or an ad-blocker, this catches the error
+            console.warn("Telemetry blocked by browser extension.");
+        }
+    }
 
 });

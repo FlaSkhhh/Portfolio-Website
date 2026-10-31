@@ -386,7 +386,7 @@ public class PortfolioProjectLoaderWeb : MonoBehaviour
         }));
     }
 
-    IEnumerator LoadProjectScreenshotAsync(VisualElement rowElement, string screenshotPath, System.Action<Texture2D> onTextureLoaded)
+    IEnumerator LoadProjectScreenshotAsync(VisualElement rowElement, string screenshotPath, Action<Texture2D> onTextureLoaded)
     {
         if (string.IsNullOrEmpty(screenshotPath))
         {
@@ -558,7 +558,7 @@ public struct ExperienceData
     public string[] bullets;
 }
 
-[System.Serializable]
+[Serializable]
 public class ProjectRow
 {
     public string header;

@@ -53,9 +53,9 @@ public class DetailVideoController : MonoBehaviour
         Stop();
         active = slot;
         slot.poster = slot.screen.style.backgroundImage;
-        slot.playButton.style.display = DisplayStyle.None;
-        slot.fallback.style.display = DisplayStyle.None;
-        slot.status.text = "LOADING...";
+        if (slot.playButton != null) slot.playButton.style.display = DisplayStyle.None;
+        if (slot.fallback != null) slot.fallback.style.display = DisplayStyle.None;
+        if (slot.status != null) slot.status.text = "LOADING...";
 
         player.url = slot.url;
         player.Prepare();
@@ -69,7 +69,7 @@ public class DetailVideoController : MonoBehaviour
         if (active == null || vp.url != active.url) return;
         timeout?.Pause();
         active.screen.style.backgroundImage = new StyleBackground(Background.FromRenderTexture(rt));
-        active.overlay.style.display = DisplayStyle.None;
+        if (active.overlay != null) active.overlay.style.display = DisplayStyle.None;
         vp.Play();
     }
 
@@ -78,8 +78,8 @@ public class DetailVideoController : MonoBehaviour
         if (active == null) return;
         timeout?.Pause();
         player.Stop();
-        active.status.text = message;
-        active.fallback.style.display = DisplayStyle.Flex;
+        if (active.status != null) active.status.text = message;
+        if (active.fallback != null) active.fallback.style.display = DisplayStyle.Flex;
     }
 
     public void Stop()
@@ -89,9 +89,13 @@ public class DetailVideoController : MonoBehaviour
         if (active == null) return;
 
         active.screen.style.backgroundImage = active.poster;
-        active.overlay.style.display = DisplayStyle.Flex;
-        active.playButton.style.display = DisplayStyle.Flex;
-        active.status.text = "";
+        if (active.overlay != null) active.overlay.style.display = DisplayStyle.Flex;
+        if (active.playButton != null) active.playButton.style.display = DisplayStyle.Flex;
+        if (active.status != null) active.status.text = "";
         active = null;
     }
+
+    public bool IsPlaying() => player != null && player.isPlaying;
+
+    public string GetCurrentUrl() => player != null ? player.url : null;
 }

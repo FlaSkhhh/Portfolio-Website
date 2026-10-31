@@ -28,6 +28,8 @@ public class PortfolioController : MonoBehaviour
     VisualElement modalOverlay;
     VisualElement modalBox;
     //VisualElement swipeIndicator;
+    VisualElement lightboxOverlay;
+    VisualElement lightboxMedia;
     Label headerName;
     Label scrollChevron;
     Label detailTitle;
@@ -55,6 +57,8 @@ public class PortfolioController : MonoBehaviour
     bool isIntroTextFullyHidden = false;
     bool isPortalFullyHidden = false;
     bool isContactModalOpen = false;
+    bool isLightboxOpen = false;
+    bool isHandlingHorizontalSwipe = false;
     string activePageState = "intro";
 
     [DllImport("__Internal")] static extern void WebGLInitHistory();
@@ -65,7 +69,11 @@ public class PortfolioController : MonoBehaviour
     [DllImport("__Internal")] static extern void WebGLArmOpen(string url);
     [DllImport("__Internal")] static extern void WebGLDisarmOpen();
     [DllImport("__Internal")] static extern int IsSafari();
+    [DllImport("__Internal")] static extern void WebGLCopyToClipboard(string text);
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")] static extern void WebGLSendTelemetry(string eventName, string eventData);
+#endif
     public static bool isSafariBrower;
 
     void Start()
@@ -73,6 +81,8 @@ public class PortfolioController : MonoBehaviour
 #if UNITY_WEBGL && !UNITY_EDITOR
         WebGLInitHistory();   
 #endif
+        SetupContactCopying();
+        SetupLightbox();
     }
 
     void OnEnable()
@@ -140,12 +150,12 @@ public class PortfolioController : MonoBehaviour
         btnContactLinkedIn = root.Q<Button>("BtnContactLinkedIn");
         //swipeIndicator = uiDocument.rootVisualElement.Q<VisualElement>("SwipeIndicator");
 
+        //for detail page buttons
+        SetupDetailButtons();
 
         if (btnEnter != null) btnEnter.clicked += OnEnterPortfolioClicked;
         if (btnBack != null) btnBack.clicked += OnBackClicked;
         if (btnBackToHome != null) btnBackToHome.clicked += OnBackToHomeClicked;
-        if (btnDetailDemo != null) ButtonClickLink(btnDetailDemo, currentDemoUrl);
-        if (btnDetailGitHub != null) ButtonClickLink(btnDetailGitHub, currentGithubUrl);
         if (headerExploreBtn != null) headerExploreBtn.clicked += OnEnterPortfolioClicked;
         if (navContactBtn != null) navContactBtn.clicked += OpenContactModal;
         if (btnCloseModal != null) btnCloseModal.clicked += CloseContactModal;
@@ -169,6 +179,7 @@ public class PortfolioController : MonoBehaviour
             scrollChevron.AddToClassList("scroll-chevron--hidden");
             dynamicScrollThreshold = 50f;
 
+            mainScroll.RegisterCallback<PointerMoveEvent>(evt => { if (isHandlingHorizontalSwipe) evt.StopPropagation(); }, TrickleDown.TrickleDown);
 
             // Ensure they are fully removed from layout on boot so they don't block clicks
             if (headerName != null) headerName.style.display = DisplayStyle.None;
@@ -352,11 +363,16 @@ public class PortfolioController : MonoBehaviour
         {
             CloseContactModal();
         }
+        if (isLightboxOpen && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            CloseLightbox();
+        }
     }
     void OnEnterPortfolioClicked()
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
         WebGLPushHistoryState("projects");
+        TrackEvent("EnterPortfolioClicked", "button_click");
 #endif
         OnBrowserStateChanged("projects"); // Force UI update locally
     }
@@ -384,19 +400,65 @@ public class PortfolioController : MonoBehaviour
         if (btn == null || string.IsNullOrEmpty(url)) return;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-    if (isSafariBrower)
-    {
-        btn.RegisterCallback<PointerDownEvent>(evt => WebGLArmOpen(url), TrickleDown.TrickleDown);
-        btn.RegisterCallback<PointerLeaveEvent>(evt => WebGLDisarmOpen(), TrickleDown.TrickleDown);
-    }
-    else
-    {
-         btn.clicked += () => Application.OpenURL(url);
-    }
+    
+        TrackEvent("ButtonClickLink", url);
+        if (isSafariBrower)
+        {
+            btn.RegisterCallback<PointerDownEvent>(evt => WebGLArmOpen(url), TrickleDown.TrickleDown);
+            btn.RegisterCallback<PointerLeaveEvent>(evt => WebGLDisarmOpen(), TrickleDown.TrickleDown);
+        }
+        else
+        {
+             btn.clicked += () => Application.OpenURL(url);
+        }
 #else
         // UNITY EDITOR / DESKTOP APP: Bind the normal click ONCE
         btn.clicked += () => Application.OpenURL(url);
 #endif
+    }
+
+    //becuase detail buttons have variable link so cannot hard sub to one url
+    void SetupDetailButtons()
+    {
+        if (btnDetailDemo != null)
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        if (isSafariBrower)
+        {
+            btnDetailDemo.RegisterCallback<PointerDownEvent>(evt => {
+                if (!string.IsNullOrEmpty(currentDemoUrl)) 
+                {
+                    WebGLArmOpen(currentDemoUrl);
+                    TrackEvent("DetailPageDemoOpened", currentDemoUrl);
+                }
+            }, TrickleDown.TrickleDown);
+            btnDetailDemo.RegisterCallback<PointerLeaveEvent>(evt => WebGLDisarmOpen(), TrickleDown.TrickleDown);
+        }
+        else btnDetailDemo.clicked += () => { if (!string.IsNullOrEmpty(currentDemoUrl)) Application.OpenURL(currentDemoUrl); };
+#else
+            btnDetailDemo.clicked += () => { if (!string.IsNullOrEmpty(currentDemoUrl)) Application.OpenURL(currentDemoUrl); };
+#endif
+        }
+
+        if (btnDetailGitHub != null)
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        if (isSafariBrower)
+        {
+            btnDetailGitHub.RegisterCallback<PointerDownEvent>(evt => {
+                if (!string.IsNullOrEmpty(currentGithubUrl)) 
+                {
+                    WebGLArmOpen(currentGithubUrl);
+                    TrackEvent("DetailPageGitHubOpened", currentGithubUrl);
+                }
+            }, TrickleDown.TrickleDown);
+            btnDetailGitHub.RegisterCallback<PointerLeaveEvent>(evt => WebGLDisarmOpen(), TrickleDown.TrickleDown);
+        }
+        else btnDetailGitHub.clicked += () => { if (!string.IsNullOrEmpty(currentGithubUrl)) Application.OpenURL(currentGithubUrl); };
+#else
+            btnDetailGitHub.clicked += () => { if (!string.IsNullOrEmpty(currentGithubUrl)) Application.OpenURL(currentGithubUrl); };
+#endif
+        }
     }
 
     void OpenContactModal()
@@ -406,7 +468,7 @@ public class PortfolioController : MonoBehaviour
         modalOverlay.RemoveFromClassList("modal-overlay--hidden");
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-    WebGLSetSwipeLock(true); // Disable physical swiping!
+        WebGLSetSwipeLock(true); // Disable physical swiping!
 #endif
         PlayGlitch(modalBox, openSteps, () => StartAmbientGlitch(modalBox));
     }
@@ -416,7 +478,7 @@ public class PortfolioController : MonoBehaviour
         isContactModalOpen = false;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-    WebGLSetSwipeLock(false); // Re-enable physical swiping!
+        WebGLSetSwipeLock(false); // Re-enable physical swiping!
 #endif
         PlayGlitch(modalBox, closeSteps, () =>
         {
@@ -569,6 +631,7 @@ public class PortfolioController : MonoBehaviour
         string projectNameRoute = project.GetTitle().Replace(" ", "-").ToLower();
 #if UNITY_WEBGL && !UNITY_EDITOR
         WebGLPushHistoryState(projectNameRoute);
+        TrackEvent("ProjectOpened", projectNameRoute);
 #endif
         OnBrowserStateChanged(projectNameRoute);
 
@@ -652,7 +715,10 @@ public class PortfolioController : MonoBehaviour
                         screen.RemoveFromClassList("skeleton-loader");
 
                         if (tex != null)
+                        {
                             screen.style.backgroundImage = new StyleBackground(tex);
+                            if(!isVideo) screen.RegisterCallback<ClickEvent>(evt => { OpenLightboxImage(tex); });
+                        }
                         else if (!isVideo)
                         {
                             holder.style.display = DisplayStyle.None;
@@ -667,7 +733,15 @@ public class PortfolioController : MonoBehaviour
                     screen.RemoveFromClassList("skeleton-loader");
                 }
 
-                if (isVideo) AttachVideo(holder, screen, row.media);
+                if (isVideo) 
+                {
+                    AttachVideo(holder, screen, row.media);
+                    screen.RegisterCallback<ClickEvent>(evt => 
+                    {
+                        string targetUrl = videoController.ResolveUrl(row.media);
+                        if (videoController.IsPlaying() && evt.target == screen && videoController.GetCurrentUrl() == targetUrl) OpenLightboxVideo(row.media);  
+                    });
+                }
             }
 
             dynamicContent.Add(rowEl);
@@ -716,6 +790,62 @@ public class PortfolioController : MonoBehaviour
         playBtn.clicked += () => videoController.Play(slot);
     }
 
+    void SetupLightbox()
+    {
+        var root = uiDocument.rootVisualElement;
+        lightboxOverlay = root.Q<VisualElement>("LightboxOverlay");
+        lightboxMedia = root.Q<VisualElement>("LightboxMedia");
+
+        lightboxOverlay.RegisterCallback<PointerDownEvent>(evt =>
+        {
+            if (evt.target == lightboxOverlay) CloseLightbox();
+        });
+    }
+
+    void OpenLightboxVideo(string mediaPath)
+    {
+        if (videoController == null) return;
+
+        string url = videoController.ResolveUrl(mediaPath);
+        ClearLightboxMedia();
+        ShowLightbox();
+
+        videoController.Play(new VideoSlot { screen = lightboxMedia, url = url });
+#if UNITY_WEBGL && !UNITY_EDITOR
+        TrackEvent("FullScreenVideo", url);
+#endif
+    }
+
+    void OpenLightboxImage(Texture2D texture)
+    {
+        if (videoController != null) videoController.Stop();
+        lightboxMedia.style.backgroundImage = new StyleBackground(texture);
+        ShowLightbox();
+#if UNITY_WEBGL && !UNITY_EDITOR
+        TrackEvent("FullScreenImage", texture.name);
+#endif
+    }
+
+    void CloseLightbox()
+    {
+        if (!isLightboxOpen) return;
+
+        if (videoController != null) videoController.Stop();
+        ClearLightboxMedia();
+        lightboxOverlay.AddToClassList("lightbox-overlay--hidden");
+        isLightboxOpen = false;
+    }
+
+    void ShowLightbox()
+    {
+        lightboxOverlay.RemoveFromClassList("lightbox-overlay--hidden");
+        isLightboxOpen = true;
+    }
+
+    void ClearLightboxMedia()
+    {
+        lightboxMedia.style.backgroundImage = StyleKeyword.Null;
+    }
 
 
     // Called by JS OR our C# fallback methods
@@ -728,7 +858,16 @@ public class PortfolioController : MonoBehaviour
             CloseContactModal();
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-        WebGLCancelHistoryChange(); 
+            WebGLCancelHistoryChange(); 
+#endif
+            return;
+        }
+
+        if(isLightboxOpen)
+        {
+            CloseLightbox();
+#if UNITY_WEBGL && !UNITY_EDITOR
+            WebGLCancelHistoryChange(); 
 #endif
             return;
         }
@@ -857,7 +996,7 @@ public class PortfolioController : MonoBehaviour
         // data comes in as "0.45|back"
         string[] split = data.Split('|');
         if (split.Length < 2) return;
-
+        isHandlingHorizontalSwipe = true;
         float screenWidth = uiDocument.rootVisualElement.layout.width;
         // Fallback just in case UI Toolkit hasn't calculated layout yet on frame 1
         if (screenWidth == 0) screenWidth = Screen.width;
@@ -896,7 +1035,7 @@ public class PortfolioController : MonoBehaviour
     public void EndSwipeVisual(string result)
     {
         if (activeIndicator == null) return;
-
+        isHandlingHorizontalSwipe = false;
         // 1. CAPTURE IT LOCALLY so the timers don't throw a NullReferenceException
         VisualElement targetIndicator = activeIndicator;
         activeIndicator = null;
@@ -926,6 +1065,8 @@ public class PortfolioController : MonoBehaviour
                 targetIndicator.style.scale = new Scale(new Vector2(1f, 1f));
                 targetIndicator.style.translate = new Translate(0, new Length(-50, LengthUnit.Percent), 0);
             }).StartingIn(150);
+
+            TrackEvent("BrowserHorizontalSwipe", "Success");
         }
         else
         {
@@ -943,6 +1084,49 @@ public class PortfolioController : MonoBehaviour
                 // Reset scale to 1f while hidden
                 targetIndicator.style.scale = new Scale(new Vector2(1f, 1f));
             }).StartingIn(10);
+            TrackEvent("BrowserHorizontalSwipe", "Cancelled");
         }
+    }
+
+    //Error message from Index script when popup is not opened
+    public void OnOpenBlocked(string message) 
+    {
+        Debug.Log(message);
+    }
+
+    void SetupContactCopying()
+    {
+        if (modalBox == null) return;
+        Button emailField = modalBox.Q<Button>("EmailField");
+        Button phoneField = modalBox.Q<Button>("PhoneField");
+        void BindCopyLogic(Button field)
+        {
+            if (field == null) return;
+
+            string originalText = field.text;
+            field.clicked += () => {
+#if UNITY_WEBGL && !UNITY_EDITOR
+                WebGLCopyToClipboard(originalText);
+                TrackEvent("ContactCopied", field.name);
+#else
+                GUIUtility.systemCopyBuffer = originalText;
+#endif
+                field.text = "Copied!";
+
+                field.schedule.Execute(() => {
+                    field.text = originalText;
+                }).StartingIn(1000);
+            };
+        }
+
+        BindCopyLogic(emailField);
+        BindCopyLogic(phoneField);
+    }
+
+    public void TrackEvent(string eventName, string eventData = "")
+    {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        WebGLSendTelemetry(eventName, eventData);
+#endif
     }
 }

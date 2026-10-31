@@ -158,6 +158,12 @@
           "text": "<b>Authored technical GDD and handover docs</b> to transition the project to external developers and QA testers.",
           "media": "",
           "poster": ""
+        },
+        {
+          "header": "PERSONAL NOTE",
+          "text": "Due to some unforeseen circumstances, I had to take over this project and made a tutorial and BOT from a completely multiplayer core in 2 days after learning the basics of it. Going into this, I had zero experience with NFT architecture. I took it on entirely as a technical challenge.",
+          "media": "",
+          "poster": ""
         }
       ]
     },
@@ -227,7 +233,7 @@
         },
         {
           "header": "CUSTOM UI & CHARACTERS",
-          "text": "<b>TV broadcast-style match HUD:</b> built a dynamic UI overlay to display real time team scoreboards and match states similar to recent World Cups.",
+          "text": "<b>TV broadcast style match HUD:</b> built a dynamic UI overlay to display real time team scoreboards and match states similar to recent World Cups.",
           "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/Overlay.jpg",
           "poster": ""
         },
@@ -242,6 +248,12 @@
           "text": "<b>Hundreds of avatar combinations</b> generated from a minimal 3-face, 3-hat asset pack using an HSV colour slider.",
           "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/CharCustomisation.mp4",
           "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/HandCricket/CharCustomisation_Poster.jpg"
+        },
+        {
+          "header": "PERSONAL NOTE",
+          "text": "I was introduced to the IRL Hand Cricket when I was in 11-12th and loved it a lot. The environment design just flowed naturally once I started placing the 3D school assets. Decided to make it Crossplay to bridge the device gap to play with the friends just like good ol days.",
+          "media": "",
+          "poster": ""
         }
       ]
     },
@@ -258,7 +270,7 @@
       "rows": [
         {
           "header": "OVERVIEW",
-          "text": "<b>30k+ downloads:</b> took over late stage production as sole programmer to complete social systems, UI/UX, matchmaking, release, and maintenance.",
+          "text": "<b>30k+ downloads:</b> took over mid to late stage production as sole programmer to complete social systems, UI/UX, matchmaking, release, and maintenance.",
           "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/SOC/SoCOverview.mp4",
           "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/SOC/SoCOverview_Poster.jpg"
         },
@@ -282,19 +294,19 @@
         },
         {
           "header": "",
-          "text": "<b>Interactive tutorial</b> onboards new players into timing-based batting and bowling mechanics before entering live queues.",
+          "text": "<b>Interactive tutorial:</b> onboards new players into timing-based batting and bowling mechanics before entering live queues.",
           "media": "",
           "poster": ""
         },
         {
           "header": "SOCIAL & AUTH",
-          "text": "<b>Facebook SDK integration</b> handles cross-install cloud saves, profile syncing, guest fallbacks, and compliant user data deletion.",
+          "text": "<b>Facebook SDK integration:</b> handles cross-install cloud saves, profile syncing, guest fallbacks, and compliant user data deletion.",
           "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/SOC/SoCLogin.jpg",
           "poster": ""
         },
         {
           "header": "",
-          "text": "<b>Firebase friend system</b> links Facebook friends and recent friend battle opponents, auto detects a copied room code, and offers to paste it.",
+          "text": "<b>Firebase friend system:</b> links Facebook friends and recent friend battle opponents, auto detects a copied room code, and offers to paste it.",
           "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/SOC/SoCFriendScreen.jpg",
           "poster": ""
         },
@@ -315,6 +327,12 @@
           "text": "<b>70 MB download size:</b> compressed 3D stadium assets, audio files, and textures to optimise for low end devices, maintaining around 200 MB installed footprint.",
           "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/SOC/SoC3D.jpg",
           "poster": ""
+        },
+        {
+          "header": "PERSONAL NOTE",
+          "text": "Took over this project mid to late into development and had to communicate directly with the client to complete the project. During the maintenance, I had to do remote development on mac which was really frustrating as the editor was crashing and Play Mode was not available to test.",
+          "media": "",
+          "poster": ""
         }
       ]
     },
@@ -330,7 +348,7 @@
       "rows": [
         {
           "header": "OVERVIEW",
-          "text": "<b>Around 5 MB first-load download:</b> a Unity UI Toolkit portfolio built and deployed solo, featuring a cyberpunk aesthetic with background shaders and UI glitch effects.",
+          "text": "<b>Around 5 MB first load download:</b> a Unity UI Toolkit portfolio built and deployed solo, featuring a cyberpunk aesthetic with background shaders and UI glitch effects.",
           "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Portfolio/Overview.mp4",
           "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Portfolio/Overview_Poster.jpg"
         },
@@ -379,6 +397,12 @@
         {
           "header": "",
           "text": "<b>Cached element references</b> resolved once at startup avoid per frame visual-tree queries.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "PERSONAL NOTE",
+          "text": "I decided to make the portfolio website inside Unity because I thought it would be funny and help me stand out, and it gave me an excuse to learn UI Toolkit. Looked up multiple other portfolios and portfolio reviews online for references and research and made this one by using all that knowledge.",
           "media": "",
           "poster": ""
         }
@@ -453,6 +477,12 @@
           "text": "<b>Code driven UI animation:</b> replaced Unity Animator clips with scalable DOTween sequences for all UI animations including staggered UI spawns, drag and tilt mechanics, and immediate player feedback.",
           "media": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Finquest/DOTween.mp4",
           "poster": "https://cdn.jsdelivr.net/gh/FlaSkhhh/Portfolio-Website@main/RemoteResources/Finquest/DOTween_Poster.jpg"
+        },
+        {
+          "header": "PERSONAL NOTE",
+          "text": "This was a demo project with friends and my contribution was making the game part so that it could be integrated into the app/web app and open inside a webview. Main focus was the load size for quick transition from learning to gameplay and the modularity of games so that same question can be played in different mini games.",
+          "media": "",
+          "poster": ""
         }
       ]
     },
@@ -499,6 +529,12 @@
         {
           "header": "ANIMATION & FEEL",
           "text": "<b>Animation driven logic:</b> utilised Unity's StateMachineBehaviours and Animation Events to synchronise melee hitboxes, sound effects, and projectile spawning with the visual frames of the attack.",
+          "media": "",
+          "poster": ""
+        },
+        {
+          "header": "PERSONAL NOTE",
+          "text": "Main inspiration for this was 2D Dark Souls boss battle and the in-game names for the characters match that inspiration. This was my first personal project and I designed all attacks based on other games like the phase change attack is from Elden Ring and post phase change attack is from Nier.",
           "media": "",
           "poster": ""
         }

@@ -1004,6 +1004,48 @@ INTRO STUFF
     margin-bottom: 20px; 
 }
 
+/* ==========================================
+   FULL SCREEN VIDEO VIEWER
+========================================== */
+
+.lightbox-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(5, 2, 3, 0.98); /* Almost pitch black */
+    align-items: center;
+    justify-content: center;
+    
+    opacity: 1;
+    visibility: visible;
+    transition-property: opacity, visibility;
+    transition-duration: 0.3s, 0s; 
+}
+
+.lightbox-overlay--hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition-delay: 0s, 0.3s;
+}
+
+.lightbox-media {
+    width: 90%;
+    height: 90%;
+    max-width: 1280px;
+    max-height: 720px;
+    -unity-background-scale-mode: scale-to-fit; /* Keeps 16:9 aspect ratio perfect */
+}
+
+.btn-close-lightbox {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    font-size: 50px;
+    color: #C8C8C8;
+    background-color: transparent;
+    border-width: 0;
+    transition-duration: 0.1s;
+}
+
 
 /* ==========================================
    CONTACT MODAL
@@ -1075,25 +1117,19 @@ INTRO STUFF
 .data-field {
     margin-bottom: 40px;
     width: 88%;
-}
-
-/* Target the internal box of the TextField to strip away the default styling */
-.data-field > .unity-text-field__input {
-    flex-grow: 1;
-    background-color: transparent; /* Removes the dark box */
-    border-width: 0;               /* Removes the border */
-    padding: 0;                    /* Removes default internal padding */
+    
+    background-color: transparent; /* Removes default button background */
+    border-width: 0;               /* Removes default button border */
+    padding: 0;                    
     
     color: #C8C8C8;                /* Light grey text */
     font-size: 30px;               /* Much bigger font */
-    -unity-text-align: middle-left; /* Perfectly centers the text */
+    -unity-text-align: middle-left;/* Perfectly centers the text */
     transition-duration: 0.1s;
 }
-/* Optional: When they click/highlight the text, make it light up Cyan so they know it worked! */
-.data-field > .unity-text-field__input:focus {
-    color: #00E5FF; 
-    background-color: transparent;
-    border-width: 0;
+
+.data-field:hover {
+    color: white; /* Cyan glow */
 }
 
 /* Puts the GitHub and LinkedIn buttons side-by-side */

@@ -179,7 +179,12 @@ public class PortfolioController : MonoBehaviour
             scrollChevron.AddToClassList("scroll-chevron--hidden");
             dynamicScrollThreshold = 50f;
 
-            mainScroll.RegisterCallback<PointerMoveEvent>(evt => { if (isHandlingHorizontalSwipe) evt.StopPropagation(); }, TrickleDown.TrickleDown);
+            mainScroll.RegisterCallback<PointerMoveEvent>(evt => {
+                if (isHandlingHorizontalSwipe) evt.StopImmediatePropagation();
+            }, TrickleDown.TrickleDown);
+            mainScroll.RegisterCallback<WheelEvent>(evt => {
+                if (isHandlingHorizontalSwipe) evt.StopImmediatePropagation();
+            }, TrickleDown.TrickleDown);
 
             // Ensure they are fully removed from layout on boot so they don't block clicks
             if (headerName != null) headerName.style.display = DisplayStyle.None;
@@ -412,7 +417,6 @@ public class PortfolioController : MonoBehaviour
              btn.clicked += () => Application.OpenURL(url);
         }
 #else
-        // UNITY EDITOR / DESKTOP APP: Bind the normal click ONCE
         btn.clicked += () => Application.OpenURL(url);
 #endif
     }
@@ -851,6 +855,7 @@ public class PortfolioController : MonoBehaviour
     // Called by JS OR our C# fallback methods
     public void OnBrowserStateChanged(string view)
     {
+        isHandlingHorizontalSwipe = false;
         shaderTracker.TriggerGlitch();
 
         if (isContactModalOpen)

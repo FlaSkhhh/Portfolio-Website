@@ -191,6 +191,7 @@ mergeInto(LibraryManager.library, {
     // ==========================================
     // MOBILE
     // ==========================================
+
     var touchStartX = 0, touchStartY = 0, swipeMode = null;
     var maxDragDistance = Math.max(window.innerWidth * 0.30, 1); 
     var isTouchLocked = false;

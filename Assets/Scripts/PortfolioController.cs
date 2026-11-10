@@ -975,33 +975,13 @@ public class PortfolioController : MonoBehaviour
         }
     }
 
-    /*public void PlaySwipeFeedback(string direction)
-    {
-        if (swipeIndicator == null) return;
-
-        // Reset any ongoing animations
-        swipeIndicator.RemoveFromClassList("swipe-anim--back");
-        swipeIndicator.RemoveFromClassList("swipe-anim--forward");
-
-        if (direction == "back")
-        {
-            // Triggers a USS class that slides it from Left to Center
-            swipeIndicator.AddToClassList("swipe-anim--back");
-        }
-        else if (direction == "forward")
-        {
-            // Triggers a USS class that slides it from Right to Center
-            swipeIndicator.AddToClassList("swipe-anim--forward");
-        }
-    }*/
-
-    // Called dozens of times a second by JS during a drag
     public void UpdateSwipeVisual(string data)
     {
         // data comes in as "0.45|back"
         string[] split = data.Split('|');
         if (split.Length < 2) return;
         isHandlingHorizontalSwipe = true;
+
         float screenWidth = uiDocument.rootVisualElement.layout.width;
         // Fallback just in case UI Toolkit hasn't calculated layout yet on frame 1
         if (screenWidth == 0) screenWidth = Screen.width;

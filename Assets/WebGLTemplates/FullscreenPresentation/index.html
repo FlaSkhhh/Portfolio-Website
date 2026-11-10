@@ -9,7 +9,6 @@
 						<meta property="og:type" content="website">
 							<meta property="og:title" content="Shantanu Nandkhile | Unity Game Programmer">
 								<meta property="og:description" content="Unity Developer Portfolio showcasing projects and experience.">
-									<meta property="og:url" content="https://shantanu-nandkhile.netlify.app/">
 										<meta property="og:image" content="https://shantanu-nandkhile.netlify.app/share-banner.png">
 											<link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
 												<style>
@@ -84,6 +83,36 @@
   gtag('js', new Date());
 
   gtag('config', 'G-NYCDHPJQ5L');
+</script>
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const sourceId = urlParams.get('s');
+  const companyId = urlParams.get('c'); // Can be a number, initials, or full name
+
+  if (sourceId) {
+      let sourceName = "Unknown_Link";
+      
+      if (sourceId === '1') sourceName = "CV";
+      else if (sourceId === '2') sourceName = "LinkedIn";
+      else if (sourceId === '3') sourceName = "Direct_Application";
+      else if (sourceId === '4') sourceName = "GitHub";
+      else if (sourceId === '5') sourceName = "Personal_Test";
+
+      // If 'c' exists, append it (e.g., "Direct_Application_101")
+      if (companyId) {
+          sourceName = sourceName + "_" + companyId;
+      }
+
+      // Fire the GA4 event
+      if (typeof gtag === 'function') {
+          gtag('event', 'Visitor_Arrival', {
+              'portfolio_target': sourceName
+          });
+      }
+
+      // Scrub the URL clean without reloading
+      window.history.replaceState(null, null, window.location.pathname);
+  }
 </script>
 
 </head>
